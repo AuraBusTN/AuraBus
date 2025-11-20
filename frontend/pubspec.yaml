@@ -39,7 +39,6 @@ dependencies:
     url_launcher: ^6.3.2
     google_maps_flutter: ^2.14.0
     flutter_launcher_icons: ^0.14.4
-    google_fonts: ^6.3.2
 
 dev_dependencies:
     flutter_test:
