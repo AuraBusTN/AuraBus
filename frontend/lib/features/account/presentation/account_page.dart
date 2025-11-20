@@ -1,8 +1,10 @@
+import 'package:aurabus/routing/router.dart';
 import 'package:flutter/material.dart';
 import 'package:aurabus/features/account/widgets/account_section.dart';
 import 'package:aurabus/features/account/widgets/account_info_body.dart';
 import 'package:aurabus/features/account/widgets/contact_us_body.dart';
 import 'package:aurabus/features/account/widgets/subscription_body.dart';
+import 'package:go_router/go_router.dart';
 
 enum AccountSectionType { info, subscription, contact, ranking }
 
@@ -92,9 +94,7 @@ class _AccountPageState extends State<AccountPage> {
               AccountSection(
                 title: 'Logout',
                 isExpanded: false,
-                onTap: () {
-                  // Handle logout action
-                },
+                onTap: () {context.go(AppRoute.login);},
               ),
             ],
           ),
