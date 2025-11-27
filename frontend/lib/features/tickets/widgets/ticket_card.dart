@@ -53,7 +53,11 @@ class _TicketHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.asset('assets/tt_logo.png', height: 32, fit: BoxFit.contain),
+        Image.asset(
+          'assets/images/tt_logo.png',
+          height: 32,
+          fit: BoxFit.contain,
+        ),
         const Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -165,7 +169,7 @@ class _TicketQrPanel extends StatelessWidget {
       child: Column(
         children: [
           Image.asset(
-            'assets/ticket_qr.png',
+            'assets/images/ticket_qr.png',
             width: 100,
             height: 100,
             fit: BoxFit.contain,

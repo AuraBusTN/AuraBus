@@ -19,7 +19,7 @@ class AccountInfoBody extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 28,
-              backgroundImage: AssetImage('assets/profile_pic.png'),
+              backgroundImage: AssetImage('assets/images/profile_pic.png'),
             ),
             const SizedBox(width: 12),
             Column(

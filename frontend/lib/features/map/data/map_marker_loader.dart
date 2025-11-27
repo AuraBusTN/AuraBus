@@ -5,7 +5,7 @@ class MapMarkerLoader {
   static Future<BitmapDescriptor> loadStopIcon() async {
     return BitmapDescriptor.asset(
       const ImageConfiguration(size: Size(24, 24)),
-      'assets/bus_stop_marker.png',
+      'assets/images/bus_stop_marker.png',
     );
   }
 }

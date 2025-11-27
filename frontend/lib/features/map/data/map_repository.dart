@@ -9,16 +9,16 @@ import 'models/stop_details.dart';
 class MapRepository {
   final String baseUrl;
 
-  MapRepository() : baseUrl = dotenv.env['API_BASE_URL'] ?? '' {
+  MapRepository() : baseUrl = dotenv.env['API_URL'] ?? '' {
     if (baseUrl.isEmpty) {
       throw Exception(
-        'API_BASE_URL environment variable is not set. Please configure it in your .env file.',
+        'API_URL environment variable is not set. Please configure it in your .env file.',
       );
     }
   }
 
   Future<List<StopData>> loadLocalStops() async {
-    final jsonStr = await rootBundle.loadString('assets/stops.json');
+    final jsonStr = await rootBundle.loadString('assets/data/stops.json');
     final jsonList = jsonDecode(jsonStr) as List<dynamic>;
     return jsonList.map((e) => StopData.fromJson(e)).toList();
   }

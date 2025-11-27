@@ -6,13 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'stop_details_modal.dart';
 
 final mapControllerProvider = Provider<MapController>((ref) {
-  final controller = MapController(ref);
-
-  ref.onDispose(() {
-    controller.dispose();
-  });
-
-  return controller;
+  return MapController(ref);
 });
 
 class MapController {

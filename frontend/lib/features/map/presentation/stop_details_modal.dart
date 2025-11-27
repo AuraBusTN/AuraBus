@@ -193,7 +193,7 @@ class _LineCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
-              'assets/bus_icon.png',
+              'assets/images/bus_icon.png',
               width: 60,
               height: 60,
               fit: BoxFit.contain,

@@ -24,11 +24,9 @@ class _MapScreenState extends ConsumerState<MapScreen>
     super.build(context);
 
     final mapController = ref.read(mapControllerProvider);
-
-    final mapStyleAsync = ref.watch(mapStyleProvider);
-    final mapStyle = mapStyleAsync.value;
-
     final markersAsync = ref.watch(markersProvider);
+
+    final mapStyle = ref.read(mapStyleProvider).value;
 
     return markersAsync.when(
       data: (rawMarkers) {
@@ -41,7 +39,9 @@ class _MapScreenState extends ConsumerState<MapScreen>
             },
           );
         }).toSet();
+
         return GoogleMap(
+          key: const Key('google_map'),
           initialCameraPosition: CameraPosition(target: _center, zoom: 13),
           onMapCreated: mapController.onMapCreated,
           style: mapStyle,

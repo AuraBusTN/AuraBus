@@ -17,7 +17,11 @@ class Googlebutton extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.surface,
         ),
         onPressed: () {},
-        icon: Image.asset('assets/google_48x48.png', width: 20, height: 20),
+        icon: Image.asset(
+          'assets/images/google_48x48.png',
+          width: 20,
+          height: 20,
+        ),
 
         label: Text(
           "Google",

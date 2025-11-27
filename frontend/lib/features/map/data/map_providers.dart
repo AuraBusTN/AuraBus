@@ -12,7 +12,7 @@ final mapRepositoryProvider = Provider((ref) => MapRepository());
 final mapStyleProvider = FutureProvider<String?>((ref) async {
   ref.keepAlive();
   try {
-    return await rootBundle.loadString('assets/map_style.json');
+    return await rootBundle.loadString('assets/data/map_style.json');
   } catch (_) {
     return null;
   }
