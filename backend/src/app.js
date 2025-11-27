@@ -16,7 +16,6 @@ const header = {
       Buffer.from(`${config.tnt.username}:${config.tnt.password}`).toString(
         "base64"
       ),
-    "X-Requested-With": "it.tndigit.mit",
   },
 };
 
