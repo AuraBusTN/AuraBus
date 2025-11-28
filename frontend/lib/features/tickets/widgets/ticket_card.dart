@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
-
-const EdgeInsets _kCardMargin = EdgeInsets.symmetric(
-  horizontal: 20,
-  vertical: 5,
-);
-const EdgeInsets _kCardPadding = EdgeInsets.all(16);
-const double _kBorderRadius = 14;
-const double _kVerticalSpacing = 5;
-const Color _kPrimaryOrange = Color(0xFFE96E2B);
-const Color _kDividerColor = Colors.black12;
-const Color _kPillTextColor = Colors.white;
-const Color _kQrBgColor = Color(0xFFF5F5F5);
+import 'package:aurabus/theme.dart';
 
 class TicketCard extends StatelessWidget {
   const TicketCard({super.key});
@@ -18,11 +7,11 @@ class TicketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: _kCardMargin,
-      padding: _kCardPadding,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(_kBorderRadius),
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -31,13 +20,13 @@ class TicketCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         children: [
-          const _TicketHeader(),
-          const SizedBox(height: _kVerticalSpacing),
-          const _TicketDivider(),
-          const SizedBox(height: _kVerticalSpacing),
-          const _TicketBody(),
+          _TicketHeader(),
+          SizedBox(height: 5),
+          _TicketDivider(),
+          SizedBox(height: 5),
+          _TicketBody(),
         ],
       ),
     );
@@ -46,9 +35,9 @@ class TicketCard extends StatelessWidget {
 
 class _TicketHeader extends StatelessWidget {
   const _TicketHeader();
-
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,25 +47,11 @@ class _TicketHeader extends StatelessWidget {
           height: 32,
           fit: BoxFit.contain,
         ),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Servizio Urbano',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.black54,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Text(
-              'TRENTO',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text('Servizio Urbano', style: textTheme.labelMedium),
+            Text('TRENTO', style: textTheme.titleMedium),
           ],
         ),
       ],
@@ -86,20 +61,19 @@ class _TicketHeader extends StatelessWidget {
 
 class _TicketDivider extends StatelessWidget {
   const _TicketDivider();
-
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Container(height: 1, color: _kDividerColor)),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6.0),
+        const Expanded(child: Divider(color: AppColors.divider, height: 1)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6.0),
           child: Text(
             'P.IVA 01807370224',
-            style: TextStyle(fontSize: 10, color: Colors.black54),
+            style: Theme.of(context).textTheme.labelSmall,
           ),
         ),
-        Expanded(child: Container(height: 1, color: _kDividerColor)),
+        const Expanded(child: Divider(color: AppColors.divider, height: 1)),
       ],
     );
   }
@@ -107,15 +81,14 @@ class _TicketDivider extends StatelessWidget {
 
 class _TicketBody extends StatelessWidget {
   const _TicketBody();
-
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Expanded(flex: 4, child: _TicketInfoPanel()),
-        const SizedBox(width: 16),
-        const Expanded(flex: 2, child: _TicketQrPanel()),
+        Expanded(flex: 4, child: _TicketInfoPanel()),
+        SizedBox(width: 16),
+        Expanded(flex: 2, child: _TicketQrPanel()),
       ],
     );
   }
@@ -123,25 +96,24 @@ class _TicketBody extends StatelessWidget {
 
 class _TicketInfoPanel extends StatelessWidget {
   const _TicketInfoPanel();
-
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
+        const Row(
           children: [
-            const _InfoPill(text: '70 minuti', isFirst: true),
-            const SizedBox(width: 1.5),
-            const _InfoPill(text: '€ 1.20', isLast: true, isItalic: true),
+            _InfoPill(text: '70 minuti', isFirst: true),
+            SizedBox(width: 1.5),
+            _InfoPill(text: '€ 1.20', isLast: true, isItalic: true),
           ],
         ),
-        const SizedBox(height: _kVerticalSpacing),
+        const SizedBox(height: 5),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 1.5),
+            border: Border.all(color: AppColors.textPrimary, width: 1.5),
             borderRadius: BorderRadius.circular(6),
           ),
           alignment: Alignment.center,
@@ -157,29 +129,23 @@ class _TicketInfoPanel extends StatelessWidget {
 
 class _TicketQrPanel extends StatelessWidget {
   const _TicketQrPanel();
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: _kQrBgColor,
+        color: AppColors.qrBackground, // Dal Tema
         borderRadius: BorderRadius.circular(4),
       ),
       child: Column(
         children: [
-          Image.asset(
-            'assets/images/ticket_qr.png',
-            width: 100,
-            height: 100,
-            fit: BoxFit.contain,
-          ),
+          Image.asset('assets/images/ticket_qr.png', fit: BoxFit.contain),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             'UNUSED',
-            style: TextStyle(
-              fontSize: 10,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
               color: Colors.black87,
+              fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
             ),
           ),
@@ -196,7 +162,6 @@ class _InfoPill extends StatelessWidget {
     this.isLast = false,
     this.isItalic = false,
   });
-
   final String text;
   final bool isFirst;
   final bool isLast;
@@ -208,19 +173,17 @@ class _InfoPill extends StatelessWidget {
       child: Container(
         height: 42,
         decoration: BoxDecoration(
-          color: _kPrimaryOrange,
-          borderRadius: BorderRadius.only(
-            topLeft: isFirst ? const Radius.circular(4) : Radius.zero,
-            bottomLeft: isFirst ? const Radius.circular(4) : Radius.zero,
-            topRight: isLast ? const Radius.circular(4) : Radius.zero,
-            bottomRight: isLast ? const Radius.circular(4) : Radius.zero,
+          color: Theme.of(context).colorScheme.tertiary, // Arancione dal tema
+          borderRadius: BorderRadius.horizontal(
+            left: isFirst ? const Radius.circular(4) : Radius.zero,
+            right: isLast ? const Radius.circular(4) : Radius.zero,
           ),
         ),
         alignment: Alignment.center,
         child: Text(
           text,
           style: TextStyle(
-            color: _kPillTextColor,
+            color: AppColors.ticketPillText,
             fontWeight: FontWeight.bold,
             fontStyle: isItalic ? FontStyle.italic : FontStyle.normal,
             fontSize: 13,

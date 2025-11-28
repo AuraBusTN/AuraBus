@@ -24,9 +24,15 @@ class StopDetailsModal extends ConsumerWidget {
       maxChildSize: 0.95,
       builder: (_, controller) {
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          decoration: BoxDecoration(
+            color: Theme.of(context).bottomSheetTheme.backgroundColor,
+            borderRadius:
+                Theme.of(context).bottomSheetTheme.shape
+                    is RoundedRectangleBorder
+                ? (Theme.of(context).bottomSheetTheme.shape
+                          as RoundedRectangleBorder)
+                      .borderRadius
+                : const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           child: async.when(
@@ -201,10 +207,10 @@ class _LineCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               "Line ${line.routeShortName}",
-              style: Theme.of(context).textTheme.labelMedium,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
           ],
         ),
