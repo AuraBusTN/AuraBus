@@ -35,8 +35,11 @@ jobs:
         working-directory: ./frontend
 
       - name: Create .env file
-        run: touch .env
+        run: |
+          mkdir -p assets/env
+          touch assets/env/.env
         working-directory: ./frontend
+
 
       - name: Analyze Dart code
         run: flutter analyze .
