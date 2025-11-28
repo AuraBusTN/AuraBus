@@ -14,7 +14,7 @@ class TicketPage extends ConsumerWidget {
           child: Column(
             children: [
               Text(
-                'Your Tickets',
+                'My Tickets',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 20),

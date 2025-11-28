@@ -64,6 +64,11 @@ class AppTheme {
           color: AppColors.textSecondary,
         ),
         labelSmall: TextStyle(fontSize: 10, color: AppColors.textSecondary),
+        headlineLarge: TextStyle(
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+          color: AppColors.primary,
+        ),
       ),
 
       cardTheme: CardThemeData(

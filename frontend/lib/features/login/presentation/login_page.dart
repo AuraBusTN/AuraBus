@@ -76,12 +76,15 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(height: 20),
                             Text(
                               "Welcome Back!",
-                              style: Theme.of(context).textTheme.displayLarge,
+                              style: Theme.of(context).textTheme.headlineLarge,
                             ),
                             const SizedBox(height: 8),
                             Text(
                               "Sign in to continue your journey",
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
                             ),
                           ],
                         ),
@@ -205,8 +208,8 @@ class _LoginPageState extends State<LoginPage> {
                 delay: 0.5,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 30.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
                     children: [
                       Text(
                         "Don't have an account? ",

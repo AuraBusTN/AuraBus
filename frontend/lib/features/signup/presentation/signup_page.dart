@@ -42,7 +42,7 @@ class _SignupPageState extends State<SignupPage> {
         );
         return;
       }
-      print("Signup valido per: ${emailController.text}");
+      print("Signup valid for: ${emailController.text}");
     }
   }
 
@@ -233,8 +233,8 @@ class _SignupPageState extends State<SignupPage> {
                 delay: 0.5,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 30.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
                     children: [
                       Text(
                         "Do you already have an account? ",
