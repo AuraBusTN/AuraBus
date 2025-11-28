@@ -6,7 +6,8 @@ class StopArrival {
   final String routeLongName;
   final Color routeColor;
   final int busId;
-  final int delay;
+  final DateTime? lastUpdate;
+  final int? delay;
   final int lastStopId;
   final int nextStopId;
   final DateTime arrivalTimeScheduled;
@@ -19,6 +20,7 @@ class StopArrival {
     required this.routeLongName,
     required this.routeColor,
     required this.busId,
+    required this.lastUpdate,
     required this.delay,
     required this.lastStopId,
     required this.nextStopId,
@@ -34,7 +36,10 @@ class StopArrival {
       routeLongName: json['routeLongName'] as String,
       routeColor: _parseHexColor(json['routeColor'] as String? ?? '000000'),
       busId: json['busId'] as int? ?? 0,
-      delay: json['delay'] as int? ?? 0,
+      lastUpdate: (json['lastUpdate'] as String?)?.isNotEmpty == true
+          ? DateTime.parse(json['lastUpdate'])
+          : null,
+      delay: json['delay'] as int?,
       lastStopId: json['lastStopId'] as int,
       nextStopId: json['nextStopId'] as int,
       arrivalTimeScheduled: DateTime.parse(

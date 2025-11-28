@@ -216,15 +216,75 @@ class _LineCard extends StatelessWidget {
   }
 }
 
+enum UpdateStatus { none, fresh, stale }
+
 class _BusCard extends StatelessWidget {
   final StopArrival arrival;
 
   const _BusCard({required this.arrival});
-  static const int _kPlaceholderOvercrowding =
-      0; // TODO: replace with real overcrowding data
+  static const int _kPlaceholderOvercrowding = 0;
 
   @override
   Widget build(BuildContext context) {
+    final updatedAt = arrival.lastUpdate;
+    UpdateStatus status;
+    if (updatedAt == null) {
+      status = UpdateStatus.none;
+    } else {
+      final diffMinutes = DateTime.now().difference(updatedAt).inMinutes;
+      status = diffMinutes <= 5 ? UpdateStatus.fresh : UpdateStatus.stale;
+    }
+
+    final delay = arrival.delay ?? 0;
+
+    final scheduledTime = arrival.arrivalTimeScheduled.toLocal();
+    final timeStr = TimeOfDay.fromDateTime(scheduledTime).format(context);
+
+    Widget buildTime() {
+      const baseStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+
+      if (delay == 0) {
+        return SizedBox(
+          width: 72,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(timeStr, style: baseStyle),
+          ),
+        );
+      }
+
+      final sign = delay > 0 ? "+$delay" : "$delay";
+      final color = delay > 0 ? Colors.red : Colors.purple;
+
+      return SizedBox(
+        width: 72,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(timeStr, style: baseStyle),
+            ),
+            Positioned(
+              right: -10,
+              top: -10,
+              child: Text(
+                "$sign'",
+                style: baseStyle.copyWith(fontSize: 11, color: color),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final diff = arrival.arrivalTimeEstimated.difference(DateTime.now());
+    int remainingMinutes = diff.isNegative ? 0 : (diff.inSeconds / 60).ceil();
+
+    final hereIn = remainingMinutes >= 60
+        ? "Here in ${remainingMinutes ~/ 60}h ${remainingMinutes % 60}m"
+        : "Here in ${remainingMinutes}m";
+
     final overcrowding = _kPlaceholderOvercrowding;
     final overcrowdingFraction = overcrowding / 100.0;
     final l10n = AppLocalizations.of(context)!;
@@ -254,6 +314,17 @@ class _BusCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
+          if (status != UpdateStatus.none) ...[
+            BlinkingDot(
+              color: status == UpdateStatus.fresh
+                  ? Colors.green
+                  : Colors.orange,
+            ),
+            const SizedBox(width: 8),
+          ] else
+            const SizedBox(width: 20),
+
+          // Line badge
           Container(
             width: 42,
             height: 42,
@@ -271,6 +342,7 @@ class _BusCard extends StatelessWidget {
               ),
             ),
           ),
+
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -315,13 +387,7 @@ class _BusCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                timeStr,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
+              buildTime(),
               const SizedBox(height: 2),
               Text(
                 hereIn,
@@ -330,6 +396,48 @@ class _BusCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BlinkingDot extends StatefulWidget {
+  final Color color;
+  const BlinkingDot({required this.color, super.key});
+
+  @override
+  State<BlinkingDot> createState() => _BlinkingDotState();
+}
+
+class _BlinkingDotState extends State<BlinkingDot>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+      lowerBound: .3,
+      upperBound: 1,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _controller,
+      child: Container(
+        width: 12,
+        height: 12,
+        decoration: BoxDecoration(color: widget.color, shape: BoxShape.circle),
       ),
     );
   }
