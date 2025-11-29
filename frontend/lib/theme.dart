@@ -41,7 +41,6 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.scaffoldBackground,
       primaryColor: AppColors.primary,
 
-      fontFamily: null,
       textTheme: const TextTheme(
         headlineMedium: TextStyle(
           fontSize: 26,
