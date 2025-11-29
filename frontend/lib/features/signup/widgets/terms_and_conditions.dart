@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
@@ -89,6 +90,10 @@ class TermsAndConditions extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline,
                       ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // TODO: Open Terms and Conditions link
+                        },
                     ),
                     TextSpan(text: l10n.andText),
                     TextSpan(
@@ -98,6 +103,10 @@ class TermsAndConditions extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline,
                       ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // TODO: Open Privacy Policy link
+                        },
                     ),
                   ],
                 ),

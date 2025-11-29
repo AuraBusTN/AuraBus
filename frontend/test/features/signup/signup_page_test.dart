@@ -36,16 +36,16 @@ void main() {
       await tester.pumpWidget(createTestApp(child: const SignupPage()));
       await tester.pumpAndSettle();
 
-      await tester.enterText(findCustomTextFieldByLabel('First Name'), 'Test');
-      await tester.enterText(findCustomTextFieldByLabel('Last Name'), 'User');
+      await tester.enterText(findTextFormFieldByLabel('First Name'), 'Test');
+      await tester.enterText(findTextFormFieldByLabel('Last Name'), 'User');
       await tester.enterText(
-        findCustomTextFieldByLabel('Email Address'),
+        findTextFormFieldByLabel('Email Address'),
         'test@email.com',
       );
 
-      await tester.enterText(findCustomTextFieldByLabel('Password'), '123456');
+      await tester.enterText(findTextFormFieldByLabel('Password'), '123456');
       await tester.enterText(
-        findCustomTextFieldByLabel('Confirm Password'),
+        findTextFormFieldByLabel('Confirm Password'),
         '654321',
       );
 
@@ -57,7 +57,7 @@ void main() {
       expect(find.text('Mismatch'), findsOneWidget);
 
       await tester.enterText(
-        findCustomTextFieldByLabel('Confirm Password'),
+        findTextFormFieldByLabel('Confirm Password'),
         '123456',
       );
 

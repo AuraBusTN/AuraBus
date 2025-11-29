@@ -99,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             CustomTextField(
+                              key: const Key('emailField'),
                               controller: emailController,
                               label: l10n.emailLabel,
                               icon: Icons.email_outlined,
@@ -116,6 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             ),
                             CustomTextField(
+                              key: const Key('passwordField'),
                               controller: passwordController,
                               label: l10n.passwordLabel,
                               icon: Icons.lock_outline,

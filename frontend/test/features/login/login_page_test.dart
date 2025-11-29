@@ -23,10 +23,7 @@ void main() {
       await tester.pumpWidget(createTestApp(child: const LoginPage()));
       await tester.pumpAndSettle();
 
-      await tester.enterText(
-        findCustomTextFieldByLabel('Email Address'),
-        'bad_email',
-      );
+      await tester.enterText(find.byKey(const Key('emailField')), 'bad_email');
 
       final loginButton = find.widgetWithText(GenericButton, 'Login');
       await tester.ensureVisible(loginButton);
@@ -40,8 +37,14 @@ void main() {
       await tester.pumpWidget(createTestApp(child: const LoginPage()));
       await tester.pumpAndSettle();
 
-      final passwordField = find.widgetWithText(TextField, 'Password');
-      final TextField widget = tester.widget(passwordField);
+      final passwordFinder = find.byKey(const Key('passwordField'));
+
+      final textFieldFinder = find.descendant(
+        of: passwordFinder,
+        matching: find.byType(TextField),
+      );
+
+      final TextField widget = tester.widget(textFieldFinder);
 
       expect(widget.obscureText, isTrue);
     });
@@ -61,7 +64,7 @@ void main() {
 
           expect(find.text('Welcome Back!'), findsOneWidget);
 
-          expect(findCustomTextFieldByLabel('Email Address'), findsOneWidget);
+          expect(find.byKey(const Key('emailField')), findsOneWidget);
 
           final loginButton = find.widgetWithText(GenericButton, 'Login');
           await tester.ensureVisible(loginButton);

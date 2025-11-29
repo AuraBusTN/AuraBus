@@ -1,4 +1,3 @@
-// test/utils/test_app_wrapper.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -52,6 +51,6 @@ Widget createTestApp({required Widget child, GoRouter? router}) {
   );
 }
 
-Finder findCustomTextFieldByLabel(String label) {
+Finder findTextFormFieldByLabel(String label) {
   return find.widgetWithText(TextFormField, label);
 }

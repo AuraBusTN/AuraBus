@@ -27,13 +27,10 @@ class StopDetailsModal extends ConsumerWidget {
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).bottomSheetTheme.backgroundColor,
-            borderRadius:
-                Theme.of(context).bottomSheetTheme.shape
-                    is RoundedRectangleBorder
-                ? (Theme.of(context).bottomSheetTheme.shape
-                          as RoundedRectangleBorder)
-                      .borderRadius
-                : const BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: switch (Theme.of(context).bottomSheetTheme.shape) {
+              RoundedRectangleBorder r => r.borderRadius,
+              _ => const BorderRadius.vertical(top: Radius.circular(20)),
+            },
           ),
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           child: async.when(

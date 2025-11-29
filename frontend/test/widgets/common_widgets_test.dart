@@ -104,7 +104,9 @@ void main() {
       expect(pressed, isTrue);
     });
 
-    testWidgets('FadeInSlide renders child and animates', (tester) async {
+    testWidgets('FadeInSlide animates opacity and position over time', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -113,12 +115,30 @@ void main() {
         ),
       );
 
-      expect(find.text('Animated Content'), findsOneWidget);
+      final fadeTransitionFinder = find.descendant(
+        of: find.byType(FadeInSlide),
+        matching: find.byType(FadeTransition),
+      );
 
-      await tester.pump(const Duration(milliseconds: 100));
-      await tester.pump(const Duration(milliseconds: 800));
+      expect(
+        tester.widget<FadeTransition>(fadeTransitionFinder).opacity.value,
+        0.0,
+      );
 
-      expect(find.text('Animated Content'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 150));
+
+      await tester.pump(const Duration(milliseconds: 200));
+
+      final fadeWidgetMid = tester.widget<FadeTransition>(fadeTransitionFinder);
+      expect(fadeWidgetMid.opacity.value, greaterThan(0.0));
+      expect(fadeWidgetMid.opacity.value, lessThan(1.0));
+
+      await tester.pump(const Duration(milliseconds: 2000));
+
+      expect(
+        tester.widget<FadeTransition>(fadeTransitionFinder).opacity.value,
+        1.0,
+      );
     });
 
     testWidgets('GoogleButton renders localized text and responds to tap', (
@@ -136,7 +156,6 @@ void main() {
       );
 
       expect(find.text('Sign in with Google'), findsOneWidget);
-
       expect(find.byType(Image), findsOneWidget);
 
       await tester.tap(find.byType(GoogleButton));
