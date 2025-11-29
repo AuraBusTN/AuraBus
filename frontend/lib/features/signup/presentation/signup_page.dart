@@ -44,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
         ).showSnackBar(SnackBar(content: Text(l10n.termsError)));
         return;
       }
-      print("Signup valid for: ${emailController.text}");
+      debugPrint("Signup valid for: ${emailController.text}");
     }
   }
 

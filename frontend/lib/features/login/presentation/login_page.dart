@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      print("Login valid: ${emailController.text}");
+      debugPrint("Login valid: ${emailController.text}");
     }
   }
 
@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             Googlebutton(
                               onPressed: () {
-                                print("Google Login");
+                                debugPrint("Google Login");
                               },
                             ),
 
