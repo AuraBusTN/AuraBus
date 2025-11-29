@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/routing/router.dart';
 import 'package:aurabus/features/account/widgets/account_info_body.dart';
 import 'package:aurabus/features/account/widgets/account_section.dart';
@@ -28,6 +29,8 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -36,14 +39,13 @@ class _AccountPageState extends State<AccountPage> {
             children: [
               const SizedBox(height: 16),
               Text(
-                'Account Settings',
+                l10n.accountSettings,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 24),
 
-              // INFO
               AccountSection(
-                title: 'Account Info',
+                title: l10n.accountInfoSection,
                 isExpanded: expandedSections.contains(AccountSectionType.info),
                 onTap: () => toggleSection(AccountSectionType.info),
                 child: AccountInfoBody(
@@ -55,7 +57,7 @@ class _AccountPageState extends State<AccountPage> {
               const SizedBox(height: 12),
 
               AccountSection(
-                title: 'Subscription',
+                title: l10n.subscriptionSection,
                 isExpanded: expandedSections.contains(
                   AccountSectionType.subscription,
                 ),
@@ -65,7 +67,7 @@ class _AccountPageState extends State<AccountPage> {
               const SizedBox(height: 12),
 
               AccountSection(
-                title: 'Contact Us',
+                title: l10n.contactUsSection,
                 isExpanded: expandedSections.contains(
                   AccountSectionType.contact,
                 ),
@@ -75,7 +77,7 @@ class _AccountPageState extends State<AccountPage> {
               const SizedBox(height: 12),
 
               AccountSection(
-                title: 'Ranking',
+                title: l10n.rankingSection,
                 isExpanded: expandedSections.contains(
                   AccountSectionType.ranking,
                 ),
@@ -83,7 +85,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
               const SizedBox(height: 12),
               AccountSection(
-                title: 'Logout',
+                title: l10n.logoutButton,
                 isExpanded: false,
                 onTap: () => context.push(AppRoute.login),
               ),

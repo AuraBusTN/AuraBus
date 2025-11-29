@@ -29,13 +29,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoute.login,
         pageBuilder: (context, state) =>
             const NoTransitionPage(child: LoginPage()),
-          ),
-        GoRoute(
+      ),
+      GoRoute(
         path: AppRoute.signup,
         pageBuilder: (context, state) =>
-            const NoTransitionPage(child: SignupPage()
-            ),
-          ),
+            const NoTransitionPage(child: SignupPage()),
+      ),
       ShellRoute(
         navigatorKey: _shellKey,
         builder: (context, state, child) {

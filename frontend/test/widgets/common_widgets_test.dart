@@ -1,5 +1,5 @@
-import 'package:aurabus/features/login/widgets/custom_text_field.dart';
-import 'package:aurabus/features/login/widgets/generic_button.dart';
+import 'package:aurabus/common/widgets/custom_text_field.dart';
+import 'package:aurabus/common/widgets/generic_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

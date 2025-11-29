@@ -1,36 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 
 class SubscriptionBody extends StatelessWidget {
   const SubscriptionBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             Text(
-              'LIBERA CIRCOLAZIONE UNITN',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              l10n.subscriptionCardTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
-            Icon(Icons.qr_code_2_rounded, size: 40),
+            const Icon(Icons.qr_code_2_rounded, size: 40),
           ],
         ),
         const SizedBox(height: 12),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text('Code:'), Text('00000')],
+          children: [Text(l10n.subscriptionCodeLabel), const Text('00000')],
         ),
         const SizedBox(height: 4),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Status:'),
+            Text(l10n.subscriptionStatusLabel),
             Text(
-              'Valid',
-              style: TextStyle(
+              l10n.statusValid,
+              style: const TextStyle(
                 color: Colors.green,
                 fontWeight: FontWeight.bold,
               ),
@@ -38,25 +41,31 @@ class SubscriptionBody extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Type:'),
+            Text(l10n.subscriptionTypeLabel),
             Text(
-              'Libera circolazione UNITN',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              l10n.subscriptionCardTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
         ),
         const SizedBox(height: 4),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text('Start date:'), Text('01/09/2025')],
+          children: [
+            Text(l10n.subscriptionStartDateLabel),
+            const Text('01/09/2025'),
+          ],
         ),
         const SizedBox(height: 4),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text('Expiration Date:'), Text('31/08/2026')],
+          children: [
+            Text(l10n.subscriptionExpirationDateLabel),
+            const Text('31/08/2026'),
+          ],
         ),
       ],
     );

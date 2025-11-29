@@ -1,5 +1,5 @@
 import 'package:aurabus/features/signup/presentation/signup_page.dart';
-import 'package:aurabus/features/signup/widgets/generic_button.dart';
+import 'package:aurabus/common/widgets/generic_button.dart';
 import 'package:aurabus/features/signup/widgets/terms_and_conditions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

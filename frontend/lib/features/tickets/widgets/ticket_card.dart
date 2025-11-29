@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/theme.dart';
 
 class TicketCard extends StatelessWidget {
@@ -38,6 +39,8 @@ class _TicketHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,8 +53,8 @@ class _TicketHeader extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Servizio Urbano', style: textTheme.labelMedium),
-            Text('TRENTO', style: textTheme.titleMedium),
+            Text(l10n.ticketUrbanService, style: textTheme.labelMedium),
+            Text(l10n.ticketCity, style: textTheme.titleMedium),
           ],
         ),
       ],
@@ -63,13 +66,15 @@ class _TicketDivider extends StatelessWidget {
   const _TicketDivider();
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       children: [
         const Expanded(child: Divider(color: AppColors.divider, height: 1)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6.0),
           child: Text(
-            'P.IVA 01807370224',
+            l10n.ticketVat,
             style: Theme.of(context).textTheme.labelSmall,
           ),
         ),
@@ -98,14 +103,16 @@ class _TicketInfoPanel extends StatelessWidget {
   const _TicketInfoPanel();
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Row(
+        Row(
           children: [
-            _InfoPill(text: '70 minuti', isFirst: true),
-            SizedBox(width: 1.5),
-            _InfoPill(text: '€ 1.20', isLast: true, isItalic: true),
+            _InfoPill(text: l10n.ticketDuration70, isFirst: true),
+            const SizedBox(width: 1.5),
+            _InfoPill(text: l10n.ticketPrice120, isLast: true, isItalic: true),
           ],
         ),
         const SizedBox(height: 5),
@@ -117,9 +124,9 @@ class _TicketInfoPanel extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
           ),
           alignment: Alignment.center,
-          child: const Text(
-            'Validate',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          child: Text(
+            l10n.ticketValidateAction,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -131,10 +138,12 @@ class _TicketQrPanel extends StatelessWidget {
   const _TicketQrPanel();
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.qrBackground, // Dal Tema
+        color: AppColors.qrBackground,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Column(
@@ -142,7 +151,7 @@ class _TicketQrPanel extends StatelessWidget {
           Image.asset('assets/images/ticket_qr.png', fit: BoxFit.contain),
           const SizedBox(height: 4),
           Text(
-            'UNUSED',
+            l10n.ticketStatusUnused,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
               color: Colors.black87,
               fontWeight: FontWeight.bold,
@@ -173,7 +182,7 @@ class _InfoPill extends StatelessWidget {
       child: Container(
         height: 42,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.tertiary, // Arancione dal tema
+          color: Theme.of(context).colorScheme.tertiary,
           borderRadius: BorderRadius.horizontal(
             left: isFirst ? const Radius.circular(4) : Radius.zero,
             right: isLast ? const Radius.circular(4) : Radius.zero,

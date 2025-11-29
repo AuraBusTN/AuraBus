@@ -1,5 +1,5 @@
 import 'package:aurabus/features/login/presentation/login_page.dart';
-import 'package:aurabus/features/login/widgets/generic_button.dart';
+import 'package:aurabus/common/widgets/generic_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../../utils/test_app_wrapper.dart';

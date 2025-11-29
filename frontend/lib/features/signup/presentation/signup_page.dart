@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:aurabus/features/signup/widgets/generic_button.dart';
-import 'package:aurabus/features/signup/widgets/google_button.dart';
-import 'package:aurabus/features/signup/widgets/custom_text_field.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
+import 'package:aurabus/common/widgets/generic_button.dart';
+import 'package:aurabus/common/widgets/google_button.dart';
+import 'package:aurabus/common/widgets/custom_text_field.dart';
 import 'package:aurabus/features/signup/widgets/terms_and_conditions.dart';
-import 'package:aurabus/features/signup/widgets/fade_in_slide.dart';
+import 'package:aurabus/common/widgets/fade_in_slide.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -35,11 +36,12 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void _handleSignup() {
+    final l10n = AppLocalizations.of(context)!;
     if (_formKey.currentState!.validate()) {
       if (!termsChecked) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please accept terms and conditions')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.termsError)));
         return;
       }
       print("Signup valid for: ${emailController.text}");
@@ -49,6 +51,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -70,13 +73,12 @@ class _SignupPageState extends State<SignupPage> {
                     children: [
                       const SizedBox(height: 80),
 
-                      // HEADER
                       FadeInSlide(
                         delay: 0.1,
                         child: Column(
                           children: [
                             Text(
-                              "Create Account",
+                              l10n.createAccountTitle,
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
@@ -85,7 +87,7 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "Join us and start your journey",
+                              l10n.createAccountSubtitle,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey[600],
@@ -106,20 +108,20 @@ class _SignupPageState extends State<SignupPage> {
                                 Expanded(
                                   child: CustomTextField(
                                     controller: firstNameController,
-                                    label: 'First Name',
+                                    label: l10n.firstNameLabel,
                                     icon: Icons.person_outline,
                                     validator: (v) =>
-                                        v!.isEmpty ? 'Required' : null,
+                                        v!.isEmpty ? l10n.requiredField : null,
                                   ),
                                 ),
                                 const SizedBox(width: 15),
                                 Expanded(
                                   child: CustomTextField(
                                     controller: lastNameController,
-                                    label: 'Last Name',
+                                    label: l10n.lastNameLabel,
                                     icon: Icons.person_outline,
                                     validator: (v) =>
-                                        v!.isEmpty ? 'Required' : null,
+                                        v!.isEmpty ? l10n.requiredField : null,
                                   ),
                                 ),
                               ],
@@ -127,29 +129,29 @@ class _SignupPageState extends State<SignupPage> {
 
                             CustomTextField(
                               controller: emailController,
-                              label: 'Email',
+                              label: l10n.emailLabel,
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
                               validator: (v) =>
-                                  !v!.contains('@') ? 'Invalid Email' : null,
+                                  !v!.contains('@') ? l10n.invalidEmail : null,
                             ),
 
                             CustomTextField(
                               controller: passwordController,
-                              label: 'Password',
+                              label: l10n.passwordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
                               validator: (v) =>
-                                  v!.length < 6 ? 'Min 6 chars' : null,
+                                  v!.length < 6 ? l10n.passwordMinChars : null,
                             ),
 
                             CustomTextField(
                               controller: confirmPasswordController,
-                              label: 'Confirm Password',
+                              label: l10n.confirmPasswordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
                               validator: (v) => v != passwordController.text
-                                  ? 'Mismatch'
+                                  ? l10n.passwordMismatch
                                   : null,
                             ),
                           ],
@@ -170,7 +172,7 @@ class _SignupPageState extends State<SignupPage> {
                             ),
 
                             Genericbutton(
-                              textlabel: 'Sign Up',
+                              textlabel: l10n.signupButton,
                               onPressed: _handleSignup,
                             ),
 
@@ -186,7 +188,7 @@ class _SignupPageState extends State<SignupPage> {
                                     horizontal: 10,
                                   ),
                                   child: Text(
-                                    "Or sign up with",
+                                    l10n.orSignUpWith,
                                     style: TextStyle(
                                       color: Colors.grey.shade500,
                                       fontSize: 12,
@@ -237,13 +239,13 @@ class _SignupPageState extends State<SignupPage> {
                     alignment: WrapAlignment.center,
                     children: [
                       Text(
-                        "Do you already have an account? ",
+                        l10n.alreadyHaveAccount,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       GestureDetector(
                         onTap: () => context.pop(),
                         child: Text(
-                          "Log In",
+                          l10n.loginButton,
                           style: TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,

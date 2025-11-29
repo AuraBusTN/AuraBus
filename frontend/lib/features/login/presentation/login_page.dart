@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:aurabus/features/login/widgets/clickable_text.dart';
-import 'package:aurabus/features/login/widgets/generic_button.dart';
-import 'package:aurabus/features/login/widgets/google_button.dart';
-import 'package:aurabus/features/login/widgets/custom_text_field.dart';
-import 'package:aurabus/features/login/widgets/fade_in_slide.dart';
+import 'package:aurabus/common/widgets/clickable_text.dart';
+import 'package:aurabus/common/widgets/generic_button.dart';
+import 'package:aurabus/common/widgets/google_button.dart';
+import 'package:aurabus/common/widgets/custom_text_field.dart';
+import 'package:aurabus/common/widgets/fade_in_slide.dart';
 import 'package:aurabus/routing/router.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -75,12 +76,12 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 20),
                             Text(
-                              "Welcome Back!",
+                              AppLocalizations.of(context)!.welcomeBack,
                               style: Theme.of(context).textTheme.headlineLarge,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "Sign in to continue your journey",
+                              AppLocalizations.of(context)!.signInSubtitle,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey[600],
@@ -98,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             CustomTextField(
                               controller: emailController,
-                              label: 'Email Address',
+                              label: AppLocalizations.of(context)!.emailLabel,
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
@@ -113,7 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             CustomTextField(
                               controller: passwordController,
-                              label: 'Password',
+                              label: AppLocalizations.of(
+                                context,
+                              )!.passwordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
                               validator: (value) =>
@@ -125,7 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Clickabletext(
-                                textlabel: "Forgot Password?",
+                                textlabel: AppLocalizations.of(
+                                  context,
+                                )!.forgotPassword,
                                 fun: () {},
                               ),
                             ),
@@ -140,7 +145,9 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             Genericbutton(
-                              textlabel: 'Login',
+                              textlabel: AppLocalizations.of(
+                                context,
+                              )!.loginButton,
                               onPressed: _handleLogin,
                             ),
 
@@ -156,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                                     horizontal: 10,
                                   ),
                                   child: Text(
-                                    "Or continue with",
+                                    AppLocalizations.of(context)!.continueWith,
                                     style: TextStyle(
                                       color: Colors.grey.shade500,
                                       fontSize: 12,
@@ -212,13 +219,13 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: WrapAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account? ",
+                        AppLocalizations.of(context)!.noAccount,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       GestureDetector(
                         onTap: () => context.push(AppRoute.signup),
                         child: Text(
-                          "Sign Up",
+                          AppLocalizations.of(context)!.signUpLink,
                           style: TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class Googlebutton extends StatelessWidget {
@@ -28,8 +29,8 @@ class Googlebutton extends StatelessWidget {
           errorBuilder: (context, error, stackTrace) =>
               const Icon(Icons.g_mobiledata, size: 30, color: Colors.blue),
         ),
-        label: const Text(
-          "Sign in with Google",
+        label: Text(
+          AppLocalizations.of(context)!.signInWithGoogle,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,

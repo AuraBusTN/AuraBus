@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:aurabus/routing/router.dart';
 import 'package:aurabus/features/account/presentation/account_page.dart';
 import 'package:aurabus/features/map/presentation/map_screen.dart';
 import 'package:aurabus/features/tickets/presentation/ticket_page.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   final Widget child;
@@ -47,15 +47,18 @@ class _HomePageState extends State<HomePage> {
               break;
           }
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.confirmation_number_outlined),
-            label: "Tickets",
+            icon: const Icon(Icons.confirmation_number_outlined),
+            label: AppLocalizations.of(context)!.tickets,
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.map_outlined), label: "Map"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: "Account",
+            icon: const Icon(Icons.map_outlined),
+            label: AppLocalizations.of(context)!.map,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person_outline),
+            label: AppLocalizations.of(context)!.account,
           ),
         ],
       ),

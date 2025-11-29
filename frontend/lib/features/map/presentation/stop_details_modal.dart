@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'package:aurabus/features/map/data/models/stop_details.dart';
 
@@ -17,6 +17,7 @@ class StopDetailsModal extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(stopDetailsProvider(stopId));
+    final l10n = AppLocalizations.of(context)!;
 
     return DraggableScrollableSheet(
       expand: false,
@@ -37,7 +38,8 @@ class StopDetailsModal extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           child: async.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text("Error: $e")),
+            error: (e, _) =>
+                Center(child: Text(l10n.errorMessage(e.toString()))),
             data: (arrivals) => _StopDetailsContent(
               controller: controller,
               stopId: stopId,
@@ -100,7 +102,6 @@ class _StopDetailsContent extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
 
-        // top horizontal line selector
         SizedBox(
           height: 100,
           child: ListView.separated(
@@ -122,7 +123,6 @@ class _StopDetailsContent extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
 
-        // bus list
         Expanded(
           child: ListView.builder(
             controller: controller,
@@ -159,7 +159,6 @@ class _DragHandle extends StatelessWidget {
   }
 }
 
-/// Top card with bus image + line name
 class _LineCard extends StatelessWidget {
   final StopArrival line;
   final bool isSelected;
@@ -176,6 +175,7 @@ class _LineCard extends StatelessWidget {
     final borderColor = isSelected
         ? Colors.black.withValues(alpha: 0.8)
         : Colors.black12;
+    final l10n = AppLocalizations.of(context)!;
 
     return GestureDetector(
       onTap: onTap,
@@ -206,7 +206,7 @@ class _LineCard extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             Text(
-              "Line ${line.routeShortName}",
+              l10n.lineTitle(line.routeShortName),
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -230,11 +230,13 @@ class _BusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final overcrowding = _kPlaceholderOvercrowding;
     final overcrowdingFraction = overcrowding / 100.0;
+    final l10n = AppLocalizations.of(context)!;
 
     final now = DateTime.now().toUtc();
     final diff = arrival.arrivalTimeEstimated.difference(now);
     final minutes = diff.inMinutes.abs();
-    final hereIn = "Here in ${minutes}m";
+
+    final hereIn = l10n.arrivingIn(minutes);
 
     final timeStr = TimeOfDay.fromDateTime(
       arrival.arrivalTimeEstimated.toLocal(),
@@ -255,7 +257,6 @@ class _BusCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
-          // Line badge
           Container(
             width: 42,
             height: 42,
@@ -274,8 +275,6 @@ class _BusCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-
-          // Middle: overcrowding + bar
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,7 +315,6 @@ class _BusCard extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          // Right: time + relative text
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [

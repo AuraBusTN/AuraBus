@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 
 class TermsAndConditions extends StatelessWidget {
   final bool isChecked;
@@ -15,6 +16,7 @@ class TermsAndConditions extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final tertiary = Theme.of(context).colorScheme.tertiary;
+    final l10n = AppLocalizations.of(context)!;
 
     return GestureDetector(
       onTap: () {
@@ -79,18 +81,18 @@ class TermsAndConditions extends StatelessWidget {
                     ).textTheme.bodyMedium?.fontFamily,
                   ),
                   children: [
-                    const TextSpan(text: "I agree with the "),
+                    TextSpan(text: l10n.termsText),
                     TextSpan(
-                      text: "Terms & Conditions",
+                      text: l10n.termsLink,
                       style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline,
                       ),
                     ),
-                    const TextSpan(text: " and "),
+                    TextSpan(text: l10n.andText),
                     TextSpan(
-                      text: "Privacy Policy",
+                      text: l10n.privacyLink,
                       style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
