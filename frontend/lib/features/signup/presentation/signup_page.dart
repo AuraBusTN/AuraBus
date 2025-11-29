@@ -44,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
         ).showSnackBar(SnackBar(content: Text(l10n.termsError)));
         return;
       }
-      debugPrint("Signup valid for: ${emailController.text}");
+      // TODO: Implement signup logic
     }
   }
 
@@ -110,8 +110,9 @@ class _SignupPageState extends State<SignupPage> {
                                     controller: firstNameController,
                                     label: l10n.firstNameLabel,
                                     icon: Icons.person_outline,
-                                    validator: (v) =>
-                                        v!.isEmpty ? l10n.requiredField : null,
+                                    validator: (v) => (v == null || v.isEmpty)
+                                        ? l10n.requiredField
+                                        : null,
                                   ),
                                 ),
                                 const SizedBox(width: 15),
@@ -120,8 +121,9 @@ class _SignupPageState extends State<SignupPage> {
                                     controller: lastNameController,
                                     label: l10n.lastNameLabel,
                                     icon: Icons.person_outline,
-                                    validator: (v) =>
-                                        v!.isEmpty ? l10n.requiredField : null,
+                                    validator: (v) => (v == null || v.isEmpty)
+                                        ? l10n.requiredField
+                                        : null,
                                   ),
                                 ),
                               ],
@@ -132,6 +134,7 @@ class _SignupPageState extends State<SignupPage> {
                               label: l10n.emailLabel,
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
+                              // TODO: Replace with more robust validation
                               validator: (v) =>
                                   !v!.contains('@') ? l10n.invalidEmail : null,
                             ),
@@ -141,6 +144,7 @@ class _SignupPageState extends State<SignupPage> {
                               label: l10n.passwordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
+                              // TODO: Replace with more robust validation
                               validator: (v) =>
                                   v!.length < 6 ? l10n.passwordMinChars : null,
                             ),
@@ -171,8 +175,8 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
 
-                            Genericbutton(
-                              textlabel: l10n.signupButton,
+                            GenericButton(
+                              textLabel: l10n.signupButton,
                               onPressed: _handleSignup,
                             ),
 
@@ -203,7 +207,7 @@ class _SignupPageState extends State<SignupPage> {
 
                             const SizedBox(height: 25),
 
-                            Googlebutton(onPressed: () {}),
+                            GoogleButton(onPressed: () {}),
 
                             const SizedBox(height: 100),
                           ],

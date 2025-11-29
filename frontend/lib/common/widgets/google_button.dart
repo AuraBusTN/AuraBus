@@ -1,10 +1,10 @@
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-class Googlebutton extends StatelessWidget {
+class GoogleButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
-  const Googlebutton({super.key, this.onPressed});
+  const GoogleButton({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class Googlebutton extends StatelessWidget {
         ),
         label: Text(
           AppLocalizations.of(context)!.signInWithGoogle,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Colors.black87,

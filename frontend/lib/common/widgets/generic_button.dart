@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Genericbutton extends StatelessWidget {
-  final String textlabel;
+class GenericButton extends StatelessWidget {
+  final String textLabel;
   final VoidCallback? onPressed;
 
-  const Genericbutton({super.key, required this.textlabel, this.onPressed});
+  const GenericButton({super.key, required this.textLabel, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class Genericbutton extends StatelessWidget {
         ),
         onPressed: onPressed ?? () {},
         child: Text(
-          textlabel,
+          textLabel,
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

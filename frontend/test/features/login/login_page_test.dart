@@ -11,7 +11,7 @@ void main() {
       await tester.pumpWidget(createTestApp(child: const LoginPage()));
       await tester.pumpAndSettle();
 
-      final loginButton = find.widgetWithText(Genericbutton, 'Login');
+      final loginButton = find.widgetWithText(GenericButton, 'Login');
       await tester.ensureVisible(loginButton);
       await tester.tap(loginButton);
       await tester.pump();
@@ -28,7 +28,7 @@ void main() {
         'bad_email',
       );
 
-      final loginButton = find.widgetWithText(Genericbutton, 'Login');
+      final loginButton = find.widgetWithText(GenericButton, 'Login');
       await tester.ensureVisible(loginButton);
       await tester.tap(loginButton);
       await tester.pump();
@@ -63,7 +63,7 @@ void main() {
 
           expect(findCustomTextFieldByLabel('Email Address'), findsOneWidget);
 
-          final loginButton = find.widgetWithText(Genericbutton, 'Login');
+          final loginButton = find.widgetWithText(GenericButton, 'Login');
           await tester.ensureVisible(loginButton);
           expect(loginButton, findsOneWidget);
 

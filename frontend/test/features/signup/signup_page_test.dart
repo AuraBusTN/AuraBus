@@ -16,7 +16,7 @@ void main() {
       await tester.pumpWidget(createTestApp(child: const SignupPage()));
       await tester.pumpAndSettle();
 
-      final signUpButton = find.widgetWithText(Genericbutton, 'Sign Up');
+      final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
       await tester.ensureVisible(signUpButton);
       await tester.tap(signUpButton);
       await tester.pump();
@@ -49,7 +49,7 @@ void main() {
         '654321',
       );
 
-      final signUpButton = find.widgetWithText(Genericbutton, 'Sign Up');
+      final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
       await tester.ensureVisible(signUpButton);
       await tester.tap(signUpButton);
       await tester.pump();

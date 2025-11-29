@@ -1,5 +1,9 @@
 import 'package:aurabus/common/widgets/custom_text_field.dart';
 import 'package:aurabus/common/widgets/generic_button.dart';
+import 'package:aurabus/common/widgets/clickable_text.dart';
+import 'package:aurabus/common/widgets/fade_in_slide.dart';
+import 'package:aurabus/common/widgets/google_button.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -64,8 +68,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Genericbutton(
-              textlabel: 'Click Me',
+            body: GenericButton(
+              textLabel: 'Click Me',
               onPressed: () => pressed = true,
             ),
           ),
@@ -74,7 +78,68 @@ void main() {
 
       expect(find.text('Click Me'), findsOneWidget);
 
-      await tester.tap(find.byType(Genericbutton));
+      await tester.tap(find.byType(GenericButton));
+      expect(pressed, isTrue);
+    });
+
+    testWidgets('ClickableText renders text and responds to tap', (
+      tester,
+    ) async {
+      bool pressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ClickableText(
+              textLabel: 'Forgot Password?',
+              fun: () => pressed = true,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Forgot Password?'), findsOneWidget);
+
+      await tester.tap(find.text('Forgot Password?'));
+      expect(pressed, isTrue);
+    });
+
+    testWidgets('FadeInSlide renders child and animates', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: FadeInSlide(delay: 0.1, child: Text('Animated Content')),
+          ),
+        ),
+      );
+
+      expect(find.text('Animated Content'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 800));
+
+      expect(find.text('Animated Content'), findsOneWidget);
+    });
+
+    testWidgets('GoogleButton renders localized text and responds to tap', (
+      tester,
+    ) async {
+      bool pressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('en'),
+          home: Scaffold(body: GoogleButton(onPressed: () => pressed = true)),
+        ),
+      );
+
+      expect(find.text('Sign in with Google'), findsOneWidget);
+
+      expect(find.byType(Image), findsOneWidget);
+
+      await tester.tap(find.byType(GoogleButton));
       expect(pressed, isTrue);
     });
   });

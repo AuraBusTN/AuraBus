@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      debugPrint("Login valid: ${emailController.text}");
+      // TODO: Implement login logic
     }
   }
 
@@ -107,6 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                                 if (value == null || value.isEmpty) {
                                   return l10n.requiredField;
                                 }
+                                // Simple email validation
+                                // TODO: Replace with more robust validation
                                 if (!value.contains('@')) {
                                   return l10n.invalidEmail;
                                 }
@@ -126,8 +128,8 @@ class _LoginPageState extends State<LoginPage> {
 
                             Align(
                               alignment: Alignment.centerRight,
-                              child: Clickabletext(
-                                textlabel: l10n.forgotPassword,
+                              child: ClickableText(
+                                textLabel: l10n.forgotPassword,
                                 fun: () {},
                               ),
                             ),
@@ -141,8 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                         delay: 0.3,
                         child: Column(
                           children: [
-                            Genericbutton(
-                              textlabel: l10n.loginButton,
+                            GenericButton(
+                              textLabel: l10n.loginButton,
                               onPressed: _handleLogin,
                             ),
 
@@ -173,9 +175,9 @@ class _LoginPageState extends State<LoginPage> {
 
                             const SizedBox(height: 30),
 
-                            Googlebutton(
+                            GoogleButton(
                               onPressed: () {
-                                debugPrint("Google Login");
+                                // TODO: Implement Google Sign-In
                               },
                             ),
 
