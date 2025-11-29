@@ -4,6 +4,7 @@ import 'package:aurabus/features/map/data/models/stop_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('MapController opens modal correctly', (tester) async {
@@ -15,6 +16,9 @@ void main() {
           ).overrideWith((ref) async => <StopArrival>[]),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('en'),
           home: Scaffold(
             body: Builder(
               builder: (context) {

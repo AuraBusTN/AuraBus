@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -76,12 +77,12 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 20),
                             Text(
-                              AppLocalizations.of(context)!.welcomeBack,
+                              l10n.welcomeBack,
                               style: Theme.of(context).textTheme.headlineLarge,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              AppLocalizations.of(context)!.signInSubtitle,
+                              l10n.signInSubtitle,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey[600],
@@ -99,38 +100,34 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             CustomTextField(
                               controller: emailController,
-                              label: AppLocalizations.of(context)!.emailLabel,
+                              label: l10n.emailLabel,
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Email is required';
+                                  return l10n.requiredField;
                                 }
                                 if (!value.contains('@')) {
-                                  return 'Invalid email';
+                                  return l10n.invalidEmail;
                                 }
                                 return null;
                               },
                             ),
                             CustomTextField(
                               controller: passwordController,
-                              label: AppLocalizations.of(
-                                context,
-                              )!.passwordLabel,
+                              label: l10n.passwordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
                               validator: (value) =>
                                   (value == null || value.isEmpty)
-                                  ? 'Password is required'
+                                  ? l10n.requiredField
                                   : null,
                             ),
 
                             Align(
                               alignment: Alignment.centerRight,
                               child: Clickabletext(
-                                textlabel: AppLocalizations.of(
-                                  context,
-                                )!.forgotPassword,
+                                textlabel: l10n.forgotPassword,
                                 fun: () {},
                               ),
                             ),
@@ -145,9 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             Genericbutton(
-                              textlabel: AppLocalizations.of(
-                                context,
-                              )!.loginButton,
+                              textlabel: l10n.loginButton,
                               onPressed: _handleLogin,
                             ),
 
@@ -163,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                     horizontal: 10,
                                   ),
                                   child: Text(
-                                    AppLocalizations.of(context)!.continueWith,
+                                    l10n.continueWith,
                                     style: TextStyle(
                                       color: Colors.grey.shade500,
                                       fontSize: 12,
@@ -219,13 +214,13 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: WrapAlignment.center,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.noAccount,
+                        l10n.noAccount,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       GestureDetector(
                         onTap: () => context.push(AppRoute.signup),
                         child: Text(
-                          AppLocalizations.of(context)!.signUpLink,
+                          l10n.signUpLink,
                           style: TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,

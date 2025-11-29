@@ -16,8 +16,7 @@ void main() {
       await tester.tap(loginButton);
       await tester.pump();
 
-      expect(find.text('Email is required'), findsOneWidget);
-      expect(find.text('Password is required'), findsOneWidget);
+      expect(find.text('Required'), findsNWidgets(2));
     });
 
     testWidgets('Validation: Invalid email format', (tester) async {
@@ -34,7 +33,7 @@ void main() {
       await tester.tap(loginButton);
       await tester.pump();
 
-      expect(find.text('Invalid email'), findsOneWidget);
+      expect(find.text('Invalid Email'), findsOneWidget);
     });
 
     testWidgets('Security: Password field is obscured', (tester) async {
