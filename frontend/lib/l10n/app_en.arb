@@ -1,0 +1,74 @@
+{
+    "welcomeBack": "Welcome Back!",
+    "signInSubtitle": "Sign in to continue your journey",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account? ",
+    "signUpLink": "Sign Up",
+    "yourTicketsTitle": "My Tickets",
+    "continueWith": "Or continue with",
+    "forgotPassword": "Forgot Password?",
+    "tickets": "Tickets",
+    "map": "Map",
+    "account": "Account",
+    "accountSettings": "Account Settings",
+    "accountInfoSection": "Account Info",
+    "subscriptionSection": "Subscription",
+    "contactUsSection": "Contact Us",
+    "rankingSection": "Ranking",
+    "logoutButton": "Logout",
+    "editProfilePicture": "Edit your profile picture",
+    "settingsTitle": "Settings",
+    "busNotificationLabel": "Bus Coming Notification",
+    "errorMessage": "Error: {error}",
+    "@errorMessage": {
+        "placeholders": {
+            "error": { "type": "String" }
+        }
+    },
+    "lineTitle": "Line {route}",
+    "@lineTitle": {
+        "placeholders": {
+            "route": { "type": "String" }
+        }
+    },
+    "arrivingIn": "Here in {minutes}m",
+    "@arrivingIn": {
+        "placeholders": {
+            "minutes": { "type": "int" }
+        }
+    },
+    "createAccountTitle": "Create Account",
+    "createAccountSubtitle": "Join us and start your journey",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "confirmPasswordLabel": "Confirm Password",
+    "signupButton": "Sign Up",
+    "orSignUpWith": "Or sign up with",
+    "alreadyHaveAccount": "Do you already have an account? ",
+    "termsError": "Please accept terms and conditions",
+    "requiredField": "Required",
+    "invalidEmail": "Invalid Email",
+    "passwordMinChars": "Min 6 chars",
+    "passwordMismatch": "Mismatch",
+    "termsText": "I agree with the ",
+    "termsLink": "Terms & Conditions",
+    "andText": " and ",
+    "privacyLink": "Privacy Policy",
+    "ticketUrbanService": "Urban Service",
+    "ticketCity": "TRENTO",
+    "ticketVat": "VAT 01807370224",
+    "ticketDuration70": "70 minutes",
+    "ticketPrice120": "€ 1.20",
+    "ticketValidateAction": "Validate",
+    "ticketStatusUnused": "UNUSED",
+    "signInWithGoogle": "Sign in with Google",
+    "subscriptionCardTitle": "LIBERA CIRCOLAZIONE UNITN",
+    "subscriptionCodeLabel": "Code:",
+    "subscriptionStatusLabel": "Status:",
+    "subscriptionTypeLabel": "Type:",
+    "subscriptionStartDateLabel": "Start date:",
+    "subscriptionExpirationDateLabel": "Expiration Date:",
+    "statusValid": "Valid"
+}

@@ -1,4 +1,4 @@
-import 'package:aurabus/features/loginAndSignUp/presentation/signup_page.dart';
+import 'package:aurabus/features/signup/presentation/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,7 +7,7 @@ import 'package:aurabus/features/home/presentation/home_page.dart';
 import 'package:aurabus/features/tickets/presentation/ticket_page.dart';
 import 'package:aurabus/features/map/presentation/map_screen.dart';
 import 'package:aurabus/features/account/presentation/account_page.dart';
-import 'package:aurabus/features/loginAndSignUp/presentation/login_page.dart';
+import 'package:aurabus/features/login/presentation/login_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 final _shellKey = GlobalKey<NavigatorState>();
@@ -29,13 +29,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoute.login,
         pageBuilder: (context, state) =>
             const NoTransitionPage(child: LoginPage()),
-          ),
-        GoRoute(
+      ),
+      GoRoute(
         path: AppRoute.signup,
         pageBuilder: (context, state) =>
-            const NoTransitionPage(child: SignupPage()
-            ),
-          ),
+            const NoTransitionPage(child: SignupPage()),
+      ),
       ShellRoute(
         navigatorKey: _shellKey,
         builder: (context, state, child) {

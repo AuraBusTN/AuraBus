@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:aurabus/features/tickets/widgets/ticket_card.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 
 class TicketPage extends ConsumerWidget {
   const TicketPage({super.key});
@@ -9,15 +9,14 @@ class TicketPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 30),
           child: Column(
             children: [
-              const SizedBox(height: 30),
-              const Text(
-                'Your Tickets',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context)!.yourTicketsTitle,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 20),
               const TicketCard(),

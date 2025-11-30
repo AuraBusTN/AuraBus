@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Clickabletext extends StatelessWidget {
-  final String textlabel;
+class ClickableText extends StatelessWidget {
+  final String textLabel;
   final VoidCallback fun;
-  const Clickabletext({super.key, required this.textlabel, required this.fun});
+  const ClickableText({super.key, required this.textLabel, required this.fun});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class Clickabletext extends StatelessWidget {
       child: GestureDetector(
         onTap: fun,
         child: Text(
-          textlabel,
+          textLabel,
           style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
         ),
       ),
