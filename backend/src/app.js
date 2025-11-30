@@ -3,6 +3,8 @@ import { connect } from "mongoose";
 import config from "./config.js";
 import { stops, routes } from "./data.js";
 import { setupSwagger } from "./swagger.js";
+import { Bus } from "./models/Bus.js";
+import { simulateOccupancy } from "./utils/SimulateOccupancy.js";
 
 export const app = express();
 
@@ -48,51 +50,127 @@ app.get("/stops", (req, res) => {
 });
 
 app.get("/stops/:id", async (req, res) => {
-  const stopId = req.params.id;
+  const stopId = parseInt(req.params.id, 10);
+
   try {
     const result = await fetch(
       `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
       header
     );
+
     if (!result.ok) {
       return res.status(502).json({
         error: `Failed to fetch data from external API: ${result.status} ${result.statusText}`,
       });
     }
+
     const data = await result.json();
     if (data.error) {
       return res.status(500).json({ error: data.error });
     }
+
+    const busIdsFromApi = data.map((el) => el.matricolaBus).filter((id) => id);
+
+    const busDetails = await Bus.find({ bus_id: { $in: busIdsFromApi } });
+
+    const busMap = new Map();
+    busDetails.forEach((b) => {
+      busMap.set(String(b.bus_id), { capacity: b.capacity, type: b.type });
+    });
+
     const trips = [];
+
     data.forEach((element) => {
       const route = routes.get(element.routeId);
+
+      const extraBusInfo = busMap.get(String(element.matricolaBus)) || {
+        capacity: 100,
+        type: "standard",
+      };
+
+      const stopTimes = Array.isArray(element.stopTimes)
+        ? element.stopTimes
+        : [];
+      const totalStops = stopTimes.length;
+
+      const lastStopId = Number(element.stopLast);
+      let currentBusIndex = -1;
+
+      if (lastStopId === 0) {
+        currentBusIndex = 0;
+      } else {
+        currentBusIndex = stopTimes.findIndex((s) => s.stopId === lastStopId);
+      }
+      const actualCurrentIndex = currentBusIndex === -1 ? 0 : currentBusIndex;
+      const targetIndices = stopTimes
+        .map((s, i) => (s.stopId === stopId ? i : -1))
+        .filter((i) => i !== -1);
+
+      let targetIndex = targetIndices.find((i) => i >= actualCurrentIndex);
+
+      if (targetIndex === undefined && targetIndices.length > 0) {
+        targetIndex = targetIndices[targetIndices.length - 1];
+      } else if (targetIndices.length === 0) {
+        return;
+      }
+      const stopsRemaining = targetIndex - actualCurrentIndex;
+
+      const occupancyRealTime = simulateOccupancy(
+        new Date(),
+        element.tripId,
+        extraBusInfo.capacity,
+        actualCurrentIndex,
+        totalStops
+      );
+
+      const occupancyExpected = simulateOccupancy(
+        new Date(element.oraArrivoEffettivaAFermataSelezionata),
+        element.tripId,
+        extraBusInfo.capacity,
+        targetIndex,
+        totalStops
+      );
+
       trips.push({
-        routeId: route.routeId,
-        routeShortName: route.routeShortName,
-        routeLongName: route.routeLongName,
-        routeColor: route.routeColor,
+        routeId: route?.routeId || "UNKNOWN",
+        routeShortName: route?.routeShortName || "",
+        routeLongName: route?.routeLongName || "",
+        routeColor: route?.routeColor || "000000",
+
         busId: element.matricolaBus,
+        busCapacity: extraBusInfo.capacity,
+        busType: extraBusInfo.type,
+
+        occupancyRealTime: occupancyRealTime,
+        occupancyExpected: occupancyExpected,
+
+        stopsRemaining: stopsRemaining,
+        isTripFinished: stopsRemaining < 0,
+        isAtStop: stopsRemaining === 0 && lastStopId !== 0,
+
         delay: element.delay,
         lastStopId: element.stopLast,
         nextStopId: element.stopNext,
+
         arrivalTimeScheduled: element.oraArrivoProgrammataAFermataSelezionata,
         arrivalTimeEstimated: element.oraArrivoEffettivaAFermataSelezionata,
-        stopTimes: Array.isArray(element.stopTimes)
-          ? element.stopTimes.map((st) => ({
-              stopId: st.stopId,
-              stopName: stops.get(st.stopId)?.stopName || "Unknown",
-              arrivalTimeScheduled: st.arrivalTime,
-              arrivalTimeEstimated: st.departureTime,
-            }))
-          : [],
+
+        stopTimes: stopTimes.map((st) => ({
+          stopId: st.stopId,
+          stopName: stops.get(st.stopId)?.stopName || "Unknown",
+          arrivalTimeScheduled: st.arrivalTime,
+          arrivalTimeEstimated: st.departureTime,
+        })),
       });
     });
+
     trips.sort((a, b) =>
       a.arrivalTimeEstimated.localeCompare(b.arrivalTimeEstimated)
     );
+
     res.json(trips);
   } catch (err) {
-    console.error("Error fetching or processing data from external API:", err);
+    console.error("Error fetching or processing data:", err);
     res
       .status(502)
       .json({ error: "Failed to fetch or process data from external API." });
