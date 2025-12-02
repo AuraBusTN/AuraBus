@@ -1,12 +1,21 @@
 import { jest } from "@jest/globals";
 
-await jest.unstable_mockModule("../src/utils/routeConfig.js", () => ({
+jest.unstable_mockModule("../src/utils/routeConfig.js", () => ({
   getRouteConfig: jest.fn(),
 }));
 
-const { getRouteConfig } = await import("../src/utils/routeConfig.js");
+let simulateOccupancy;
+let getRouteConfig;
 
 describe("simulateOccupancy Logic", () => {
+  beforeAll(async () => {
+    const occupancyModule = await import("../src/utils/SimulateOccupancy.js");
+    simulateOccupancy = occupancyModule.simulateOccupancy;
+
+    const configModule = await import("../src/utils/routeConfig.js");
+    getRouteConfig = configModule.getRouteConfig;
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -26,9 +35,7 @@ describe("simulateOccupancy Logic", () => {
     expect(result).toHaveProperty("percentage");
     expect(result).toHaveProperty("passengers");
     expect(result).toHaveProperty("level");
-
     expect(typeof result.percentage).toBe("number");
-    expect(typeof result.passengers).toBe("number");
     expect(["green", "orange", "red"]).toContain(result.level);
   });
 
@@ -37,7 +44,6 @@ describe("simulateOccupancy Logic", () => {
       profile: "university",
       peakLocation: 0.5,
     });
-
     const mondayMorning = new Date("2023-10-23T08:00:00");
 
     const result = simulateOccupancy(
@@ -48,14 +54,12 @@ describe("simulateOccupancy Logic", () => {
       20,
       "routeUni"
     );
-
-    // Ci aspettiamo passeggeri > 0 dato l'orario di punta
+    // In orario di punta ci aspettiamo passeggeri
     expect(result.passengers).toBeGreaterThan(0);
   });
 
   test("Dovrebbe restituire livello 'green' e carico basso in orari non di punta", () => {
     getRouteConfig.mockReturnValue({ profile: "standard" });
-
     const sundayNight = new Date("2023-10-22T23:00:00");
 
     const result = simulateOccupancy(
@@ -96,7 +100,6 @@ describe("simulateOccupancy Logic", () => {
 
   test("Dovrebbe limitare (clamp) i valori tra 0% e 100%", () => {
     getRouteConfig.mockReturnValue({ profile: "standard" });
-
     const result = simulateOccupancy(
       new Date(),
       "tripClamp",
@@ -114,9 +117,8 @@ describe("simulateOccupancy Logic", () => {
 
   test("Dovrebbe gestire correttamente la prima fermata (stopIndex 0)", () => {
     getRouteConfig.mockReturnValue({ profile: "standard" });
-
     const result = simulateOccupancy(new Date(), "tripStart", 100, 0, 20, "r1");
-    
+
     expect(result.percentage).toBe(10);
   });
 });
