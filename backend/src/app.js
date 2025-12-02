@@ -48,7 +48,7 @@ app.get("/stops", (req, res) => {
 });
 
 app.get("/stops/:id", async (req, res) => {
-  const stopId = req.params.id;
+  const stopId = Number(req.params.id);
   try {
     const result = await fetch(
       `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,

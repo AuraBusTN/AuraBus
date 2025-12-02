@@ -41,7 +41,7 @@ final markersProvider = FutureProvider<Set<Marker>>((ref) async {
   }).toSet();
 });
 
-final stopDetailsProvider = FutureProvider.family<List<StopArrival>, String>((
+final stopDetailsProvider = FutureProvider.family<List<StopArrival>, int>((
   ref,
   stopId,
 ) async {

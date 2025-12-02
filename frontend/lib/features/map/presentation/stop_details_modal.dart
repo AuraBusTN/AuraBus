@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'package:aurabus/features/map/data/models/stop_details.dart';
 
 class StopDetailsModal extends ConsumerWidget {
-  final String stopId;
+  final int stopId;
   final String stopName;
 
   const StopDetailsModal({
@@ -52,7 +53,7 @@ class StopDetailsModal extends ConsumerWidget {
 
 class _StopDetailsContent extends ConsumerWidget {
   final ScrollController controller;
-  final String stopId;
+  final int stopId;
   final String stopName;
   final List<StopArrival> arrivals;
 
@@ -118,6 +119,7 @@ class _StopDetailsContent extends ConsumerWidget {
             },
           ),
         ),
+
         const SizedBox(height: 16),
 
         Expanded(
@@ -128,7 +130,7 @@ class _StopDetailsContent extends ConsumerWidget {
               final bus = filteredArrivals[index];
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: _BusCard(arrival: bus),
+                child: _BusCard(arrival: bus, thisStopId: stopId),
               );
             },
           ),
@@ -148,7 +150,7 @@ class _DragHandle extends StatelessWidget {
         width: 40,
         height: 4,
         decoration: BoxDecoration(
-          color: Colors.black26,
+          color: AppColors.divider,
           borderRadius: BorderRadius.circular(8),
         ),
       ),
@@ -170,8 +172,8 @@ class _LineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderColor = isSelected
-        ? Colors.black.withValues(alpha: 0.8)
-        : Colors.black12;
+        ? AppColors.primary.withValues(alpha: 0.8)
+        : AppColors.divider;
     final l10n = AppLocalizations.of(context)!;
 
     return GestureDetector(
@@ -180,14 +182,14 @@ class _LineCard extends StatelessWidget {
         width: 90,
         height: 70,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: borderColor, width: 2),
           boxShadow: [
             BoxShadow(
               blurRadius: 6,
               offset: const Offset(0, 3),
-              color: Colors.black.withValues(alpha: .08),
+              color: AppColors.divider,
             ),
           ],
         ),
@@ -206,7 +208,7 @@ class _LineCard extends StatelessWidget {
               l10n.lineTitle(line.routeShortName),
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -216,12 +218,48 @@ class _LineCard extends StatelessWidget {
   }
 }
 
+class _BusCard extends StatefulWidget {
+  final StopArrival arrival;
+  final int thisStopId;
+
+  const _BusCard({required this.arrival, required this.thisStopId});
+
+  @override
+  State<_BusCard> createState() => _BusCardState();
+}
+
+class _BusCardState extends State<_BusCard> {
+  bool expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final arrival = widget.arrival;
+    final thisStopId = widget.thisStopId;
+
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () => setState(() => expanded = !expanded),
+          child: _BusCardHeader(arrival: arrival),
+        ),
+        if (expanded)
+          TripTimeline(
+            stops: arrival.stopTimes,
+            lastStopId: arrival.lastStopId,
+            thisStopId: thisStopId,
+          ),
+      ],
+    );
+  }
+}
+
 enum UpdateStatus { none, fresh, stale }
 
-class _BusCard extends StatelessWidget {
+class _BusCardHeader extends StatelessWidget {
   final StopArrival arrival;
 
-  const _BusCard({required this.arrival});
+  const _BusCardHeader({required this.arrival});
+
   static const int _kPlaceholderOvercrowding = 0;
 
   @override
@@ -236,7 +274,6 @@ class _BusCard extends StatelessWidget {
     }
 
     final delay = arrival.delay ?? 0;
-
     final scheduledTime = arrival.arrivalTimeScheduled.toLocal();
     final timeStr = TimeOfDay.fromDateTime(scheduledTime).format(context);
 
@@ -280,23 +317,24 @@ class _BusCard extends StatelessWidget {
 
     final overcrowding = _kPlaceholderOvercrowding;
     final overcrowdingFraction = overcrowding / 100.0;
-    final l10n = AppLocalizations.of(context)!;
 
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now().toUtc();
     final diff = arrival.arrivalTimeEstimated.difference(now);
     final minutes = diff.inMinutes.abs();
-
     final hereIn = l10n.arrivingIn(minutes);
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
             blurRadius: 10,
             offset: const Offset(0, 4),
-            color: Colors.black.withValues(alpha: .06),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: .06),
           ),
         ],
       ),
@@ -313,7 +351,6 @@ class _BusCard extends StatelessWidget {
           ] else
             const SizedBox(width: 20),
 
-          // Line badge
           Container(
             width: 42,
             height: 42,
@@ -325,13 +362,12 @@ class _BusCard extends StatelessWidget {
             child: Text(
               arrival.routeShortName,
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.onPrimary,
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
               ),
             ),
           ),
-
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -370,9 +406,7 @@ class _BusCard extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(width: 12),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -380,12 +414,167 @@ class _BusCard extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 hereIn,
-                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class TripTimeline extends StatefulWidget {
+  final List<StopTime> stops;
+  final int lastStopId;
+  final int thisStopId;
+
+  const TripTimeline({
+    required this.stops,
+    required this.lastStopId,
+    required this.thisStopId,
+    super.key,
+  });
+
+  @override
+  State<TripTimeline> createState() => _TripTimelineState();
+}
+
+class _TripTimelineState extends State<TripTimeline> {
+  final controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final index = widget.stops.indexWhere(
+        (s) => s.stopId == widget.thisStopId,
+      );
+
+      if (index != -1) {
+        controller.jumpTo(index * 56);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+            color: Colors.black.withValues(alpha: .07),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.fromLTRB(12, 6, 12, 12),
+      constraints: const BoxConstraints(maxHeight: 240),
+      child: ListView.builder(
+        controller: controller,
+        itemCount: widget.stops.length,
+        itemBuilder: (context, index) {
+          final stop = widget.stops[index];
+
+          final bool isPastOrCurrent =
+              stop.stopId == widget.lastStopId ||
+              widget.stops.indexWhere((s) => s.stopId == stop.stopId) <=
+                  widget.stops.indexWhere((s) => s.stopId == widget.lastStopId);
+
+          final bool isThisStop = stop.stopId == widget.thisStopId;
+
+          return TimelineStop(
+            stop: stop,
+            isThisStop: isThisStop,
+            isPastOrCurrent: isPastOrCurrent,
+            isFirst: index == 0,
+            isLast: index == widget.stops.length - 1,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class TimelineStop extends StatelessWidget {
+  final StopTime stop;
+  final bool isPastOrCurrent;
+  final bool isThisStop;
+  final bool isFirst;
+  final bool isLast;
+
+  const TimelineStop({
+    required this.stop,
+    required this.isPastOrCurrent,
+    required this.isThisStop,
+    required this.isFirst,
+    required this.isLast,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final mainColor = isPastOrCurrent
+        ? AppColors.primary
+        : AppColors.textSecondary;
+
+    final stopTime = stop.arrivalTimeScheduled.substring(0, 5);
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            if (!isFirst) Container(width: 2, height: 12, color: mainColor),
+
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: mainColor,
+                shape: BoxShape.circle,
+              ),
+            ),
+
+            if (!isLast) Container(width: 2, height: 36, color: mainColor),
+          ],
+        ),
+
+        const SizedBox(width: 10),
+
+        Expanded(
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    stopTime,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                  Text(
+                    stop.stopName,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: isThisStop
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

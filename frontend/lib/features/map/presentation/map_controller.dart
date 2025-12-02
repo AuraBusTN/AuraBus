@@ -27,7 +27,7 @@ class MapController {
     _gmaps = null;
   }
 
-  void openStopModal(BuildContext context, String stopId, String stopName) {
+  void openStopModal(BuildContext context, int stopId, String stopName) {
     final _ = ref.refresh(stopDetailsProvider(stopId));
 
     showModalBottomSheet(
