@@ -9,7 +9,7 @@ let getRouteConfig;
 
 describe("simulateOccupancy Logic", () => {
   beforeAll(async () => {
-    const occupancyModule = await import("../src/utils/SimulateOccupancy.js");
+    const occupancyModule = await import("../src/utils/simulateOccupancy.js");
     simulateOccupancy = occupancyModule.simulateOccupancy;
 
     const configModule = await import("../src/utils/routeConfig.js");

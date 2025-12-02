@@ -4,7 +4,7 @@ import config from "./config.js";
 import { stops, routes } from "./data.js";
 import { setupSwagger } from "./swagger.js";
 import { Bus } from "./models/Bus.js";
-import { simulateOccupancy } from "./utils/SimulateOccupancy.js";
+import { simulateOccupancy } from "./utils/simulateOccupancy.js";
 
 export const app = express();
 
