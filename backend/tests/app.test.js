@@ -56,10 +56,16 @@ describe("AuraBus Backend Integration Tests", () => {
 
   describe("GET /stops/:id (Trip Details)", () => {
     let fetchSpy;
+    let consoleErrorSpy;
 
     beforeEach(() => {
       jest.clearAllMocks();
       fetchSpy = jest.spyOn(global, "fetch");
+      consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleErrorSpy.mockRestore();
     });
 
     it("should return 200 and transformed trips including occupancy data on success", async () => {
@@ -120,10 +126,13 @@ describe("AuraBus Backend Integration Tests", () => {
       expect(trip).toEqual(expect.objectContaining({
           routeId: "R1",
           routeShortName: "10",
-          busId: "B123",
-          stopName: "Fermata 2"
+          busId: "B123"
       }));
       
+      const targetStop = trip.stopTimes.find(s => s.stopId === "S2");
+      expect(targetStop).toBeDefined();
+      expect(targetStop.stopName).toBe("Fermata 2");
+
       expect(trip).toHaveProperty("occupancyExpected");
       expect(trip.occupancyExpected).toEqual({
           percentage: expect.any(Number),
@@ -168,6 +177,8 @@ describe("AuraBus Backend Integration Tests", () => {
       expect(res.body).toEqual({
         error: "Failed to fetch or process data from external API.",
       });
+      
+      expect(consoleErrorSpy).toHaveBeenCalled();
     });
   });
 });
