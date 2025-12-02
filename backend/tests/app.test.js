@@ -56,12 +56,16 @@ describe("AuraBus Backend Integration Tests", () => {
 
   describe("GET /stops/:id (Trip Details)", () => {
     let fetchSpy;
+
     beforeEach(() => {
       jest.clearAllMocks();
       fetchSpy = jest.spyOn(global, "fetch");
     });
 
     it("should return 200 and transformed trips including occupancy data on success", async () => {
+      const mockIsoDate = "2024-05-20T10:00:00Z";
+      const mockIsoDateDelayed = "2024-05-20T10:00:15Z";
+
       const mockApiData = [
         {
           routeId: "R1",
@@ -69,8 +73,8 @@ describe("AuraBus Backend Integration Tests", () => {
           delay: 0,
           stopLast: "S1",
           stopNext: "S3",
-          oraArrivoProgrammataAFermataSelezionata: "10:00:00",
-          oraArrivoEffettivaAFermataSelezionata: "10:00:15",
+          oraArrivoProgrammataAFermataSelezionata: mockIsoDate,
+          oraArrivoEffettivaAFermataSelezionata: mockIsoDateDelayed,
           stopTimes: [
             { stopId: "S1", arrivalTime: "09:55:00", departureTime: "09:55:10" },
             { stopId: "S2", arrivalTime: "10:00:00", departureTime: "10:00:15" },
@@ -92,6 +96,7 @@ describe("AuraBus Backend Integration Tests", () => {
         ok: true,
         json: jest.fn().mockResolvedValue(mockApiData),
       });
+
       routes.get.mockReturnValue(mockRoute);
       stops.get.mockImplementation((stopId) => {
         if (stopId === "S1") return mockStopTime1;
@@ -118,8 +123,9 @@ describe("AuraBus Backend Integration Tests", () => {
           busId: "B123",
           stopName: "Fermata 2"
       }));
-      expect(trip).toHaveProperty("occupancy");
-      expect(trip.occupancy).toEqual({
+      
+      expect(trip).toHaveProperty("occupancyExpected");
+      expect(trip.occupancyExpected).toEqual({
           percentage: expect.any(Number),
           passengers: expect.any(Number),
           level: expect.stringMatching(/green|orange|red/)
