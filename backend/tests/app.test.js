@@ -18,7 +18,6 @@ const { app, connectDb } = await import("../src/app.js");
 const { initData, stops, routes } = await import("../src/data.js");
 
 describe("AuraBus Backend Integration Tests", () => {
-  
   beforeAll(async () => {
     await connectDb();
     await initData();
@@ -29,7 +28,7 @@ describe("AuraBus Backend Integration Tests", () => {
   });
 
   describe("API Endpoints", () => {
-    it("GET / it should return 200 and a greeting message", async () => {
+    it("GET / should return 200 and a greeting message", async () => {
       const response = await request(app)
         .get("/")
         .expect("Content-Type", /text\/html/)
@@ -37,7 +36,7 @@ describe("AuraBus Backend Integration Tests", () => {
       expect(response.text).toBe("Hello World! My AuraBus API is alive!");
     });
 
-    it("GET /stops it should return 200 and all stops data", async () => {
+    it("GET /stops should return 200 and all stops data", async () => {
       stops.values.mockReturnValue(expectedStops);
 
       const response = await request(app)
@@ -134,7 +133,7 @@ describe("AuraBus Backend Integration Tests", () => {
         statusText: "Service Down",
       });
 
-      const res = await request(app).get("/stops/qualunque-id");
+      const res = await request(app).get("/stops/any-id");
 
       expect(res.statusCode).toBe(502);
       expect(res.body).toEqual({
@@ -148,7 +147,7 @@ describe("AuraBus Backend Integration Tests", () => {
         json: jest.fn().mockResolvedValue({ error: "Invalid API Key" }),
       });
 
-      const res = await request(app).get("/stops/id-valido");
+      const res = await request(app).get("/stops/valid-id");
 
       expect(res.statusCode).toBe(500);
       expect(res.body).toEqual({ error: "Invalid API Key" });
@@ -157,7 +156,7 @@ describe("AuraBus Backend Integration Tests", () => {
     it("should return 502 if fetch throws a network error", async () => {
       fetchSpy.mockRejectedValue(new Error("Network connection failed"));
 
-      const res = await request(app).get("/stops/id-valido");
+      const res = await request(app).get("/stops/valid-id");
 
       expect(res.statusCode).toBe(502);
       expect(res.body).toEqual({

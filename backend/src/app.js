@@ -50,11 +50,13 @@ app.get("/stops", (req, res) => {
 });
 
 app.get("/stops/:id", async (req, res) => {
-  const stopId = parseInt(req.params.id, 10);
+  const { id } = req.params;
 
   try {
     const result = await fetch(
-      `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
+      `${config.tnt.url}/trips_new?stopId=${encodeURIComponent(
+        id
+      )}&type=U&limit=30`,
       header
     );
 
@@ -69,7 +71,7 @@ app.get("/stops/:id", async (req, res) => {
       return res.status(500).json({ error: data.error });
     }
 
-    const busIdsFromApi = data.map((el) => el.matricolaBus).filter((id) => id);
+    const busIdsFromApi = data.map((el) => el.matricolaBus).filter(Boolean);
 
     const busDetails = await Bus.find({ bus_id: { $in: busIdsFromApi } });
 
@@ -103,7 +105,7 @@ app.get("/stops/:id", async (req, res) => {
       }
       const actualCurrentIndex = currentBusIndex === -1 ? 0 : currentBusIndex;
       const targetIndices = stopTimes
-        .map((s, i) => (s.stopId === stopId ? i : -1))
+        .map((s, i) => (String(s.stopId) === id ? i : -1))
         .filter((i) => i !== -1);
 
       let targetIndex = targetIndices.find((i) => i >= actualCurrentIndex);
@@ -143,10 +145,10 @@ app.get("/stops/:id", async (req, res) => {
         busCapacity: extraBusInfo.capacity,
         busType: extraBusInfo.type,
 
-        occupancyRealTime: occupancyRealTime,
-        occupancyExpected: occupancyExpected,
+        occupancyRealTime,
+        occupancyExpected,
 
-        stopsRemaining: stopsRemaining,
+        stopsRemaining,
         isTripFinished: stopsRemaining < 0,
         isAtStop: stopsRemaining === 0 && lastStopId !== 0,
 
