@@ -59,13 +59,11 @@ class StopTime {
   final int stopId;
   final String stopName;
   final String arrivalTimeScheduled;
-  final String arrivalTimeEstimated;
 
   StopTime({
     required this.stopId,
     required this.stopName,
     required this.arrivalTimeScheduled,
-    required this.arrivalTimeEstimated,
   });
 
   factory StopTime.fromJson(Map<String, dynamic> json) {
@@ -73,7 +71,6 @@ class StopTime {
       stopId: json['stopId'] as int,
       stopName: json['stopName'] as String,
       arrivalTimeScheduled: json['arrivalTimeScheduled'] as String,
-      arrivalTimeEstimated: json['arrivalTimeEstimated'] as String,
     );
   }
 }

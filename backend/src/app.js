@@ -83,7 +83,6 @@ app.get("/stops/:id", async (req, res) => {
             stopId: st.stopId,
             stopName: stops.get(st.stopId)?.stopName || "Unknown",
             arrivalTimeScheduled: st.arrivalTime,
-            arrivalTimeEstimated: st.departureTime,
           }))
           : [],
       });

@@ -278,13 +278,6 @@ class _BusCard extends StatelessWidget {
       );
     }
 
-    final diff = arrival.arrivalTimeEstimated.difference(DateTime.now());
-    int remainingMinutes = diff.isNegative ? 0 : (diff.inSeconds / 60).ceil();
-
-    final hereIn = remainingMinutes >= 60
-        ? "Here in ${remainingMinutes ~/ 60}h ${remainingMinutes % 60}m"
-        : "Here in ${remainingMinutes}m";
-
     final overcrowding = _kPlaceholderOvercrowding;
     final overcrowdingFraction = overcrowding / 100.0;
     final l10n = AppLocalizations.of(context)!;
@@ -294,10 +287,6 @@ class _BusCard extends StatelessWidget {
     final minutes = diff.inMinutes.abs();
 
     final hereIn = l10n.arrivingIn(minutes);
-
-    final timeStr = TimeOfDay.fromDateTime(
-      arrival.arrivalTimeEstimated.toLocal(),
-    ).format(context);
 
     return Container(
       decoration: BoxDecoration(
