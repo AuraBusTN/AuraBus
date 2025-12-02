@@ -136,10 +136,10 @@ app.get("/stops/:id", async (req, res) => {
       );
 
       trips.push({
-        routeId: route?.routeId,
-        routeShortName: route?.routeShortName,
-        routeLongName: route?.routeLongName,
-        routeColor: route?.routeColor,
+        routeId: route.routeId,
+        routeShortName: route.routeShortName,
+        routeLongName: route.routeLongName,
+        routeColor: route.routeColor,
 
         busId: element.matricolaBus,
         busCapacity: extraBusInfo.capacity,
