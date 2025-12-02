@@ -120,7 +120,8 @@ app.get("/stops/:id", async (req, res) => {
         element.tripId,
         extraBusInfo.capacity,
         actualCurrentIndex,
-        totalStops
+        totalStops,
+        route.routeId
       );
 
       const occupancyExpected = simulateOccupancy(
@@ -128,14 +129,15 @@ app.get("/stops/:id", async (req, res) => {
         element.tripId,
         extraBusInfo.capacity,
         targetIndex,
-        totalStops
+        totalStops,
+        route.routeId
       );
 
       trips.push({
-        routeId: route?.routeId || "UNKNOWN",
-        routeShortName: route?.routeShortName || "",
-        routeLongName: route?.routeLongName || "",
-        routeColor: route?.routeColor || "000000",
+        routeId: route?.routeId,
+        routeShortName: route?.routeShortName,
+        routeLongName: route?.routeLongName,
+        routeColor: route?.routeColor,
 
         busId: element.matricolaBus,
         busCapacity: extraBusInfo.capacity,
