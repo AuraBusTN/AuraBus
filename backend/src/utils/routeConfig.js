@@ -1,4 +1,3 @@
-// Mappa il comportamento specifico per ogni linea
 export const routeConfig = {
   614: {
     // Line A
@@ -30,7 +29,7 @@ export const routeConfig = {
     profile: "university",
     peakLocation: 0.7,
   },
-  
+
   535: {
     // Line 5/ from P.Dante to university
     profile: "university",

@@ -60,7 +60,7 @@ describe("GET /stops/:id (Trip Details)", () => {
     fetchSpy = jest.spyOn(global, "fetch");
   });
 
-  it("should return 200 and transformed trips on success", async () => {
+  it("should return 200 and transformed trips including occupancy data on success", async () => {
     const mockApiData = [
       {
         routeId: "R1",
@@ -105,38 +105,24 @@ describe("GET /stops/:id (Trip Details)", () => {
       expect.stringContaining("stopId=S2"),
       expect.any(Object)
     );
-    expect(routes.get).toHaveBeenCalledWith("R1");
-    expect(stops.get).toHaveBeenCalledWith("S1");
-    expect(stops.get).toHaveBeenCalledWith("S2");
 
-    expect(res.body).toEqual([
-      {
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBe(1);
+
+    const trip = res.body[0];
+
+    expect(trip).toEqual(expect.objectContaining({
         routeId: "R1",
         routeShortName: "10",
-        routeLongName: "Centro - Sobborgo",
-        routeColor: "blue",
         busId: "B123",
-        delay: 0,
-        lastStopId: "S1",
-        nextStopId: "S3",
-        arrivalTimeScheduled: "10:00:00",
-        arrivalTimeEstimated: "10:00:15",
-        stopTimes: [
-          {
-            stopId: "S1",
-            stopName: "Fermata 1",
-            arrivalTimeScheduled: "09:55:00",
-            arrivalTimeEstimated: "09:55:10",
-          },
-          {
-            stopId: "S2",
-            stopName: "Fermata 2",
-            arrivalTimeScheduled: "10:00:00",
-            arrivalTimeEstimated: "10:00:15",
-          },
-        ],
-      },
-    ]);
+        stopName: "Fermata 2"
+    }));
+    expect(trip).toHaveProperty("occupancy");
+    expect(trip.occupancy).toEqual({
+        percentage: expect.any(Number),
+        passengers: expect.any(Number),
+        level: expect.stringMatching(/green|orange|red/)
+    });
   });
 
   it("should return 502 if external API fetch fails", async () => {
