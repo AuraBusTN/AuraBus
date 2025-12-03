@@ -444,6 +444,12 @@ class _TripTimelineState extends State<TripTimeline> {
   final controller = ScrollController();
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
 
@@ -460,6 +466,9 @@ class _TripTimelineState extends State<TripTimeline> {
 
   @override
   Widget build(BuildContext context) {
+    final lastStopIndex = widget.stops.indexWhere(
+      (s) => s.stopId == widget.lastStopId,
+    );
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -479,11 +488,9 @@ class _TripTimelineState extends State<TripTimeline> {
         itemCount: widget.stops.length,
         itemBuilder: (context, index) {
           final stop = widget.stops[index];
-
-          final bool isPastOrCurrent =
-              stop.stopId == widget.lastStopId ||
-              widget.stops.indexWhere((s) => s.stopId == stop.stopId) <=
-                  widget.stops.indexWhere((s) => s.stopId == widget.lastStopId);
+          final bool isPastOrCurrent = lastStopIndex == -1
+              ? false
+              : index <= lastStopIndex;
 
           final bool isThisStop = stop.stopId == widget.thisStopId;
 
@@ -522,7 +529,9 @@ class TimelineStop extends StatelessWidget {
         ? AppColors.primary
         : AppColors.textSecondary;
 
-    final stopTime = stop.arrivalTimeScheduled.substring(0, 5);
+    final stopTime = stop.arrivalTimeScheduled.length >= 5
+        ? stop.arrivalTimeScheduled.substring(0, 5)
+        : stop.arrivalTimeScheduled;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

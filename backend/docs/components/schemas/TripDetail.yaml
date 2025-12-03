@@ -18,7 +18,7 @@ components:
           description: "Color associated with the route"
           nullable: true
         busId:
-          type: string
+          type: integer
           description: "Id of the bus. Usually null because the trip has not begun yet"
           nullable: true
         lastUpdate:

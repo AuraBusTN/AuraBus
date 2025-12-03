@@ -49,6 +49,9 @@ app.get("/stops", (req, res) => {
 
 app.get("/stops/:id", async (req, res) => {
   const stopId = Number(req.params.id);
+  if (isNaN(stopId)) {
+    return res.status(400).json({ error: "Invalid stop ID" });
+  }
   try {
     const result = await fetch(
       `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
