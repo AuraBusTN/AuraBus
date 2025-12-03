@@ -64,10 +64,12 @@ describe("GET /stops/:id (Trip Details)", () => {
     const mockApiData = [
       {
         routeId: "R1",
-        matricolaBus: "B123",
+        matricolaBus: 123,
         delay: 0,
         stopLast: 1,
         stopNext: 3,
+        lastEventRecivedAt: "2025-12-03T09:11:23Z",
+        lastSequenceDetection: 1,
         oraArrivoProgrammataAFermataSelezionata: "10:00:00",
         oraArrivoEffettivaAFermataSelezionata: "10:00:15",
         stopTimes: [
@@ -81,7 +83,7 @@ describe("GET /stops/:id (Trip Details)", () => {
       routeId: "R1",
       routeShortName: "10",
       routeLongName: "Centro - Sobborgo",
-      routeColor: "blue",
+      routeColor: "C52720",
     };
 
     const mockStopTime1 = { stopName: "Fermata 1" };
