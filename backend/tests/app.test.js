@@ -92,8 +92,30 @@ describe("AuraBus Backend Integration Tests", () => {
         routeId: "R1",
         routeShortName: "10",
         routeLongName: "Centro - Sobborgo",
-        routeColor: "blue",
-      };
+        routeColor: "C52720",
+        busId: 123,
+        lastUpdate: "2025-12-03T09:11:23Z",
+        delay: 0,
+        lastStopId: 1,
+        nextStopId: 3,
+        passedStopCount: 1,
+        arrivalTimeScheduled: "10:00:00",
+        arrivalTimeEstimated: "10:00:15",
+        stopTimes: [
+          {
+            stopId: 1,
+            stopName: "Fermata 1",
+            arrivalTimeScheduled: "09:55:00",
+          },
+          {
+            stopId: 2,
+            stopName: "Fermata 2",
+            arrivalTimeScheduled: "10:00:00",
+          },
+        ],
+      },
+    ]);
+  });
 
       const mockStopTime1 = { stopName: "Fermata 1" };
       const mockStopTime2 = { stopName: "Fermata 2" };
@@ -102,6 +124,7 @@ describe("AuraBus Backend Integration Tests", () => {
         ok: true,
         json: jest.fn().mockResolvedValue(mockApiData),
       });
+    const res = await request(app).get("/stops/999");
 
       routes.get.mockReturnValue(mockRoute);
       stops.get.mockImplementation((stopId) => {
@@ -109,8 +132,6 @@ describe("AuraBus Backend Integration Tests", () => {
         if (stopId === "S2") return mockStopTime2;
         return { stopName: "Unknown" };
       });
-
-      const res = await request(app).get("/stops/S2");
 
       expect(res.statusCode).toBe(200);
       expect(global.fetch).toHaveBeenCalledWith(
@@ -161,8 +182,8 @@ describe("AuraBus Backend Integration Tests", () => {
         ok: true,
         json: jest.fn().mockResolvedValue({ error: "Invalid API Key" }),
       });
+    const res = await request(app).get("/stops/12");
 
-      const res = await request(app).get("/stops/valid-id");
 
       expect(res.statusCode).toBe(500);
       expect(res.body).toEqual({ error: "Invalid API Key" });
@@ -171,7 +192,7 @@ describe("AuraBus Backend Integration Tests", () => {
     it("should return 502 if fetch throws a network error", async () => {
       fetchSpy.mockRejectedValue(new Error("Network connection failed"));
 
-      const res = await request(app).get("/stops/valid-id");
+    const res = await request(app).get("/stops/12");
 
       expect(res.statusCode).toBe(502);
       expect(res.body).toEqual({

@@ -11,9 +11,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          stopDetailsProvider(
-            'STOP_123',
-          ).overrideWith((ref) async => <StopArrival>[]),
+          stopDetailsProvider(123).overrideWith((ref) async => <StopArrival>[]),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -29,7 +27,7 @@ void main() {
                         final controller = ref.read(mapControllerProvider);
                         controller.openStopModal(
                           context,
-                          'STOP_123',
+                          123,
                           'Stazione Centrale',
                         );
                       },
@@ -48,6 +46,6 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('STOP_123 - Stazione Centrale'), findsOneWidget);
+    expect(find.text('123 - Stazione Centrale'), findsOneWidget);
   });
 }

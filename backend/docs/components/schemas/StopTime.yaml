@@ -14,8 +14,3 @@ components:
           format: time
           example: "14:35:00"
           description: "Scheduled arrival time at the stop"
-        arrivalTimeEstimated:
-          type: string
-          format: time
-          example: "14:35:00"
-          description: "Estimated arrival time at the stop. It isn't useful because it's always the same as scheduled, because it not considers real-time delays"

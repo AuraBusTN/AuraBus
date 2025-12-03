@@ -18,19 +18,27 @@ components:
           description: "Color associated with the route"
           nullable: true
         busId:
-          type: string
+          type: integer
           description: "Id of the bus. Usually null because the trip has not begun yet"
+          nullable: true
+        lastUpdate:
+          type: string
+          format: date-time
+          description: "Timestamp of the last update for this trip. Null if the trip has not begun yet or there is no real-time data."
           nullable: true
         delay:
           type: integer
           nullable: true
-          description: "Delay in minutes. It can be negative if the bus is ahead of schedule. Null if the bus has not begun its trip."
+          description: "Delay in minutes. It can be negative if the bus is ahead of schedule. Null if the bus has not begun its trip or there is no real-time data."
         lastStopId:
           type: integer
           description: "Id of the last stop the bus passed"
         nextStopId:
           type: integer
           description: "Id of the next stop the bus will pass"
+        passedStopCount:
+          type: integer
+          description: "Number of stops the bus has already passed"
         arrivalTimeScheduled:
           type: string
           format: time

@@ -50,8 +50,10 @@ app.get("/stops", (req, res) => {
 });
 
 app.get("/stops/:id", async (req, res) => {
-  const { id } = req.params;
-
+  const stopId = Number(req.params.id);
+  if (isNaN(stopId)) {
+    return res.status(400).json({ error: "Invalid stop ID" });
+  }
   try {
     const result = await fetch(
       `${config.tnt.url}/trips_new?stopId=${encodeURIComponent(
@@ -151,7 +153,8 @@ app.get("/stops/:id", async (req, res) => {
         stopsRemaining,
         isTripFinished: stopsRemaining < 0,
         isAtStop: stopsRemaining === 0 && lastStopId !== 0,
-
+        
+        lastUpdate: element.lastEventRecivedAt,
         delay: element.delay,
         lastStopId: element.stopLast,
         nextStopId: element.stopNext,
@@ -163,7 +166,6 @@ app.get("/stops/:id", async (req, res) => {
           stopId: st.stopId,
           stopName: stops.get(st.stopId)?.stopName || "Unknown",
           arrivalTimeScheduled: st.arrivalTime,
-          arrivalTimeEstimated: st.departureTime,
         })),
       });
     });
