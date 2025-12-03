@@ -48,7 +48,10 @@ app.get("/stops", (req, res) => {
 });
 
 app.get("/stops/:id", async (req, res) => {
-  const stopId = req.params.id;
+  const stopId = Number(req.params.id);
+  if (isNaN(stopId)) {
+    return res.status(400).json({ error: "Invalid stop ID" });
+  }
   try {
     const result = await fetch(
       `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
@@ -72,18 +75,19 @@ app.get("/stops/:id", async (req, res) => {
         routeLongName: route.routeLongName,
         routeColor: route.routeColor,
         busId: element.matricolaBus,
+        lastUpdate: element.lastEventRecivedAt,
         delay: element.delay,
         lastStopId: element.stopLast,
         nextStopId: element.stopNext,
+        passedStopCount: element.lastSequenceDetection,
         arrivalTimeScheduled: element.oraArrivoProgrammataAFermataSelezionata,
         arrivalTimeEstimated: element.oraArrivoEffettivaAFermataSelezionata,
         stopTimes: Array.isArray(element.stopTimes)
           ? element.stopTimes.map((st) => ({
-              stopId: st.stopId,
-              stopName: stops.get(st.stopId)?.stopName || "Unknown",
-              arrivalTimeScheduled: st.arrivalTime,
-              arrivalTimeEstimated: st.departureTime,
-            }))
+            stopId: st.stopId,
+            stopName: stops.get(st.stopId)?.stopName || "Unknown",
+            arrivalTimeScheduled: st.arrivalTime,
+          }))
           : [],
       });
     });

@@ -23,7 +23,7 @@ class MapRepository {
     return jsonList.map((e) => StopData.fromJson(e)).toList();
   }
 
-  Future<List<StopArrival>> fetchStopDetails(String stopId) async {
+  Future<List<StopArrival>> fetchStopDetails(int stopId) async {
     try {
       final res = await http.get(Uri.parse("$baseUrl/stops/$stopId"));
       if (res.statusCode != 200) {
