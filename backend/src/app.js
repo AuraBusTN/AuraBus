@@ -79,6 +79,7 @@ app.get("/stops/:id", async (req, res) => {
         delay: element.delay,
         lastStopId: element.stopLast,
         nextStopId: element.stopNext,
+        passedStopCount: element.lastSequenceDetection,
         arrivalTimeScheduled: element.oraArrivoProgrammataAFermataSelezionata,
         arrivalTimeEstimated: element.oraArrivoEffettivaAFermataSelezionata,
         stopTimes: Array.isArray(element.stopTimes)

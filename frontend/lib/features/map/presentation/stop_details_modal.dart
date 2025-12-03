@@ -245,7 +245,7 @@ class _BusCardState extends State<_BusCard> {
         if (expanded)
           TripTimeline(
             stops: arrival.stopTimes,
-            lastStopId: arrival.lastStopId,
+            passedStopCount: arrival.passedStopCount,
             thisStopId: thisStopId,
           ),
       ],
@@ -426,12 +426,12 @@ class _BusCardHeader extends StatelessWidget {
 
 class TripTimeline extends StatefulWidget {
   final List<StopTime> stops;
-  final int lastStopId;
+  final int passedStopCount;
   final int thisStopId;
 
   const TripTimeline({
     required this.stops,
-    required this.lastStopId,
+    required this.passedStopCount,
     required this.thisStopId,
     super.key,
   });
@@ -466,9 +466,6 @@ class _TripTimelineState extends State<TripTimeline> {
 
   @override
   Widget build(BuildContext context) {
-    final lastStopIndex = widget.stops.indexWhere(
-      (s) => s.stopId == widget.lastStopId,
-    );
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -488,9 +485,7 @@ class _TripTimelineState extends State<TripTimeline> {
         itemCount: widget.stops.length,
         itemBuilder: (context, index) {
           final stop = widget.stops[index];
-          final bool isPastOrCurrent = lastStopIndex == -1
-              ? false
-              : index <= lastStopIndex;
+          final bool isPastOrCurrent = index < widget.passedStopCount;
 
           final bool isThisStop = stop.stopId == widget.thisStopId;
 

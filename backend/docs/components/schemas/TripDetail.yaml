@@ -36,6 +36,9 @@ components:
         nextStopId:
           type: integer
           description: "Id of the next stop the bus will pass"
+        passedStopCount:
+          type: integer
+          description: "Number of stops the bus has already passed"
         arrivalTimeScheduled:
           type: string
           format: time

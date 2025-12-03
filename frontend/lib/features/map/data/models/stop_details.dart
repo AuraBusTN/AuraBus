@@ -10,6 +10,7 @@ class StopArrival {
   final int? delay;
   final int lastStopId;
   final int nextStopId;
+  final int passedStopCount;
   final DateTime arrivalTimeScheduled;
   final DateTime arrivalTimeEstimated;
   final List<StopTime> stopTimes;
@@ -24,6 +25,7 @@ class StopArrival {
     required this.delay,
     required this.lastStopId,
     required this.nextStopId,
+    required this.passedStopCount,
     required this.arrivalTimeScheduled,
     required this.arrivalTimeEstimated,
     required this.stopTimes,
@@ -42,6 +44,7 @@ class StopArrival {
       delay: json['delay'] as int?,
       lastStopId: json['lastStopId'] as int,
       nextStopId: json['nextStopId'] as int,
+      passedStopCount: json['passedStopCount'] as int,
       arrivalTimeScheduled: DateTime.parse(
         json['arrivalTimeScheduled'] as String,
       ),
