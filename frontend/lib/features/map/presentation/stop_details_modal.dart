@@ -245,6 +245,7 @@ class _BusCardState extends State<_BusCard> {
         if (expanded)
           TripTimeline(
             stops: arrival.stopTimes,
+            delay: arrival.delay ?? 0,
             passedStopCount: arrival.passedStopCount,
             thisStopId: thisStopId,
           ),
@@ -321,8 +322,13 @@ class _BusCardHeader extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now().toUtc();
     final diff = arrival.arrivalTimeEstimated.difference(now);
-    final minutes = diff.inMinutes.abs();
-    final hereIn = l10n.arrivingIn(minutes);
+    final minutes = (diff.inSeconds / 60).ceil();
+    var hereIn = l10n.arrivingIn(minutes);
+
+    // If arrival is in the past → show 0
+    if (diff.isNegative) {
+      hereIn = l10n.arrivingIn(0);
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -426,11 +432,13 @@ class _BusCardHeader extends StatelessWidget {
 
 class TripTimeline extends StatefulWidget {
   final List<StopTime> stops;
+  final int delay;
   final int passedStopCount;
   final int thisStopId;
 
   const TripTimeline({
     required this.stops,
+    required this.delay,
     required this.passedStopCount,
     required this.thisStopId,
     super.key,
@@ -491,6 +499,7 @@ class _TripTimelineState extends State<TripTimeline> {
 
           return TimelineStop(
             stop: stop,
+            delay: widget.delay,
             isThisStop: isThisStop,
             isPastOrCurrent: isPastOrCurrent,
             isFirst: index == 0,
@@ -504,6 +513,7 @@ class _TripTimelineState extends State<TripTimeline> {
 
 class TimelineStop extends StatelessWidget {
   final StopTime stop;
+  final int delay;
   final bool isPastOrCurrent;
   final bool isThisStop;
   final bool isFirst;
@@ -511,6 +521,7 @@ class TimelineStop extends StatelessWidget {
 
   const TimelineStop({
     required this.stop,
+    required this.delay,
     required this.isPastOrCurrent,
     required this.isThisStop,
     required this.isFirst,
@@ -556,11 +567,23 @@ class TimelineStop extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    stopTime,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        color: AppColors.textPrimary,
+                      ),
+                      children: [
+                        TextSpan(text: stopTime),
+                        if (!isPastOrCurrent && delay != 0)
+                          TextSpan(
+                            text: delay > 0 ? "  +$delay'" : "  $delay'",
+                            style: TextStyle(
+                              color: delay > 0 ? Colors.red : Colors.purple,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   Text(
