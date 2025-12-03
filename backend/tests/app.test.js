@@ -66,13 +66,13 @@ describe("GET /stops/:id (Trip Details)", () => {
         routeId: "R1",
         matricolaBus: "B123",
         delay: 0,
-        stopLast: "S1",
-        stopNext: "S3",
+        stopLast: 1,
+        stopNext: 3,
         oraArrivoProgrammataAFermataSelezionata: "10:00:00",
         oraArrivoEffettivaAFermataSelezionata: "10:00:15",
         stopTimes: [
-          { stopId: "S1", arrivalTime: "09:55:00", departureTime: "09:55:10" },
-          { stopId: "S2", arrivalTime: "10:00:00", departureTime: "10:00:15" },
+          { stopId: 1, arrivalTime: "09:55:00", departureTime: "09:55:10" },
+          { stopId: 2, arrivalTime: "10:00:00", departureTime: "10:00:15" },
         ],
       },
     ];
@@ -91,23 +91,27 @@ describe("GET /stops/:id (Trip Details)", () => {
       ok: true,
       json: jest.fn().mockResolvedValue(mockApiData),
     });
+
     routes.get.mockReturnValue(mockRoute);
+
     stops.get.mockImplementation((stopId) => {
-      if (stopId === "S1") return mockStopTime1;
-      if (stopId === "S2") return mockStopTime2;
+      if (stopId === 1) return mockStopTime1;
+      if (stopId === 2) return mockStopTime2;
       return { stopName: "Unknown" };
     });
 
-    const res = await request(app).get("/stops/S2");
+    const res = await request(app).get("/stops/2");
 
     expect(res.statusCode).toBe(200);
+
     expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("stopId=S2"),
+      expect.stringContaining("stopId=2"),
       expect.any(Object)
     );
+
     expect(routes.get).toHaveBeenCalledWith("R1");
-    expect(stops.get).toHaveBeenCalledWith("S1");
-    expect(stops.get).toHaveBeenCalledWith("S2");
+    expect(stops.get).toHaveBeenCalledWith(1);
+    expect(stops.get).toHaveBeenCalledWith(2);
 
     expect(res.body).toEqual([
       {
@@ -117,19 +121,19 @@ describe("GET /stops/:id (Trip Details)", () => {
         routeColor: "blue",
         busId: "B123",
         delay: 0,
-        lastStopId: "S1",
-        nextStopId: "S3",
+        lastStopId: 1,
+        nextStopId: 3,
         arrivalTimeScheduled: "10:00:00",
         arrivalTimeEstimated: "10:00:15",
         stopTimes: [
           {
-            stopId: "S1",
+            stopId: 1,
             stopName: "Fermata 1",
             arrivalTimeScheduled: "09:55:00",
             arrivalTimeEstimated: "09:55:10",
           },
           {
-            stopId: "S2",
+            stopId: 2,
             stopName: "Fermata 2",
             arrivalTimeScheduled: "10:00:00",
             arrivalTimeEstimated: "10:00:15",
@@ -146,7 +150,7 @@ describe("GET /stops/:id (Trip Details)", () => {
       statusText: "Service Down",
     });
 
-    const res = await request(app).get("/stops/qualunque-id");
+    const res = await request(app).get("/stops/999");
 
     expect(res.statusCode).toBe(502);
     expect(res.body).toEqual({
@@ -160,7 +164,7 @@ describe("GET /stops/:id (Trip Details)", () => {
       json: jest.fn().mockResolvedValue({ error: "Invalid API Key" }),
     });
 
-    const res = await request(app).get("/stops/id-valido");
+    const res = await request(app).get("/stops/12");
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ error: "Invalid API Key" });
@@ -169,7 +173,7 @@ describe("GET /stops/:id (Trip Details)", () => {
   it("should return 502 if fetch throws a network error", async () => {
     fetchSpy.mockRejectedValue(new Error("Network connection failed"));
 
-    const res = await request(app).get("/stops/id-valido");
+    const res = await request(app).get("/stops/12");
 
     expect(res.statusCode).toBe(502);
     expect(res.body).toEqual({
