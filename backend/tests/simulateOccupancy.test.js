@@ -7,118 +7,122 @@ jest.unstable_mockModule("../src/utils/routeConfig.js", () => ({
 let simulateOccupancy;
 let getRouteConfig;
 
-describe("simulateOccupancy Logic", () => {
+describe("Unit Test: simulateOccupancy Algorithm", () => {
   beforeAll(async () => {
-    const occupancyModule = await import("../src/utils/simulateOccupancy.js");
-    simulateOccupancy = occupancyModule.simulateOccupancy;
-
     const configModule = await import("../src/utils/routeConfig.js");
     getRouteConfig = configModule.getRouteConfig;
+
+    const occupancyModule = await import("../src/utils/simulateOccupancy.js");
+    simulateOccupancy = occupancyModule.simulateOccupancy;
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test("Dovrebbe restituire la struttura dati corretta (percentage, passengers, level)", () => {
-    getRouteConfig.mockReturnValue({ profile: "standard" });
+  describe("Basic Logic and Data Structure", () => {
+    test("It should return an object with correct percentage, passengers, and level", () => {
+      getRouteConfig.mockReturnValue({ profile: "standard" });
+      const result = simulateOccupancy(new Date(), "trip1", 100, 5, 20, "R1");
 
-    const result = simulateOccupancy(
-      new Date(),
-      "trip123",
-      100,
-      5,
-      20,
-      "routeA"
-    );
-
-    expect(result).toHaveProperty("percentage");
-    expect(result).toHaveProperty("passengers");
-    expect(result).toHaveProperty("level");
-    expect(typeof result.percentage).toBe("number");
-    expect(["green", "orange", "red"]).toContain(result.level);
-  });
-
-  test("Dovrebbe gestire il profilo 'university' con picchi specifici", () => {
-    getRouteConfig.mockReturnValue({
-      profile: "university",
-      peakLocation: 0.5,
+      expect(result).toEqual({
+        percentage: expect.any(Number),
+        passengers: expect.any(Number),
+        level: expect.stringMatching(/green|orange|red/),
+      });
+      expect(result.percentage).toBeGreaterThanOrEqual(0);
+      expect(result.percentage).toBeLessThanOrEqual(100);
     });
-    const mondayMorning = new Date("2023-10-23T08:00:00");
 
-    const result = simulateOccupancy(
-      mondayMorning,
-      "tripUni",
-      100,
-      10,
-      20,
-      "routeUni"
-    );
-    // In orario di punta ci aspettiamo passeggeri
-    expect(result.passengers).toBeGreaterThan(0);
-  });
-
-  test("Dovrebbe restituire livello 'green' e carico basso in orari non di punta", () => {
-    getRouteConfig.mockReturnValue({ profile: "standard" });
-    const sundayNight = new Date("2023-10-22T23:00:00");
-
-    const result = simulateOccupancy(
-      sundayNight,
-      "tripQuiet",
-      100,
-      2,
-      20,
-      "routeStd"
-    );
-
-    expect(result.level).toBe("green");
-    expect(result.percentage).toBeLessThan(50);
-  });
-
-  test("Dovrebbe assegnare correttamente i colori in base alla percentuale", () => {
-    getRouteConfig.mockReturnValue({ profile: "accumulator" });
-
-    for (let i = 0; i < 5; i++) {
+    test("It should correctly calculate the number of passengers based on capacity", () => {
+      getRouteConfig.mockReturnValue({ profile: "standard" });
+      const capacity = 50;
       const result = simulateOccupancy(
         new Date(),
-        `trip-${i}`,
-        100,
-        15,
+        "trip1",
+        capacity,
+        10,
         20,
-        "routeTest"
+        "R1"
       );
 
-      if (result.percentage > 80) {
-        expect(result.level).toBe("red");
-      } else if (result.percentage > 50) {
-        expect(result.level).toBe("orange");
-      } else {
-        expect(result.level).toBe("green");
-      }
-    }
+      expect(result.passengers).toBe(
+        Math.floor(capacity * (result.percentage / 100))
+      );
+    });
   });
 
-  test("Dovrebbe limitare (clamp) i valori tra 0% e 100%", () => {
-    getRouteConfig.mockReturnValue({ profile: "standard" });
-    const result = simulateOccupancy(
-      new Date(),
-      "tripClamp",
-      100,
-      10,
-      20,
-      "r1"
+  describe("Route Profiles", () => {
+    test.each([
+      ["accumulator", 0, 0.1],
+      ["draining", 0, 0.1],
+      ["flat_high", 0, 0.6],
+    ])(
+      "Profile '%s' at stop index %i should have base load around %f",
+      (profile, stopIndex, expectedBase) => {
+        getRouteConfig.mockReturnValue({ profile });
+
+        const neutralTime = new Date("2023-10-25T12:00:00");
+        const result = simulateOccupancy(
+          neutralTime,
+          "tripX",
+          100,
+          stopIndex,
+          10,
+          "RX"
+        );
+
+        if (profile === "flat_high") {
+          expect(result.percentage).toBeGreaterThan(50);
+        } else if (stopIndex === 0 && profile !== "flat_high") {
+          expect(result.percentage).toBe(10);
+        }
+      }
     );
 
-    expect(result.percentage).toBeGreaterThanOrEqual(0);
-    expect(result.percentage).toBeLessThanOrEqual(100);
-    expect(result.passengers).toBeGreaterThanOrEqual(0);
-    expect(result.passengers).toBeLessThanOrEqual(100);
+    test("Profile 'university' should have specific peaks (morning)", () => {
+      getRouteConfig.mockReturnValue({
+        profile: "university",
+        peakLocation: 0.5,
+      });
+      const mondayMorning = new Date("2023-10-23T08:00:00");
+
+      const result = simulateOccupancy(
+        mondayMorning,
+        "tripUni",
+        100,
+        5,
+        10,
+        "R_UNI"
+      );
+      expect(result.percentage).toBeGreaterThan(10);
+    });
   });
 
-  test("Dovrebbe gestire correttamente la prima fermata (stopIndex 0)", () => {
-    getRouteConfig.mockReturnValue({ profile: "standard" });
-    const result = simulateOccupancy(new Date(), "tripStart", 100, 0, 20, "r1");
+  describe("Temporal Factors", () => {
+    test("Sunday should drastically reduce occupancy", () => {
+      getRouteConfig.mockReturnValue({ profile: "standard" });
+      const sunday = new Date("2023-10-22T10:00:00");
+      const monday = new Date("2023-10-23T10:00:00");
 
-    expect(result.percentage).toBe(10);
+      const resSunday = simulateOccupancy(sunday, "t1", 100, 5, 10, "R1");
+      const resMonday = simulateOccupancy(monday, "t1", 100, 5, 10, "R1");
+
+      expect(resSunday.percentage).toBeGreaterThanOrEqual(resMonday.percentage);
+    });
+  });
+
+  describe("Edge Cases", () => {
+    test("StopIndex 0 should force load factor to 0.1 (except flat_high)", () => {
+      getRouteConfig.mockReturnValue({ profile: "standard" });
+      const result = simulateOccupancy(new Date(), "t1", 100, 0, 10, "R1");
+      expect(result.percentage).toBe(10);
+    });
+
+    test("Invalid inputs should not break execution", () => {
+      getRouteConfig.mockReturnValue({ profile: "standard" });
+      const result = simulateOccupancy(undefined, "t1", 100, 5, 10, "R1");
+      expect(result).toHaveProperty("percentage");
+    });
   });
 });

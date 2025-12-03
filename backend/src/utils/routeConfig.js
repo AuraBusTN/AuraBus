@@ -71,7 +71,7 @@ export const routeConfig = {
     peakLocation: 0.2,
   },
 
-  536: {
+  629: {
     // Line 17 to Dogana
     profile: "accumulator",
     peakLocation: 0.9,

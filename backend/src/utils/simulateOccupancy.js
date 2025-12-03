@@ -35,7 +35,7 @@ export const simulateOccupancy = (
     case "flat_high":
       routeCurve = 0.6 + (Math.sin(progress * Math.PI) * 0.4);
       break;
-      
+
     case "draining":
       routeCurve = 1.0 - (progress * 0.8);
       break;
@@ -64,13 +64,17 @@ export const simulateOccupancy = (
     timeFactor = Math.max(morning, lunch, evening, 0.05);
   }
 
-  if (dayOfWeek === 0) timeFactor *= 1.1; // Sunday
-  if (dayOfWeek === 1) timeFactor *= 0.8; // Monday
-  if (dayOfWeek === 2) timeFactor *= 0.9; // Tuesday
-  if (dayOfWeek === 3) timeFactor *= 1.0; // Wednesday
-  if (dayOfWeek === 4) timeFactor *= 0.9; // Thursday
-  if (dayOfWeek === 5) timeFactor *= 0.8; // Friday
-  if (dayOfWeek === 6) timeFactor *= 0.9; // Saturday
+  let dayMultiplier = 1.0;
+  switch (dayOfWeek) {
+    case 0: dayMultiplier = 1.1; break; // Sunday
+    case 1: dayMultiplier = 0.8; break; // Monday
+    case 2: dayMultiplier = 0.9; break; // Tuesday
+    case 3: dayMultiplier = 1.0; break; // Wednesday
+    case 4: dayMultiplier = 0.9; break; // Thursday
+    case 5: dayMultiplier = 0.8; break; // Friday
+    case 6: dayMultiplier = 0.9; break; // Saturday
+  }
+  timeFactor *= dayMultiplier;
 
   // Combine the line shape with the time factor
   // Weighing timeFactor more to reflect its importance
@@ -93,7 +97,7 @@ export const simulateOccupancy = (
   finalLoadFactor = Math.min(Math.max(finalLoadFactor, 0), 1);
 
   const estimatedPassengers = Math.floor(capacity * finalLoadFactor);
-  const percentage = Math.round(finalLoadFactor * 100);
+  const percentage = capacity > 0 ? Math.round((estimatedPassengers / capacity) * 100) : 0;
 
   let statusColor = "green";
   if (percentage > 50) statusColor = "orange";

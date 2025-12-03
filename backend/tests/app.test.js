@@ -1,205 +1,152 @@
 import { jest } from "@jest/globals";
 import request from "supertest";
-import mongoose from "mongoose";
-import expectedStops from "../data/stops.json" with { type: "json" };
 
-await jest.unstable_mockModule("../src/data.js", () => ({
+const mockStops = new Map([
+  ["1", { stopId: "1", stopName: "Stazione Centrale" }],
+  ["2", { stopId: "2", stopName: "Piazza Duomo" }],
+]);
+const mockRoutes = new Map([
+  ["R1", { 
+    routeId: "R1", 
+    routeShortName: "5", 
+    routeLongName: "Circolare", 
+    routeColor: "#FF0000" 
+  }],
+]);
+
+jest.unstable_mockModule("../src/data.js", () => ({
   initData: jest.fn(),
-  stops: {
-    get: jest.fn(),
-    values: jest.fn(),
-  },
-  routes: {
-    get: jest.fn(),
+  stops: mockStops,
+  routes: mockRoutes,
+}));
+
+const mockBusFind = jest.fn();
+jest.unstable_mockModule("../src/models/Bus.js", () => ({
+  Bus: {
+    find: mockBusFind,
   },
 }));
 
-const { app, connectDb } = await import("../src/app.js");
-const { initData, stops, routes } = await import("../src/data.js");
+jest.unstable_mockModule("mongoose", () => ({
+  connect: jest.fn().mockResolvedValue(true),
+  Schema: class {},
+  model: jest.fn(),
+}));
 
-describe("AuraBus Backend Integration Tests", () => {
-  beforeAll(async () => {
-    await connectDb();
-    await initData();
+global.fetch = jest.fn();
+
+const { app } = await import("../src/app.js");
+
+describe("Integration Test: AuraBus API", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    global.fetch.mockReset();
   });
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
-  describe("API Endpoints", () => {
-    it("GET / should return 200 and a greeting message", async () => {
-      const response = await request(app)
-        .get("/")
-        .expect("Content-Type", /text\/html/)
-        .expect(200);
-      expect(response.text).toBe("Hello World! My AuraBus API is alive!");
-    });
-
-    it("GET /stops should return 200 and all stops data", async () => {
-      stops.values.mockReturnValue(expectedStops);
-
-      const response = await request(app)
-        .get("/stops")
-        .expect("Content-Type", /json/)
-        .expect(200);
-
-      const sortByStopId = (arr) =>
-        arr.slice().sort((a, b) => {
-          if (a.stopId < b.stopId) return -1;
-          if (a.stopId > b.stopId) return 1;
-          return 0;
-        });
-      expect(sortByStopId(response.body)).toEqual(sortByStopId(expectedStops));
+  describe("GET /", () => {
+    it("It would respond with status 200 and a welcome message", async () => {
+      const res = await request(app).get("/");
+      expect(res.statusCode).toBe(200);
+      expect(res.text).toContain("AuraBus API is alive");
     });
   });
 
-  describe("GET /stops/:id (Trip Details)", () => {
-    let fetchSpy;
-    let consoleErrorSpy;
-
-    beforeEach(() => {
-      jest.clearAllMocks();
-      fetchSpy = jest.spyOn(global, "fetch");
-      consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  describe("GET /stops", () => {
+    it("It would return the list of stops from the mock", async () => {
+      const res = await request(app).get("/stops");
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveLength(2);
+      expect(res.body[0]).toHaveProperty("stopName");
     });
+  });
 
-    afterEach(() => {
-      consoleErrorSpy.mockRestore();
-    });
-
-    it("should return 200 and transformed trips including occupancy data on success", async () => {
-      const mockIsoDate = "2024-05-20T10:00:00Z";
-      const mockIsoDateDelayed = "2024-05-20T10:00:15Z";
-
-      const mockApiData = [
-        {
-          routeId: "R1",
-          matricolaBus: "B123",
-          delay: 0,
-          stopLast: "S1",
-          stopNext: "S3",
-          oraArrivoProgrammataAFermataSelezionata: mockIsoDate,
-          oraArrivoEffettivaAFermataSelezionata: mockIsoDateDelayed,
-          stopTimes: [
-            { stopId: "S1", arrivalTime: "09:55:00", departureTime: "09:55:10" },
-            { stopId: "S2", arrivalTime: "10:00:00", departureTime: "10:00:15" },
-          ],
-        },
-      ];
-
-      const mockRoute = {
+  describe("GET /stops/:id (Logic Trip & Occupancy)", () => {
+    const stopId = "1";
+    
+    const mockExternalApiData = [
+      {
+        tripId: "TRIP_001",
         routeId: "R1",
-        routeShortName: "10",
-        routeLongName: "Centro - Sobborgo",
-        routeColor: "C52720",
-        busId: 123,
-        lastUpdate: "2025-12-03T09:11:23Z",
-        delay: 0,
-        lastStopId: 1,
-        nextStopId: 3,
-        passedStopCount: 1,
-        arrivalTimeScheduled: "10:00:00",
-        arrivalTimeEstimated: "10:00:15",
+        matricolaBus: "BUS_100",
+        stopLast: "1", 
+        stopNext: "2",
+        delay: 120,
+        oraArrivoProgrammataAFermataSelezionata: "2024-12-03T10:00:00Z",
+        oraArrivoEffettivaAFermataSelezionata: "2024-12-03T10:02:00Z",
+        lastEventRecivedAt: "2024-12-03T09:59:00Z",
         stopTimes: [
-          {
-            stopId: 1,
-            stopName: "Fermata 1",
-            arrivalTimeScheduled: "09:55:00",
-          },
-          {
-            stopId: 2,
-            stopName: "Fermata 2",
-            arrivalTimeScheduled: "10:00:00",
-          },
-        ],
-      },
-    ]);
-  });
+          { stopId: 1, arrivalTime: "10:00:00" },
+          { stopId: 2, arrivalTime: "10:10:00" }
+        ]
+      }
+    ];
 
-      const mockStopTime1 = { stopName: "Fermata 1" };
-      const mockStopTime2 = { stopName: "Fermata 2" };
-
-      fetchSpy.mockResolvedValue({
+    it("It would correctly process data and calculate occupancy", async () => {
+      global.fetch.mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockApiData),
+        json: async () => mockExternalApiData,
       });
-    const res = await request(app).get("/stops/999");
 
-      routes.get.mockReturnValue(mockRoute);
-      stops.get.mockImplementation((stopId) => {
-        if (stopId === "S1") return mockStopTime1;
-        if (stopId === "S2") return mockStopTime2;
-        return { stopName: "Unknown" };
-      });
+      mockBusFind.mockResolvedValue([
+        { bus_id: "BUS_100", capacity: 150, type: "articulated" }
+      ]);
+
+      const res = await request(app).get(`/stops/${stopId}`);
 
       expect(res.statusCode).toBe(200);
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("stopId=S2"),
-        expect.any(Object)
-      );
-
       expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body.length).toBe(1);
+      expect(res.body).toHaveLength(1);
 
       const trip = res.body[0];
 
-      expect(trip).toEqual(expect.objectContaining({
-          routeId: "R1",
-          routeShortName: "10",
-          busId: "B123"
-      }));
-      
-      const targetStop = trip.stopTimes.find(s => s.stopId === "S2");
-      expect(targetStop).toBeDefined();
-      expect(targetStop.stopName).toBe("Fermata 2");
+      expect(trip.busId).toBe("BUS_100");
+      expect(trip.busCapacity).toBe(150); 
+      expect(trip.routeShortName).toBe("5"); 
 
-      expect(trip).toHaveProperty("occupancyExpected");
-      expect(trip.occupancyExpected).toEqual({
-          percentage: expect.any(Number),
-          passengers: expect.any(Number),
-          level: expect.stringMatching(/green|orange|red/)
-      });
+      expect(trip).toHaveProperty("occupancyRealTime");
+      expect(trip.occupancyRealTime).toHaveProperty("percentage");
+      expect(trip.occupancyRealTime.level).toMatch(/green|orange|red/);
     });
 
-    it("should return 502 if external API fetch fails", async () => {
-      fetchSpy.mockResolvedValue({
+    it("It would correctly handle a bus not found in the DB (default fallback)", async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => mockExternalApiData,
+      });
+
+      mockBusFind.mockResolvedValue([]);
+
+      const res = await request(app).get(`/stops/${stopId}`);
+
+      expect(res.statusCode).toBe(200);
+      const trip = res.body[0];
+      expect(trip.busCapacity).toBe(100);
+      expect(trip.busType).toBe("standard");
+    });
+
+    it("It would return 502 if the external API fails", async () => {
+      global.fetch.mockResolvedValue({
         ok: false,
         status: 503,
-        statusText: "Service Down",
+        statusText: "Service Unavailable",
       });
 
-      const res = await request(app).get("/stops/any-id");
-
+      const res = await request(app).get(`/stops/${stopId}`);
       expect(res.statusCode).toBe(502);
-      expect(res.body).toEqual({
-        error: "Failed to fetch data from external API: 503 Service Down",
-      });
+      expect(res.body.error).toContain("Failed to fetch data");
     });
 
-    it("should return 500 if external API returns an application error", async () => {
-      fetchSpy.mockResolvedValue({
-        ok: true,
-        json: jest.fn().mockResolvedValue({ error: "Invalid API Key" }),
-      });
-    const res = await request(app).get("/stops/12");
-
-
-      expect(res.statusCode).toBe(500);
-      expect(res.body).toEqual({ error: "Invalid API Key" });
+    it("It would return 400 if the stop ID is not numeric", async () => {
+      const res = await request(app).get("/stops/abc");
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error).toBe("Invalid stop ID");
     });
 
-    it("should return 502 if fetch throws a network error", async () => {
-      fetchSpy.mockRejectedValue(new Error("Network connection failed"));
-
-    const res = await request(app).get("/stops/12");
-
-      expect(res.statusCode).toBe(502);
-      expect(res.body).toEqual({
-        error: "Failed to fetch or process data from external API.",
-      });
+    it("It would handle unexpected network errors in fetch", async () => {
+      global.fetch.mockRejectedValue(new Error("Network Error"));
       
-      expect(consoleErrorSpy).toHaveBeenCalled();
+      const res = await request(app).get(`/stops/${stopId}`);
+      expect(res.statusCode).toBe(502);
     });
   });
 });

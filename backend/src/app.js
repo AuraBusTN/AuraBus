@@ -56,9 +56,7 @@ app.get("/stops/:id", async (req, res) => {
   }
   try {
     const result = await fetch(
-      `${config.tnt.url}/trips_new?stopId=${encodeURIComponent(
-        id
-      )}&type=U&limit=30`,
+      `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
       header
     );
 
@@ -107,7 +105,7 @@ app.get("/stops/:id", async (req, res) => {
       }
       const actualCurrentIndex = currentBusIndex === -1 ? 0 : currentBusIndex;
       const targetIndices = stopTimes
-        .map((s, i) => (String(s.stopId) === id ? i : -1))
+        .map((s, i) => (s.stopId === stopId ? i : -1))
         .filter((i) => i !== -1);
 
       let targetIndex = targetIndices.find((i) => i >= actualCurrentIndex);
@@ -153,7 +151,7 @@ app.get("/stops/:id", async (req, res) => {
         stopsRemaining,
         isTripFinished: stopsRemaining < 0,
         isAtStop: stopsRemaining === 0 && lastStopId !== 0,
-        
+
         lastUpdate: element.lastEventRecivedAt,
         delay: element.delay,
         lastStopId: element.stopLast,
