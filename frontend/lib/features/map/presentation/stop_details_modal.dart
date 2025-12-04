@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
-import 'package:aurabus/features/map/data/models/stop_details.dart';
+import 'package:aurabus/features/map/data/models/stop_trip_info.dart';
 
 class StopDetailsModal extends ConsumerWidget {
   final int stopId;
@@ -55,7 +55,7 @@ class _StopDetailsContent extends ConsumerWidget {
   final ScrollController controller;
   final int stopId;
   final String stopName;
-  final List<StopArrival> arrivals;
+  final List<StopTrip> arrivals;
 
   const _StopDetailsContent({
     required this.controller,
@@ -159,7 +159,7 @@ class _DragHandle extends StatelessWidget {
 }
 
 class _LineCard extends StatelessWidget {
-  final StopArrival line;
+  final StopTrip line;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -219,7 +219,7 @@ class _LineCard extends StatelessWidget {
 }
 
 class _BusCard extends StatefulWidget {
-  final StopArrival arrival;
+  final StopTrip arrival;
   final int thisStopId;
 
   const _BusCard({required this.arrival, required this.thisStopId});
@@ -257,7 +257,7 @@ class _BusCardState extends State<_BusCard> {
 enum UpdateStatus { none, fresh, stale }
 
 class _BusCardHeader extends StatelessWidget {
-  final StopArrival arrival;
+  final StopTrip arrival;
 
   const _BusCardHeader({required this.arrival});
 
@@ -431,7 +431,7 @@ class _BusCardHeader extends StatelessWidget {
 }
 
 class TripTimeline extends StatefulWidget {
-  final List<StopTime> stops;
+  final List<StopTripTime> stops;
   final int delay;
   final int passedStopCount;
   final int thisStopId;
@@ -512,7 +512,7 @@ class _TripTimelineState extends State<TripTimeline> {
 }
 
 class TimelineStop extends StatelessWidget {
-  final StopTime stop;
+  final StopTripTime stop;
   final int delay;
   final bool isPastOrCurrent;
   final bool isThisStop;

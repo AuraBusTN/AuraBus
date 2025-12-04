@@ -41,14 +41,6 @@ export async function connectDb() {
   }
 }
 
-app.get("/", (req, res) => {
-  res.send("Hello World! My AuraBus API is alive!");
-});
-
-app.get("/stops", (req, res) => {
-  res.json(Array.from(stops.values()));
-});
-
 app.get("/stops/:id", async (req, res) => {
   const stopId = Number(req.params.id);
   if (isNaN(stopId)) {
@@ -83,7 +75,6 @@ app.get("/stops/:id", async (req, res) => {
     const trips = [];
 
     data.forEach((element) => {
-      const route = routes.get(element.routeId);
 
       const extraBusInfo = busMap.get(element.matricolaBus) || {
         capacity: 100,
@@ -117,6 +108,7 @@ app.get("/stops/:id", async (req, res) => {
       }
       const stopsRemaining = targetIndex - actualCurrentIndex;
 
+      const route = routes.get(element.routeId);
       const occupancyRealTime = simulateOccupancy(
         new Date(),
         element.tripId,
@@ -163,7 +155,7 @@ app.get("/stops/:id", async (req, res) => {
 
         stopTimes: stopTimes.map((st) => ({
           stopId: st.stopId,
-          stopName: stops.get(st.stopId)?.stopName || "Unknown",
+          stopName: stops.get(st.stopId).stopName,
           arrivalTimeScheduled: st.arrivalTime,
         })),
       });

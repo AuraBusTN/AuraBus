@@ -9,7 +9,8 @@
           name: id
           required: true
           schema:
-            type: string
+            type: integer
+            example: 247
           description: The unique ID of the stop to query.
       responses:
         '200':
@@ -19,7 +20,7 @@
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TripDetail'
+                  $ref: '#/components/schemas/StopTrip'
         '500':
           description: Internal server error, or error from the external API due to invalid data (e.g., malformed JSON, missing required fields, or unexpected data types). A 500 error is returned when the external API responds but the data cannot be processed. A 502 error is returned when the external API is unreachable or returns a non-successful HTTP response.
           content:

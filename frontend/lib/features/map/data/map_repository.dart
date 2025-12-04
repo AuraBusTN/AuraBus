@@ -3,8 +3,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'models/stop_data.dart';
-import 'models/stop_details.dart';
+import 'models/stop_info.dart';
+import 'models/stop_trip_info.dart';
 
 class MapRepository {
   final String baseUrl;
@@ -17,13 +17,13 @@ class MapRepository {
     }
   }
 
-  Future<List<StopData>> loadLocalStops() async {
+  Future<List<StopInfo>> loadLocalStops() async {
     final jsonStr = await rootBundle.loadString('assets/data/stops.json');
     final jsonList = jsonDecode(jsonStr) as List<dynamic>;
-    return jsonList.map((e) => StopData.fromJson(e)).toList();
+    return jsonList.map((e) => StopInfo.fromJson(e)).toList();
   }
 
-  Future<List<StopArrival>> fetchStopDetails(int stopId) async {
+  Future<List<StopTrip>> fetchStopDetails(int stopId) async {
     try {
       final res = await http.get(Uri.parse("$baseUrl/stops/$stopId"));
       if (res.statusCode != 200) {
@@ -33,7 +33,7 @@ class MapRepository {
       }
       final jsonList = jsonDecode(res.body) as List<dynamic>;
       return jsonList
-          .map((e) => StopArrival.fromJson(e as Map<String, dynamic>))
+          .map((e) => StopTrip.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (e) {
       throw Exception("Failed to fetch stop details for $stopId: $e");

@@ -1,6 +1,6 @@
 components:
   schemas:
-    TripDetail:
+    StopTrip:
       type: object
       properties:
         routeId:
@@ -78,16 +78,16 @@ components:
           description: "Number of stops the bus has already passed"
         arrivalTimeScheduled:
           type: string
-          format: time
-          example: "14:30:00"
+          format: date-time
+          example: "2025-12-04T21:26:00Z"
           description: "Scheduled arrival time at the next stop"
         arrivalTimeEstimated:
           type: string
-          format: time
-          example: "14:32:00"
+          format: date-time
+          example: "2025-12-04T21:26:00Z"
           description: "Estimated arrival time at the next stop. It is useful because it considers real-time delays"
         stopTimes:
           type: array
           description: "List of stop times for the trip"
           items:
-            $ref: '#/components/schemas/StopTime'
+            $ref: '#/components/schemas/StopTripTime'

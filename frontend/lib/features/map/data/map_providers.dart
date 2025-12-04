@@ -4,8 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'map_repository.dart';
 import 'map_marker_loader.dart';
-import 'models/stop_data.dart';
-import 'models/stop_details.dart';
+import 'models/stop_info.dart';
+import 'models/stop_trip_info.dart';
 
 final mapRepositoryProvider = Provider((ref) => MapRepository());
 
@@ -30,7 +30,7 @@ final markersProvider = FutureProvider<Set<Marker>>((ref) async {
   final icon = await ref.read(stopIconProvider.future);
   final stops = await repo.loadLocalStops();
 
-  return stops.map((StopData stop) {
+  return stops.map((StopInfo stop) {
     return Marker(
       markerId: MarkerId(stop.stopId.toString()),
       position: LatLng(stop.stopLat, stop.stopLon),
@@ -41,7 +41,7 @@ final markersProvider = FutureProvider<Set<Marker>>((ref) async {
   }).toSet();
 });
 
-final stopDetailsProvider = FutureProvider.family<List<StopArrival>, int>((
+final stopDetailsProvider = FutureProvider.family<List<StopTrip>, int>((
   ref,
   stopId,
 ) async {
