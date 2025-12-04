@@ -326,13 +326,13 @@ const busData = [
 export async function seedDatabase() {
   try {
     await Bus.deleteMany({});
-    console.log('🧹 Collezione "buses" pulita.');
+    console.log('🧹 Collection "buses" cleaned.');
 
     const result = await Bus.insertMany(busData);
     console.log(
-      `🚀 Inseriti ${result.length} bus nel database automaticamente!`
+      `🚀 Inserted ${result.length} buses into the database automatically!`
     );
   } catch (error) {
-    console.error("❌ Errore durante il seeding automatico:", error);
+    console.error("❌ Error during automatic seeding:", error);
   }
 }

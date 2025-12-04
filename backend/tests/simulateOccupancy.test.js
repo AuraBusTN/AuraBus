@@ -100,7 +100,7 @@ describe("Unit Test: simulateOccupancy Algorithm", () => {
   });
 
   describe("Temporal Factors", () => {
-    test("Sunday should drastically reduce occupancy", () => {
+    test("Sunday should drastically increase occupancy", () => {
       getRouteConfig.mockReturnValue({ profile: "standard" });
       const sunday = new Date("2023-10-22T10:00:00");
       const monday = new Date("2023-10-23T10:00:00");

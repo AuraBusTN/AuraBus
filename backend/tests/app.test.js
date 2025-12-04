@@ -44,7 +44,7 @@ describe("Integration Test: AuraBus API", () => {
   });
 
   describe("GET /", () => {
-    it("It would respond with status 200 and a welcome message", async () => {
+    it("Should respond with status 200 and a welcome message", async () => {
       const res = await request(app).get("/");
       expect(res.statusCode).toBe(200);
       expect(res.text).toContain("AuraBus API is alive");
@@ -52,7 +52,7 @@ describe("Integration Test: AuraBus API", () => {
   });
 
   describe("GET /stops", () => {
-    it("It would return the list of stops from the mock", async () => {
+    it("Should return the list of stops from the mock", async () => {
       const res = await request(app).get("/stops");
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveLength(2);
@@ -81,7 +81,7 @@ describe("Integration Test: AuraBus API", () => {
       }
     ];
 
-    it("It would correctly process data and calculate occupancy", async () => {
+    it("Should correctly process data and calculate occupancy", async () => {
       global.fetch.mockResolvedValue({
         ok: true,
         json: async () => mockExternalApiData,
@@ -108,7 +108,7 @@ describe("Integration Test: AuraBus API", () => {
       expect(trip.occupancyRealTime.level).toMatch(/green|orange|red/);
     });
 
-    it("It would correctly handle a bus not found in the DB (default fallback)", async () => {
+    it("Should correctly handle a bus not found in the DB (default fallback)", async () => {
       global.fetch.mockResolvedValue({
         ok: true,
         json: async () => mockExternalApiData,
@@ -124,7 +124,7 @@ describe("Integration Test: AuraBus API", () => {
       expect(trip.busType).toBe("standard");
     });
 
-    it("It would return 502 if the external API fails", async () => {
+    it("Should return 502 if the external API fails", async () => {
       global.fetch.mockResolvedValue({
         ok: false,
         status: 503,
@@ -136,13 +136,13 @@ describe("Integration Test: AuraBus API", () => {
       expect(res.body.error).toContain("Failed to fetch data");
     });
 
-    it("It would return 400 if the stop ID is not numeric", async () => {
+    it("Should return 400 if the stop ID is not numeric", async () => {
       const res = await request(app).get("/stops/abc");
       expect(res.statusCode).toBe(400);
       expect(res.body.error).toBe("Invalid stop ID");
     });
 
-    it("It would handle unexpected network errors in fetch", async () => {
+    it("Should handle unexpected network errors in fetch", async () => {
       global.fetch.mockRejectedValue(new Error("Network Error"));
       
       const res = await request(app).get(`/stops/${stopId}`);

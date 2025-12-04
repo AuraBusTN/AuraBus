@@ -91,7 +91,7 @@ export const simulateOccupancy = (
 
   let finalLoadFactor = rawLoad + randomVariance;
 
-  // Clamp e Output
+  // Clamp and Output
   if (stopIndex === 0 && config.profile !== "flat_high") finalLoadFactor = 0.1;
   
   finalLoadFactor = Math.min(Math.max(finalLoadFactor, 0), 1);
