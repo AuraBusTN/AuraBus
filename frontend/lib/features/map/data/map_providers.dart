@@ -46,7 +46,7 @@ final stopDetailsProvider = FutureProvider.family<List<StopTrip>, int>((
   stopId,
 ) async {
   final repo = ref.read(mapRepositoryProvider);
-  return repo.fetchStopDetails(stopId);
+  return repo.fetchStopTrips(stopId);
 });
 
 class SelectedLinesNotifier extends Notifier<Set<String>> {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,11 +20,15 @@ class MapRepository {
 
   Future<List<StopInfo>> loadLocalStops() async {
     final jsonStr = await rootBundle.loadString('assets/data/stops.json');
+    return compute(_parseStops, jsonStr);
+  }
+
+  List<StopInfo> _parseStops(String jsonStr) {
     final jsonList = jsonDecode(jsonStr) as List<dynamic>;
     return jsonList.map((e) => StopInfo.fromJson(e)).toList();
   }
 
-  Future<List<StopTrip>> fetchStopDetails(int stopId) async {
+  Future<List<StopTrip>> fetchStopTrips(int stopId) async {
     try {
       final res = await http.get(Uri.parse("$baseUrl/stops/$stopId"));
       if (res.statusCode != 200) {
