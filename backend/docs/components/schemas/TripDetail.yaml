@@ -21,6 +21,43 @@ components:
           type: integer
           description: "Id of the bus. Usually null because the trip has not begun yet"
           nullable: true
+        busCapacity:
+          type: integer
+          description: "Capacity of the bus"
+        busType:
+          type: string
+          enum:
+            - mini
+            - standard
+            - standard_single
+            - articulated
+          description: "Type of the bus"
+        occupancyRealTime:
+          type: object
+          description: "Occupancy information of the bus"
+          properties:
+            percentage:
+              type: integer
+              description: "Occupancy percentage of the bus"
+            passengers:
+              type: integer
+              description: "Estimated number of passengers on the bus"
+            level:
+              type: string
+              description: "Color representing the occupancy status (green, orange, red)"
+        occupancyExpected:
+          type: object
+          description: "Expected occupancy information of the bus based on historical data"
+          properties:
+            percentage:
+              type: integer
+              description: "Expected occupancy percentage of the bus"
+            passengers:
+              type: integer
+              description: "Expected number of passengers on the bus"
+            level:
+              type: string
+              description: "Color representing the expected occupancy status (green, orange, red)"
         lastUpdate:
           type: string
           format: date-time

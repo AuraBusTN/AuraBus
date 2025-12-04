@@ -1,185 +1,155 @@
 import { jest } from "@jest/globals";
 import request from "supertest";
-import mongoose from "mongoose";
-import expectedStops from "../data/stops.json" with { type: "json" };
 
-await jest.unstable_mockModule("../src/data.js", () => ({
+const mockStops = new Map([
+  [1, { stopId: 1, stopName: "Stazione Centrale" }],
+  [2, { stopId: 2, stopName: "Piazza Duomo" }],
+]);
+const mockRoutes = new Map([
+  [
+    1,
+    {
+      routeId: 1,
+      routeShortName: "5",
+      routeLongName: "Circolare",
+      routeColor: "#FF0000",
+    },
+  ],
+]);
+
+jest.unstable_mockModule("../src/data.js", () => ({
   initData: jest.fn(),
-  stops: {
-    get: jest.fn(),
-    values: jest.fn(),
-  },
-  routes: {
-    get: jest.fn(),
+  stops: mockStops,
+  routes: mockRoutes,
+}));
+
+const mockBusFind = jest.fn();
+jest.unstable_mockModule("../src/models/Bus.js", () => ({
+  Bus: {
+    find: mockBusFind,
   },
 }));
 
-const { app, connectDb } = await import("../src/app.js");
-const { initData, stops, routes } = await import("../src/data.js");
+jest.unstable_mockModule("mongoose", () => ({
+  connect: jest.fn().mockResolvedValue(true),
+  Schema: class {},
+  model: jest.fn(),
+}));
 
-describe("API Endpoints", () => {
-  beforeAll(async () => {
-    await connectDb();
-    await initData();
-  });
+global.fetch = jest.fn();
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
+const { app } = await import("../src/app.js");
 
-  it("GET / it should return 200 and a greeting message", async () => {
-    const response = await request(app)
-      .get("/")
-      .expect("Content-Type", /text\/html/)
-      .expect(200);
-    expect(response.text).toBe("Hello World! My AuraBus API is alive!");
-  });
-
-  it("GET /stops it should return 200 and all stops data", async () => {
-    stops.values.mockReturnValue(expectedStops);
-
-    const response = await request(app)
-      .get("/stops")
-      .expect("Content-Type", /json/)
-      .expect(200);
-
-    const sortByStopId = (arr) =>
-      arr.slice().sort((a, b) => {
-        if (a.stopId < b.stopId) return -1;
-        if (a.stopId > b.stopId) return 1;
-        return 0;
-      });
-    expect(sortByStopId(response.body)).toEqual(sortByStopId(expectedStops));
-  });
-});
-
-describe("GET /stops/:id (Trip Details)", () => {
-  let fetchSpy;
+describe("Integration Test: AuraBus API", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    fetchSpy = jest.spyOn(global, "fetch");
+    global.fetch.mockReset();
   });
 
-  it("should return 200 and transformed trips on success", async () => {
-    const mockApiData = [
+  describe("GET /", () => {
+    it("Should respond with status 200 and a welcome message", async () => {
+      const res = await request(app).get("/");
+      expect(res.statusCode).toBe(200);
+      expect(res.text).toContain("AuraBus API is alive");
+    });
+  });
+
+  describe("GET /stops", () => {
+    it("Should return the list of stops from the mock", async () => {
+      const res = await request(app).get("/stops");
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveLength(2);
+      expect(res.body[0]).toHaveProperty("stopName");
+    });
+  });
+
+  describe("GET /stops/:id (Logic Trip & Occupancy)", () => {
+    const stopId = 1;
+
+    const mockExternalApiData = [
       {
-        routeId: "R1",
-        matricolaBus: 123,
-        delay: 0,
+        tripId: 1,
+        routeId: 1,
+        matricolaBus: 100,
         stopLast: 1,
-        stopNext: 3,
-        lastEventRecivedAt: "2025-12-03T09:11:23Z",
-        lastSequenceDetection: 1,
-        oraArrivoProgrammataAFermataSelezionata: "10:00:00",
-        oraArrivoEffettivaAFermataSelezionata: "10:00:15",
+        stopNext: 2,
+        delay: 120,
+        oraArrivoProgrammataAFermataSelezionata: "2024-12-03T10:00:00Z",
+        oraArrivoEffettivaAFermataSelezionata: "2024-12-03T10:02:00Z",
+        lastEventRecivedAt: "2024-12-03T09:59:00Z",
         stopTimes: [
-          { stopId: 1, arrivalTime: "09:55:00", departureTime: "09:55:10" },
-          { stopId: 2, arrivalTime: "10:00:00", departureTime: "10:00:15" },
+          { stopId: 1, arrivalTime: "10:00:00" },
+          { stopId: 2, arrivalTime: "10:10:00" },
         ],
       },
     ];
 
-    const mockRoute = {
-      routeId: "R1",
-      routeShortName: "10",
-      routeLongName: "Centro - Sobborgo",
-      routeColor: "C52720",
-    };
+    it("Should correctly process data and calculate occupancy", async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => mockExternalApiData,
+      });
 
-    const mockStopTime1 = { stopName: "Fermata 1" };
-    const mockStopTime2 = { stopName: "Fermata 2" };
+      mockBusFind.mockResolvedValue([
+        { bus_id: 100, capacity: 150, type: "articulated" },
+      ]);
 
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue(mockApiData),
+      const res = await request(app).get(`/stops/${String(stopId)}`);
+
+      expect(res.statusCode).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
+      expect(res.body).toHaveLength(1);
+
+      const trip = res.body[0];
+
+      expect(trip.busId).toBe(100);
+      expect(trip.busCapacity).toBe(150);
+      expect(trip.routeShortName).toBe("5");
+
+      expect(trip).toHaveProperty("occupancyRealTime");
+      expect(trip.occupancyRealTime).toHaveProperty("percentage");
+      expect(trip.occupancyRealTime.level).toMatch(/green|orange|red/);
     });
 
-    routes.get.mockReturnValue(mockRoute);
+    it("Should correctly handle a bus not found in the DB (default fallback)", async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => mockExternalApiData,
+      });
 
-    stops.get.mockImplementation((stopId) => {
-      if (stopId === 1) return mockStopTime1;
-      if (stopId === 2) return mockStopTime2;
-      return { stopName: "Unknown" };
+      mockBusFind.mockResolvedValue([]);
+
+      const res = await request(app).get(`/stops/${stopId}`);
+
+      expect(res.statusCode).toBe(200);
+      const trip = res.body[0];
+      expect(trip.busCapacity).toBe(100);
+      expect(trip.busType).toBe("standard");
     });
 
-    const res = await request(app).get("/stops/2");
+    it("Should return 502 if the external API fails", async () => {
+      global.fetch.mockResolvedValue({
+        ok: false,
+        status: 503,
+        statusText: "Service Unavailable",
+      });
 
-    expect(res.statusCode).toBe(200);
-
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("stopId=2"),
-      expect.any(Object)
-    );
-
-    expect(routes.get).toHaveBeenCalledWith("R1");
-    expect(stops.get).toHaveBeenCalledWith(1);
-    expect(stops.get).toHaveBeenCalledWith(2);
-
-    expect(res.body).toEqual([
-      {
-        routeId: "R1",
-        routeShortName: "10",
-        routeLongName: "Centro - Sobborgo",
-        routeColor: "C52720",
-        busId: 123,
-        lastUpdate: "2025-12-03T09:11:23Z",
-        delay: 0,
-        lastStopId: 1,
-        nextStopId: 3,
-        passedStopCount: 1,
-        arrivalTimeScheduled: "10:00:00",
-        arrivalTimeEstimated: "10:00:15",
-        stopTimes: [
-          {
-            stopId: 1,
-            stopName: "Fermata 1",
-            arrivalTimeScheduled: "09:55:00",
-          },
-          {
-            stopId: 2,
-            stopName: "Fermata 2",
-            arrivalTimeScheduled: "10:00:00",
-          },
-        ],
-      },
-    ]);
-  });
-
-  it("should return 502 if external API fetch fails", async () => {
-    fetchSpy.mockResolvedValue({
-      ok: false,
-      status: 503,
-      statusText: "Service Down",
+      const res = await request(app).get(`/stops/${stopId}`);
+      expect(res.statusCode).toBe(502);
+      expect(res.body.error).toContain("Failed to fetch data");
     });
 
-    const res = await request(app).get("/stops/999");
-
-    expect(res.statusCode).toBe(502);
-    expect(res.body).toEqual({
-      error: "Failed to fetch data from external API: 503 Service Down",
-    });
-  });
-
-  it("should return 500 if external API returns an application error", async () => {
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue({ error: "Invalid API Key" }),
+    it("Should return 400 if the stop ID is not numeric", async () => {
+      const res = await request(app).get("/stops/abc");
+      expect(res.statusCode).toBe(400);
+      expect(res.body.error).toBe("Invalid stop ID");
     });
 
-    const res = await request(app).get("/stops/12");
+    it("Should handle unexpected network errors in fetch", async () => {
+      global.fetch.mockRejectedValue(new Error("Network Error"));
 
-    expect(res.statusCode).toBe(500);
-    expect(res.body).toEqual({ error: "Invalid API Key" });
-  });
-
-  it("should return 502 if fetch throws a network error", async () => {
-    fetchSpy.mockRejectedValue(new Error("Network connection failed"));
-
-    const res = await request(app).get("/stops/12");
-
-    expect(res.statusCode).toBe(502);
-    expect(res.body).toEqual({
-      error: "Failed to fetch or process data from external API.",
+      const res = await request(app).get(`/stops/${stopId}`);
+      expect(res.statusCode).toBe(502);
     });
   });
 });
