@@ -77,7 +77,7 @@ app.get("/stops/:id", async (req, res) => {
 
     const busMap = new Map();
     busDetails.forEach((b) => {
-      busMap.set(String(b.bus_id), { capacity: b.capacity, type: b.type });
+      busMap.set(b.bus_id, { capacity: b.capacity, type: b.type });
     });
 
     const trips = [];
@@ -85,7 +85,7 @@ app.get("/stops/:id", async (req, res) => {
     data.forEach((element) => {
       const route = routes.get(element.routeId);
 
-      const extraBusInfo = busMap.get(String(element.matricolaBus)) || {
+      const extraBusInfo = busMap.get(element.matricolaBus) || {
         capacity: 100,
         type: "standard",
       };
