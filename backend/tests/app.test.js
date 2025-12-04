@@ -2,16 +2,19 @@ import { jest } from "@jest/globals";
 import request from "supertest";
 
 const mockStops = new Map([
-  ["1", { stopId: "1", stopName: "Stazione Centrale" }],
-  ["2", { stopId: "2", stopName: "Piazza Duomo" }],
+  [1, { stopId: 1, stopName: "Stazione Centrale" }],
+  [2, { stopId: 2, stopName: "Piazza Duomo" }],
 ]);
 const mockRoutes = new Map([
-  ["R1", { 
-    routeId: "R1", 
-    routeShortName: "5", 
-    routeLongName: "Circolare", 
-    routeColor: "#FF0000" 
-  }],
+  [
+    1,
+    {
+      routeId: 1,
+      routeShortName: "5",
+      routeLongName: "Circolare",
+      routeColor: "#FF0000",
+    },
+  ],
 ]);
 
 jest.unstable_mockModule("../src/data.js", () => ({
@@ -61,24 +64,24 @@ describe("Integration Test: AuraBus API", () => {
   });
 
   describe("GET /stops/:id (Logic Trip & Occupancy)", () => {
-    const stopId = "1";
-    
+    const stopId = 1;
+
     const mockExternalApiData = [
       {
-        tripId: "TRIP_001",
-        routeId: "R1",
-        matricolaBus: "BUS_100",
-        stopLast: "1", 
-        stopNext: "2",
+        tripId: 1,
+        routeId: 1,
+        matricolaBus: 100,
+        stopLast: 1,
+        stopNext: 2,
         delay: 120,
         oraArrivoProgrammataAFermataSelezionata: "2024-12-03T10:00:00Z",
         oraArrivoEffettivaAFermataSelezionata: "2024-12-03T10:02:00Z",
         lastEventRecivedAt: "2024-12-03T09:59:00Z",
         stopTimes: [
           { stopId: 1, arrivalTime: "10:00:00" },
-          { stopId: 2, arrivalTime: "10:10:00" }
-        ]
-      }
+          { stopId: 2, arrivalTime: "10:10:00" },
+        ],
+      },
     ];
 
     it("Should correctly process data and calculate occupancy", async () => {
@@ -88,10 +91,10 @@ describe("Integration Test: AuraBus API", () => {
       });
 
       mockBusFind.mockResolvedValue([
-        { bus_id: "BUS_100", capacity: 150, type: "articulated" }
+        { bus_id: 100, capacity: 150, type: "articulated" },
       ]);
 
-      const res = await request(app).get(`/stops/${stopId}`);
+      const res = await request(app).get(`/stops/${String(stopId)}`);
 
       expect(res.statusCode).toBe(200);
       expect(Array.isArray(res.body)).toBe(true);
@@ -99,9 +102,9 @@ describe("Integration Test: AuraBus API", () => {
 
       const trip = res.body[0];
 
-      expect(trip.busId).toBe("BUS_100");
-      expect(trip.busCapacity).toBe(150); 
-      expect(trip.routeShortName).toBe("5"); 
+      expect(trip.busId).toBe(100);
+      expect(trip.busCapacity).toBe(150);
+      expect(trip.routeShortName).toBe("5");
 
       expect(trip).toHaveProperty("occupancyRealTime");
       expect(trip.occupancyRealTime).toHaveProperty("percentage");
@@ -144,7 +147,7 @@ describe("Integration Test: AuraBus API", () => {
 
     it("Should handle unexpected network errors in fetch", async () => {
       global.fetch.mockRejectedValue(new Error("Network Error"));
-      
+
       const res = await request(app).get(`/stops/${stopId}`);
       expect(res.statusCode).toBe(502);
     });
