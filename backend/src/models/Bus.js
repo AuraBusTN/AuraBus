@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const busSchema = new mongoose.Schema({
-  bus_id: { type: String, required: true, unique: true, index: true },
+  bus_id: { type: Number, required: true, unique: true, index: true },
   capacity: { type: Number, required: true },
   type: {
     type: String,
