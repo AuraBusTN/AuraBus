@@ -6,11 +6,11 @@ const routes = new Map();
 export async function initData() {
   try {
     const stopsJson = await fs.promises.readFile(
-      new URL("../data/stops.json", import.meta.url),
+      new URL("../../data/stops.json", import.meta.url),
       "utf-8"
     );
     const routesJson = await fs.promises.readFile(
-      new URL("../data/routes.json", import.meta.url),
+      new URL("../../data/routes.json", import.meta.url),
       "utf-8"
     );
 
@@ -25,9 +25,9 @@ export async function initData() {
       routes.set(route.routeId, route);
     });
 
-    console.log("Data (stops & routes) loaded successfully!");
+    console.log("✅ Static Data (stops & routes) loaded!");
   } catch (err) {
-    console.error("Error loading data files:", err);
+    console.error("❌ Error loading data files:", err);
     process.exit(1);
   }
 }
