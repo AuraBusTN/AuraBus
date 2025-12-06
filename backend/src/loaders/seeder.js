@@ -15,8 +15,10 @@ export async function seedDatabase() {
       const buses = JSON.parse(busesJson);
 
       await Bus.insertMany(buses);
-      
-      console.log(`✅ Database seeded successfully with ${buses.length} buses!`);
+
+      console.log(
+        `✅ Database seeded successfully with ${buses.length} buses!`
+      );
     } else {
       console.log("ℹ️ Database already contains data. Skipping seed.");
     }

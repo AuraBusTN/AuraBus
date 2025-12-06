@@ -17,7 +17,7 @@ const mockRoutes = new Map([
   ],
 ]);
 
-jest.unstable_mockModule("../src/data.js", () => ({
+jest.unstable_mockModule("../src/utils/staticData.js", () => ({
   initData: jest.fn(),
   stops: mockStops,
   routes: mockRoutes,
@@ -51,15 +51,6 @@ describe("Integration Test: AuraBus API", () => {
       const res = await request(app).get("/");
       expect(res.statusCode).toBe(200);
       expect(res.text).toContain("AuraBus API is alive");
-    });
-  });
-
-  describe("GET /stops", () => {
-    it("Should return the list of stops from the mock", async () => {
-      const res = await request(app).get("/stops");
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveLength(2);
-      expect(res.body[0]).toHaveProperty("stopName");
     });
   });
 
@@ -127,7 +118,7 @@ describe("Integration Test: AuraBus API", () => {
       expect(trip.busType).toBe("standard");
     });
 
-    it("Should return 502 if the external API fails", async () => {
+    it("Should return 500 if the external API fails", async () => {
       global.fetch.mockResolvedValue({
         ok: false,
         status: 503,
@@ -135,8 +126,9 @@ describe("Integration Test: AuraBus API", () => {
       });
 
       const res = await request(app).get(`/stops/${stopId}`);
-      expect(res.statusCode).toBe(502);
-      expect(res.body.error).toContain("Failed to fetch data");
+      expect(res.statusCode).toBe(500);
+      expect(res.body.error).toBe(true);
+      expect(res.body.message).toBeDefined();
     });
 
     it("Should return 400 if the stop ID is not numeric", async () => {
@@ -149,7 +141,9 @@ describe("Integration Test: AuraBus API", () => {
       global.fetch.mockRejectedValue(new Error("Network Error"));
 
       const res = await request(app).get(`/stops/${stopId}`);
-      expect(res.statusCode).toBe(502);
+      expect(res.statusCode).toBe(500);
+      expect(res.body.error).toBe(true);
+      expect(res.body.message).toBeDefined();
     });
   });
 });

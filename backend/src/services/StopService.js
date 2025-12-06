@@ -15,116 +15,125 @@ const getAuthHeader = () => ({
 });
 
 export const getStopDetails = async (stopId) => {
-  const response = await fetch(
-    `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
-    getAuthHeader()
-  );
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
 
-  if (!response.ok) {
-    throw new Error(
-      `External API Error: ${response.status} ${response.statusText}`
+  try {
+    const response = await fetch(
+      `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
+      { ...getAuthHeader(), signal: controller.signal }
     );
-  }
 
-  const data = await response.json();
-  if (data.error) {
-    throw new Error(data.error);
-  }
-
-  const busIdsFromApi = data.map((el) => el.matricolaBus).filter(Boolean);
-
-  const busMap = await findBusByIds(busIdsFromApi);
-
-  const trips = [];
-
-  data.forEach((element) => {
-    const route = routes.get(element.routeId);
-
-    const extraBusInfo = busMap.get(element.matricolaBus) || {
-      capacity: 100,
-      type: "standard",
-    };
-
-    const stopTimes = Array.isArray(element.stopTimes) ? element.stopTimes : [];
-    const totalStops = stopTimes.length;
-
-    const lastStopId = Number(element.stopLast);
-    let currentBusIndex = -1;
-
-    if (lastStopId === 0) {
-      currentBusIndex = 0;
-    } else {
-      currentBusIndex = stopTimes.findIndex((s) => s.stopId === lastStopId);
+    if (!response.ok) {
+      throw new Error(
+        `External API Error: ${response.status} ${response.statusText}`
+      );
     }
-    const actualCurrentIndex = currentBusIndex === -1 ? 0 : currentBusIndex;
-    const targetIndices = stopTimes
-      .map((s, i) => (s.stopId === stopId ? i : -1))
-      .filter((i) => i !== -1);
 
-    let targetIndex = targetIndices.find((i) => i >= actualCurrentIndex);
-
-    if (targetIndex === undefined && targetIndices.length > 0) {
-      targetIndex = targetIndices[targetIndices.length - 1];
-    } else if (targetIndices.length === 0) {
-      return;
+    const data = await response.json();
+    if (data.error) {
+      throw new Error(data.error);
     }
-    const stopsRemaining = targetIndex - actualCurrentIndex;
 
-    const occupancyRealTime = simulateOccupancy(
-      new Date(),
-      element.tripId,
-      extraBusInfo.capacity,
-      actualCurrentIndex,
-      totalStops,
-      route.routeId
-    );
+    const busIdsFromApi = data.map((el) => el.matricolaBus).filter(Boolean);
 
-    const occupancyExpected = simulateOccupancy(
-      new Date(element.oraArrivoEffettivaAFermataSelezionata),
-      element.tripId,
-      extraBusInfo.capacity,
-      targetIndex,
-      totalStops,
-      route.routeId
-    );
+    const busMap = await findBusByIds(busIdsFromApi);
 
-    trips.push({
-      routeId: route.routeId,
-      routeShortName: route.routeShortName,
-      routeLongName: route.routeLongName,
-      routeColor: route.routeColor,
+    const trips = [];
 
-      busId: element.matricolaBus,
-      busCapacity: extraBusInfo.capacity,
-      busType: extraBusInfo.type,
+    data.forEach((element) => {
+      const route = routes.get(element.routeId);
 
-      occupancyRealTime,
-      occupancyExpected,
+      const extraBusInfo = busMap.get(element.matricolaBus) || {
+        capacity: 100,
+        type: "standard",
+      };
 
-      stopsRemaining,
-      isTripFinished: stopsRemaining < 0,
-      isAtStop: stopsRemaining === 0 && lastStopId !== 0,
+      const stopTimes = Array.isArray(element.stopTimes)
+        ? element.stopTimes
+        : [];
+      const totalStops = stopTimes.length;
 
-      lastUpdate: element.lastEventRecivedAt,
-      delay: element.delay,
-      lastStopId: element.stopLast,
-      nextStopId: element.stopNext,
-      passedStopCount: element.lastSequenceDetection,
+      const lastStopId = Number(element.stopLast);
+      let currentBusIndex = -1;
 
-      arrivalTimeScheduled: element.oraArrivoProgrammataAFermataSelezionata,
-      arrivalTimeEstimated: element.oraArrivoEffettivaAFermataSelezionata,
+      if (lastStopId === 0) {
+        currentBusIndex = 0;
+      } else {
+        currentBusIndex = stopTimes.findIndex((s) => s.stopId === lastStopId);
+      }
+      const actualCurrentIndex = currentBusIndex === -1 ? 0 : currentBusIndex;
+      const targetIndices = stopTimes
+        .map((s, i) => (s.stopId === stopId ? i : -1))
+        .filter((i) => i !== -1);
 
-      stopTimes: stopTimes.map((st) => ({
-        stopId: st.stopId,
-        stopName: stops.get(st.stopId)?.stopName || "Unknown",
-        arrivalTimeScheduled: st.arrivalTime,
-      })),
+      let targetIndex = targetIndices.find((i) => i >= actualCurrentIndex);
+
+      if (targetIndex === undefined && targetIndices.length > 0) {
+        targetIndex = targetIndices[targetIndices.length - 1];
+      } else if (targetIndices.length === 0) {
+        return;
+      }
+      const stopsRemaining = targetIndex - actualCurrentIndex;
+
+      const occupancyRealTime = simulateOccupancy(
+        new Date(),
+        element.tripId,
+        extraBusInfo.capacity,
+        actualCurrentIndex,
+        totalStops,
+        route.routeId
+      );
+
+      const occupancyExpected = simulateOccupancy(
+        new Date(element.oraArrivoEffettivaAFermataSelezionata),
+        element.tripId,
+        extraBusInfo.capacity,
+        targetIndex,
+        totalStops,
+        route.routeId
+      );
+
+      trips.push({
+        routeId: route.routeId,
+        routeShortName: route.routeShortName,
+        routeLongName: route.routeLongName,
+        routeColor: route.routeColor,
+
+        busId: element.matricolaBus,
+        busCapacity: extraBusInfo.capacity,
+        busType: extraBusInfo.type,
+
+        occupancyRealTime,
+        occupancyExpected,
+
+        stopsRemaining,
+        isTripFinished: stopsRemaining < 0,
+        isAtStop: stopsRemaining === 0 && lastStopId !== 0,
+
+        lastUpdate: element.lastEventRecivedAt,
+        delay: element.delay,
+        lastStopId: element.stopLast,
+        nextStopId: element.stopNext,
+        passedStopCount: element.lastSequenceDetection,
+
+        arrivalTimeScheduled: element.oraArrivoProgrammataAFermataSelezionata,
+        arrivalTimeEstimated: element.oraArrivoEffettivaAFermataSelezionata,
+
+        stopTimes: stopTimes.map((st) => ({
+          stopId: st.stopId,
+          stopName: stops.get(st.stopId)?.stopName || "Unknown",
+          arrivalTimeScheduled: st.arrivalTime,
+        })),
+      });
     });
-  });
 
-  trips.sort((a, b) =>
-    a.arrivalTimeEstimated.localeCompare(b.arrivalTimeEstimated)
-  );
+    trips.sort((a, b) =>
+      a.arrivalTimeEstimated.localeCompare(b.arrivalTimeEstimated)
+    );
 
-  return trips;
+    return trips;
+  } finally {
+    clearTimeout(timeout);
+  }
 };
