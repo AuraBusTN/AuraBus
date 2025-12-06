@@ -15,13 +15,13 @@ const getAuthHeader = () => ({
 });
 
 export const getStopDetails = async (stopId) => {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
+  const abortController = new AbortController();
+  const timeout = setTimeout(() => abortController.abort(), 5000);
 
   try {
     const response = await fetch(
       `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
-      { ...getAuthHeader(), signal: controller.signal }
+      { ...getAuthHeader(), signal: abortController.signal }
     );
 
     if (!response.ok) {
@@ -43,6 +43,12 @@ export const getStopDetails = async (stopId) => {
 
     data.forEach((element) => {
       const route = routes.get(element.routeId);
+      if (!route) {
+        console.warn(
+          `⚠️ Unknown routeId received from API: ${element.routeId}`
+        );
+        return;
+      }
 
       const extraBusInfo = busMap.get(element.matricolaBus) || {
         capacity: 100,

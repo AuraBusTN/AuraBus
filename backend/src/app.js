@@ -25,10 +25,12 @@ app.use((err, req, res, next) => {
 
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
+  const showStack =
+    process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
 
   res.status(statusCode).json({
     error: true,
     message: message,
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+    stack: showStack ? err.stack : null,
   });
 });
