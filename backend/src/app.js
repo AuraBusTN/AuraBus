@@ -20,6 +20,12 @@ app.get("/", (req, res) => {
 
 app.use("/stops", stopsRouter);
 
+app.use((req, res, next) => {
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+  error.statusCode = 404;
+  next(error);
+});
+
 app.use((err, req, res, next) => {
   console.error("❌ Global Error Handler:", err);
 
