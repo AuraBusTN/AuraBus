@@ -103,7 +103,6 @@ describe("Integration Test: AuraBus API", () => {
       expect(trip.busId).toBe(100);
       expect(trip.busCapacity).toBe(150);
       expect(trip.routeShortName).toBe("5");
-      expect(trip.occupancyRealTime.level).toMatch(/green|orange|red/);
     });
 
     it("Should correctly handle a bus not found in the DB (default fallback)", async () => {

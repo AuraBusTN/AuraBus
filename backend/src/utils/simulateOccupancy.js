@@ -116,13 +116,8 @@ export const simulateOccupancy = (
   const percentage =
     capacity > 0 ? Math.round((estimatedPassengers / capacity) * 100) : 0;
 
-  let statusColor = "green";
-  if (percentage > 50) statusColor = "orange";
-  if (percentage > 80) statusColor = "red";
-
   return {
     percentage: percentage,
     passengers: estimatedPassengers,
-    level: statusColor,
   };
 };
