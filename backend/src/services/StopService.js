@@ -3,16 +3,18 @@ import { stops, routes } from "../utils/staticData.js";
 import { simulateOccupancy } from "../utils/simulateOccupancy.js";
 import { findBusByIds } from "../repositories/BusRepository.js";
 
-const AUTH_TOKEN = Buffer.from(
-  `${config.tnt.username}:${config.tnt.password}`
-).toString("base64");
+const getFetchOptions = () => {
+  const authToken = Buffer.from(
+    `${config.tnt.username}:${config.tnt.password}`
+  ).toString("base64");
 
-const getFetchOptions = () => ({
-  method: "GET",
-  headers: {
-    Authorization: `Basic ${AUTH_TOKEN}`,
-  },
-});
+  return {
+    method: "GET",
+    headers: {
+      Authorization: `Basic ${authToken}`,
+    },
+  };
+};
 
 export const getStopDetails = async (stopId) => {
   const abortController = new AbortController();

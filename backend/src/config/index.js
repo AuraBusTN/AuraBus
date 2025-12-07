@@ -33,4 +33,19 @@ const config = {
   },
 };
 
+const missingTntConfig = [];
+if (!config.tnt.url) missingTntConfig.push("API_URL");
+if (!config.tnt.username) missingTntConfig.push("API_USER");
+if (!config.tnt.password) missingTntConfig.push("API_PASSWORD");
+if (!config.db.user) missingTntConfig.push("MONGO_USER");
+if (!config.db.pass) missingTntConfig.push("MONGO_PASSWORD");
+
+if (missingTntConfig.length > 0) {
+  throw new Error(
+    `❌ CRITICAL ERROR: Missing required TNT API configuration: ${missingTntConfig.join(
+      ", "
+    )}`
+  );
+}
+
 export default config;
