@@ -163,7 +163,8 @@ describe("Integration Test: AuraBus API", () => {
     it("Should return 400 if the stop ID is not numeric", async () => {
       const res = await request(app).get("/stops/abc");
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toBe("Invalid stop ID");
+      expect(res.body.error).toBe(true);
+      expect(res.body.message).toBe("Invalid stop ID");
     });
 
     it("Should handle unexpected network errors in fetch", async () => {

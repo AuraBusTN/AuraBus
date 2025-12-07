@@ -3,7 +3,9 @@ import { getStopDetails } from "../services/StopService.js";
 export const getStop = async (req, res, next) => {
   const stopId = Number(req.params.id);
   if (isNaN(stopId)) {
-    return res.status(400).json({ error: "Invalid stop ID" });
+    const error = new Error("Invalid stop ID");
+    error.statusCode = 400;
+    return next(error);
   }
 
   try {

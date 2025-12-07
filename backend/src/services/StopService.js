@@ -3,25 +3,26 @@ import { stops, routes } from "../utils/staticData.js";
 import { simulateOccupancy } from "../utils/simulateOccupancy.js";
 import { findBusByIds } from "../repositories/BusRepository.js";
 
-const getAuthHeader = () => ({
+const AUTH_TOKEN = Buffer.from(
+  `${config.tnt.username}:${config.tnt.password}`
+).toString("base64");
+
+const getFetchOptions = () => ({
   method: "GET",
   headers: {
-    Authorization:
-      "Basic " +
-      Buffer.from(`${config.tnt.username}:${config.tnt.password}`).toString(
-        "base64"
-      ),
+    Authorization: `Basic ${AUTH_TOKEN}`,
   },
 });
 
 export const getStopDetails = async (stopId) => {
   const abortController = new AbortController();
-  const timeout = setTimeout(() => abortController.abort(), 5000);
+  const TIMEOUT_MS = 5000;
+  const timeout = setTimeout(() => abortController.abort(), TIMEOUT_MS);
 
   try {
     const response = await fetch(
       `${config.tnt.url}/trips_new?stopId=${stopId}&type=U&limit=30`,
-      { ...getAuthHeader(), signal: abortController.signal }
+      { ...getFetchOptions(), signal: abortController.signal }
     );
 
     if (!response.ok) {
@@ -139,6 +140,13 @@ export const getStopDetails = async (stopId) => {
     );
 
     return trips;
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.error(`⏱️ Timeout request to TNT API after ${TIMEOUT_MS}ms`);
+      throw new Error("External service unavailable (Timeout)");
+    }
+
+    throw error;
   } finally {
     clearTimeout(timeout);
   }
