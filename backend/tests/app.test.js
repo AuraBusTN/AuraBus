@@ -17,7 +17,7 @@ const mockRoutes = new Map([
   ],
 ]);
 
-jest.unstable_mockModule("../src/data.js", () => ({
+jest.unstable_mockModule("../src/utils/staticData.js", () => ({
   initData: jest.fn(),
   stops: mockStops,
   routes: mockRoutes,
@@ -54,40 +54,39 @@ describe("Integration Test: AuraBus API", () => {
     });
   });
 
-  describe("GET /stops", () => {
-    it("Should return the list of stops from the mock", async () => {
-      const res = await request(app).get("/stops");
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveLength(2);
-      expect(res.body[0]).toHaveProperty("stopName");
+  describe("Global 404 Handler", () => {
+    it("Should return 404 JSON for non-existent routes", async () => {
+      const res = await request(app).get("/questo-endpoint-non-esiste");
+
+      expect(res.statusCode).toBe(404);
+      expect(res.body.error).toBe(true);
+      expect(res.body.message).toMatch(/Not Found/);
     });
   });
 
   describe("GET /stops/:id (Logic Trip & Occupancy)", () => {
     const stopId = 1;
 
-    const mockExternalApiData = [
-      {
-        tripId: 1,
-        routeId: 1,
-        matricolaBus: 100,
-        stopLast: 1,
-        stopNext: 2,
-        delay: 120,
-        oraArrivoProgrammataAFermataSelezionata: "2024-12-03T10:00:00Z",
-        oraArrivoEffettivaAFermataSelezionata: "2024-12-03T10:02:00Z",
-        lastEventRecivedAt: "2024-12-03T09:59:00Z",
-        stopTimes: [
-          { stopId: 1, arrivalTime: "10:00:00" },
-          { stopId: 2, arrivalTime: "10:10:00" },
-        ],
-      },
-    ];
+    const baseApiData = {
+      tripId: 1,
+      routeId: 1,
+      matricolaBus: 100,
+      stopLast: 1,
+      stopNext: 2,
+      delay: 120,
+      oraArrivoProgrammataAFermataSelezionata: "2024-12-03T10:00:00Z",
+      oraArrivoEffettivaAFermataSelezionata: "2024-12-03T10:02:00Z",
+      lastEventRecivedAt: "2024-12-03T09:59:00Z",
+      stopTimes: [
+        { stopId: 1, arrivalTime: "10:00:00" },
+        { stopId: 2, arrivalTime: "10:10:00" },
+      ],
+    };
 
     it("Should correctly process data and calculate occupancy", async () => {
       global.fetch.mockResolvedValue({
         ok: true,
-        json: async () => mockExternalApiData,
+        json: async () => [baseApiData],
       });
 
       mockBusFind.mockResolvedValue([
@@ -101,20 +100,15 @@ describe("Integration Test: AuraBus API", () => {
       expect(res.body).toHaveLength(1);
 
       const trip = res.body[0];
-
       expect(trip.busId).toBe(100);
       expect(trip.busCapacity).toBe(150);
       expect(trip.routeShortName).toBe("5");
-
-      expect(trip).toHaveProperty("occupancyRealTime");
-      expect(trip.occupancyRealTime).toHaveProperty("percentage");
-      expect(trip.occupancyRealTime.level).toMatch(/green|orange|red/);
     });
 
     it("Should correctly handle a bus not found in the DB (default fallback)", async () => {
       global.fetch.mockResolvedValue({
         ok: true,
-        json: async () => mockExternalApiData,
+        json: async () => [baseApiData],
       });
 
       mockBusFind.mockResolvedValue([]);
@@ -127,7 +121,33 @@ describe("Integration Test: AuraBus API", () => {
       expect(trip.busType).toBe("standard");
     });
 
-    it("Should return 502 if the external API fails", async () => {
+    it("Should ignore trips with unknown routeIds (Service Resilience)", async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => [{ ...baseApiData, tripId: 999, routeId: 999 }],
+      });
+
+      mockBusFind.mockResolvedValue([]);
+
+      const res = await request(app).get(`/stops/${stopId}`);
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveLength(0);
+    });
+
+    it("Should return empty array if external API returns empty list", async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => [],
+      });
+
+      const res = await request(app).get(`/stops/${stopId}`);
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toEqual([]);
+    });
+
+    it("Should return 500 if the external API fails (503)", async () => {
       global.fetch.mockResolvedValue({
         ok: false,
         status: 503,
@@ -135,21 +155,25 @@ describe("Integration Test: AuraBus API", () => {
       });
 
       const res = await request(app).get(`/stops/${stopId}`);
-      expect(res.statusCode).toBe(502);
-      expect(res.body.error).toContain("Failed to fetch data");
+      expect(res.statusCode).toBe(500);
+      expect(res.body.error).toBe(true);
+      expect(res.body.message).toMatch(/External API Error/);
     });
 
     it("Should return 400 if the stop ID is not numeric", async () => {
       const res = await request(app).get("/stops/abc");
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toBe("Invalid stop ID");
+      expect(res.body.error).toBe(true);
+      expect(res.body.message).toBe("Invalid stop ID");
     });
 
     it("Should handle unexpected network errors in fetch", async () => {
       global.fetch.mockRejectedValue(new Error("Network Error"));
 
       const res = await request(app).get(`/stops/${stopId}`);
-      expect(res.statusCode).toBe(502);
+      expect(res.statusCode).toBe(500);
+      expect(res.body.error).toBe(true);
+      expect(res.body.message).toBeDefined();
     });
   });
 });

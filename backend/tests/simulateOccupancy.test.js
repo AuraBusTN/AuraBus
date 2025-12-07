@@ -21,14 +21,13 @@ describe("Unit Test: simulateOccupancy Algorithm", () => {
   });
 
   describe("Basic Logic and Data Structure", () => {
-    test("It should return an object with correct percentage, passengers, and level", () => {
+    test("It should return an object with correct percentage and passengers", () => {
       getRouteConfig.mockReturnValue({ profile: "standard" });
       const result = simulateOccupancy(new Date(), "trip1", 100, 5, 20, "R1");
 
       expect(result).toEqual({
         percentage: expect.any(Number),
         passengers: expect.any(Number),
-        level: expect.stringMatching(/green|orange|red/),
       });
       expect(result.percentage).toBeGreaterThanOrEqual(0);
       expect(result.percentage).toBeLessThanOrEqual(100);
