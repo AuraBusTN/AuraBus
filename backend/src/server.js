@@ -1,19 +1,31 @@
-import { app, connectDb } from "./app.js";
-import { initData } from "./data.js";
-import config from "./config.js";
-import { seedDatabase } from "./seedBus.js";
+import { app } from "./app.js";
+import config from "./config/index.js";
+import loaders from "./loaders/index.js";
 
-const port = config.api.port;
+process.on("uncaughtException", (err) => {
+  console.error("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+  console.error(err);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("UNHANDLED REJECTION! 💥 Shutting down...");
+  console.error(err);
+  process.exit(1);
+});
 
 async function startServer() {
   try {
-    await Promise.all([connectDb(), initData(), seedDatabase()]);
-
-    app.listen(port, () => {
-      console.log(`Server API listening on port ${port}`);
+    await loaders();
+    app.listen(config.api.port, () => {
+      console.log(`
+        ################################################
+        🛡️  Server listening on port: ${config.api.port} 🛡️
+        ################################################
+      `);
     });
   } catch (err) {
-    console.error("Failed to start server:", err);
+    console.error("❌ Failed to start server:", err);
     process.exit(1);
   }
 }

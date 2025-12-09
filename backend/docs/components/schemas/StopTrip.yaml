@@ -42,9 +42,6 @@ components:
             passengers:
               type: integer
               description: "Estimated number of passengers on the bus"
-            level:
-              type: string
-              description: "Color representing the occupancy status (green, orange, red)"
         occupancyExpected:
           type: object
           description: "Expected occupancy information of the bus based on historical data"
@@ -55,9 +52,6 @@ components:
             passengers:
               type: integer
               description: "Expected number of passengers on the bus"
-            level:
-              type: string
-              description: "Color representing the expected occupancy status (green, orange, red)"
         lastUpdate:
           type: string
           format: date-time

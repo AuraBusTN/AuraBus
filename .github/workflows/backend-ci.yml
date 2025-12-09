@@ -39,6 +39,9 @@ jobs:
           echo "MONGO_USER=${{ secrets.MONGO_USER }}" >> .env
           echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
           echo "MONGO_HOST=db" >> .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "API_USER=${{ secrets.API_USER }}" >> .env
+          echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> .env
 
       - name: Run tests with Jest (inside Docker)
         env:
@@ -49,4 +52,7 @@ jobs:
           -e MONGO_USER="${{ secrets.MONGO_USER }}" \
           -e MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}" \
           -e MONGO_HOST="db" \
+          -e API_URL="${{ secrets.API_URL }}" \
+          -e API_USER="${{ secrets.API_USER }}" \
+          -e API_PASSWORD="${{ secrets.API_PASSWORD }}" \
           api npm test
