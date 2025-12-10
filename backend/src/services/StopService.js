@@ -83,7 +83,6 @@ export const getStopDetails = async (stopId) => {
       } else if (targetIndices.length === 0) {
         return;
       }
-      const stopsRemaining = targetIndex - actualCurrentIndex;
 
       const occupancyRealTime = simulateOccupancy(
         new Date(),
@@ -115,10 +114,6 @@ export const getStopDetails = async (stopId) => {
 
         occupancyRealTime,
         occupancyExpected,
-
-        stopsRemaining,
-        isTripFinished: stopsRemaining < 0,
-        isAtStop: stopsRemaining === 0 && lastStopId !== 0,
 
         lastUpdate: element.lastEventRecivedAt,
         delay: element.delay,

@@ -362,7 +362,7 @@ class _BusCardHeader extends StatelessWidget {
             height: 42,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: arrival.routeColor,
+              color: arrival.routeColor ?? Colors.black,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(

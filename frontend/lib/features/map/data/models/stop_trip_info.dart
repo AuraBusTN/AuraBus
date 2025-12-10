@@ -36,7 +36,9 @@ class StopTrip {
       routeId: json['routeId'],
       routeShortName: json['routeShortName'],
       routeLongName: json['routeLongName'],
-      routeColor: _parseHexColor(json['routeColor'] ?? '000000'),
+      routeColor: json['routeColor'] != null
+          ? _parseHexColor(json['routeColor'])
+          : null,
       busId: json['busId'],
       lastUpdate: json['lastUpdate'] != null
           ? DateTime.parse(json['lastUpdate'])
