@@ -23,7 +23,7 @@ class MapRepository {
     return compute(_parseStops, jsonStr);
   }
 
-  List<StopInfo> _parseStops(String jsonStr) {
+  static List<StopInfo> _parseStops(String jsonStr) {
     final jsonList = jsonDecode(jsonStr) as List<dynamic>;
     return jsonList.map((e) => StopInfo.fromJson(e)).toList();
   }
