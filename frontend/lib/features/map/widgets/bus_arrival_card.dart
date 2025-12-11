@@ -26,7 +26,6 @@ class _BusArrivalCardState extends State<BusArrivalCard> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      // Reduced vertical margin for compactness
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -151,7 +150,6 @@ class _BusCardHeader extends StatelessWidget {
     }
 
     return Padding(
-      // Reduced padding for compactness
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
@@ -166,7 +164,6 @@ class _BusCardHeader extends StatelessWidget {
             const SizedBox(width: 20),
 
           Container(
-            // Reduced size from 42 to 34
             width: 34,
             height: 34,
             alignment: Alignment.center,
@@ -179,7 +176,6 @@ class _BusCardHeader extends StatelessWidget {
               style: const TextStyle(
                 color: AppColors.onPrimary,
                 fontWeight: FontWeight.w700,
-                // Reduced font size
                 fontSize: 16,
               ),
             ),
@@ -196,7 +192,7 @@ class _BusCardHeader extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 4), // Reduced spacing
+                const SizedBox(height: 4),
                 Row(
                   children: [
                     Expanded(
@@ -229,7 +225,7 @@ class _BusCardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               buildTime(),
-              const SizedBox(height: 2), // Reduced spacing
+              const SizedBox(height: 2),
               Text(
                 hereIn,
                 style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
@@ -262,7 +258,6 @@ class TripTimeline extends StatefulWidget {
 
 class _TripTimelineState extends State<TripTimeline> {
   late ScrollController controller;
-  // Approximated height of a single timeline item row
   static const double _itemHeight = 56.0;
 
   @override

@@ -42,7 +42,6 @@ class _MapScreenState extends ConsumerState<MapScreen>
                 orElse: () => throw Exception("Stop not found"),
               );
 
-              // Refactored call: passing the object directly
               mapController.openStopModal(context, stopInfo);
             },
           );

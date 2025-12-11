@@ -71,7 +71,6 @@ class _StopDetailsContent extends ConsumerWidget {
               .where((a) => selectedLines.any((r) => r.routeId == a.routeId))
               .toList();
 
-    // Grouping logic for filter cards
     final uniqueLines =
         {for (final a in arrivals) a.routeShortName: a}.values.toList()
           ..sort((a, b) {
@@ -92,7 +91,6 @@ class _StopDetailsContent extends ConsumerWidget {
       children: [
         const _DragHandle(),
         const SizedBox(height: 12),
-        // Fixed height container prevents UI jumps when button appears/disappears
         SizedBox(
           height: 48,
           child: Row(
@@ -162,7 +160,6 @@ class _StopDetailsContent extends ConsumerWidget {
             itemCount: filteredArrivals.length,
             itemBuilder: (context, index) {
               final bus = filteredArrivals[index];
-              // Added Key for performance during filtering
               return Padding(
                 key: ValueKey(
                   "${bus.routeId}_${bus.arrivalTimeScheduled.millisecondsSinceEpoch}",

@@ -1,5 +1,5 @@
 import 'package:aurabus/features/map/data/map_providers.dart';
-import 'package:aurabus/features/map/data/models/stop_info.dart'; // Import StopInfo
+import 'package:aurabus/features/map/data/models/stop_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,11 +29,8 @@ class MapController {
   }
 
   Future<void> openStopModal(BuildContext context, StopInfo stopInfo) async {
-    // 1. Trigger the refresh.
     final _ = ref.refresh(stopDetailsProvider(stopInfo.stopId));
 
-    // 2. Yield to the event loop for one frame.
-    // This ensures the provider update registers and the animation start isn't blocked by sync work.
     await Future.delayed(Duration.zero);
 
     if (!context.mounted) return;
@@ -42,8 +39,7 @@ class MapController {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      useRootNavigator:
-          true, // Fix: Use root navigator to ensure proper animation over the map
+      useRootNavigator: true,
       builder: (_) => StopDetailsModal(stopInfo: stopInfo),
     ).whenComplete(() {
       final notifier = ref.read(selectedLinesProvider.notifier);
