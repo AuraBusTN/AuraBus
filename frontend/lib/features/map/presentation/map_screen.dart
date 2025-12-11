@@ -25,19 +25,30 @@ class _MapScreenState extends ConsumerState<MapScreen>
 
     final mapController = ref.read(mapControllerProvider);
     final markersAsync = ref.watch(markersProvider);
+    final stopsAsync = ref.watch(stopsListProvider);
 
     final mapStyle = ref.read(mapStyleProvider).value;
 
     return markersAsync.when(
       data: (rawMarkers) {
+        final stops = stopsAsync.value ?? [];
+
         final markers = rawMarkers.map((marker) {
           return marker.copyWith(
             onTapParam: () {
               final stopId = int.parse(
                 marker.markerId.value,
               ); // Safety: IDs are always generated from integers in the codebase
-              final stopName = marker.infoWindow.title ?? "Unknown";
-              mapController.openStopModal(context, stopId, stopName);
+              final stopInfo = stops.firstWhere(
+                (s) => s.stopId == stopId,
+                orElse: () => throw Exception("Stop not found"),
+              );
+              mapController.openStopModal(
+                context,
+                stopId,
+                stopInfo.stopName,
+                stopInfo.routes,
+              );
             },
           );
         }).toSet();

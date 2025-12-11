@@ -31,4 +31,13 @@ class RouteInfo {
       type: json['type'],
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is RouteInfo && other.routeId == routeId;
+  }
+
+  @override
+  int get hashCode => routeId.hashCode;
 }

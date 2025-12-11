@@ -4,15 +4,18 @@ import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'package:aurabus/features/map/data/models/stop_trip_info.dart';
+import 'package:aurabus/features/map/data/models/route_info.dart';
 
 class StopDetailsModal extends ConsumerWidget {
   final int stopId;
   final String stopName;
+  final List<RouteInfo> stopRoutes;
 
   const StopDetailsModal({
     super.key,
     required this.stopId,
     required this.stopName,
+    required this.stopRoutes,
   });
 
   @override
@@ -42,6 +45,7 @@ class StopDetailsModal extends ConsumerWidget {
               controller: controller,
               stopId: stopId,
               stopName: stopName,
+              stopRoutes: stopRoutes,
               arrivals: arrivals,
             ),
           ),
@@ -56,12 +60,14 @@ class _StopDetailsContent extends ConsumerWidget {
   final int stopId;
   final String stopName;
   final List<StopTrip> arrivals;
+  final List<RouteInfo> stopRoutes;
 
   const _StopDetailsContent({
     required this.controller,
     required this.stopId,
     required this.stopName,
     required this.arrivals,
+    required this.stopRoutes,
   });
 
   @override
@@ -71,7 +77,7 @@ class _StopDetailsContent extends ConsumerWidget {
     final filteredArrivals = selectedLines.isEmpty
         ? arrivals
         : arrivals
-              .where((a) => selectedLines.contains(a.routeShortName))
+              .where((a) => selectedLines.any((r) => r.routeId == a.routeId))
               .toList();
 
     final uniqueLines =
@@ -108,13 +114,22 @@ class _StopDetailsContent extends ConsumerWidget {
             separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final line = uniqueLines[index];
-              final isSelected = selectedLines.contains(line.routeShortName);
+              final routeInfo = stopRoutes.cast<RouteInfo?>().firstWhere(
+                (r) => r?.routeId == line.routeId,
+                orElse: () => null,
+              );
+
+              final isSelected =
+                  routeInfo != null && selectedLines.contains(routeInfo);
+
               return _LineCard(
                 line: line,
                 isSelected: isSelected,
-                onTap: () => ref
-                    .read(selectedLinesProvider.notifier)
-                    .toggle(line.routeShortName),
+                onTap: () {
+                  if (routeInfo != null) {
+                    ref.read(selectedLinesProvider.notifier).toggle(routeInfo);
+                  }
+                },
               );
             },
           ),

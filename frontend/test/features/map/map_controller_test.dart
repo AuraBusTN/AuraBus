@@ -29,6 +29,7 @@ void main() {
                           context,
                           123,
                           'Stazione Centrale',
+                          [],
                         );
                       },
                       child: const Text('Open Modal'),

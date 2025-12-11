@@ -1,3 +1,4 @@
+import 'package:aurabus/features/map/data/models/route_info.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,12 +24,15 @@ final stopIconProvider = FutureProvider<BitmapDescriptor>((ref) async {
   return MapMarkerLoader.loadStopIcon();
 });
 
+final stopsListProvider = FutureProvider<List<StopInfo>>((ref) async {
+  final repo = ref.read(mapRepositoryProvider);
+  return repo.loadLocalStops();
+});
+
 final markersProvider = FutureProvider<Set<Marker>>((ref) async {
   ref.keepAlive();
-
-  final repo = ref.read(mapRepositoryProvider);
   final icon = await ref.read(stopIconProvider.future);
-  final stops = await repo.loadLocalStops();
+  final stops = await ref.watch(stopsListProvider.future);
 
   return stops.map((StopInfo stop) {
     return Marker(
@@ -49,15 +53,15 @@ final stopDetailsProvider = FutureProvider.family<List<StopTrip>, int>((
   return repo.fetchStopTrips(stopId);
 });
 
-class SelectedLinesNotifier extends Notifier<Set<String>> {
+class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
   @override
-  Set<String> build() => {};
+  Set<RouteInfo> build() => {};
 
-  void toggle(String routeShortName) {
-    if (state.contains(routeShortName)) {
-      state = {...state}..remove(routeShortName);
+  void toggle(RouteInfo route) {
+    if (state.contains(route)) {
+      state = {...state}..remove(route);
     } else {
-      state = {...state, routeShortName};
+      state = {...state, route};
     }
   }
 
@@ -65,6 +69,6 @@ class SelectedLinesNotifier extends Notifier<Set<String>> {
 }
 
 final selectedLinesProvider =
-    NotifierProvider<SelectedLinesNotifier, Set<String>>(() {
+    NotifierProvider<SelectedLinesNotifier, Set<RouteInfo>>(() {
       return SelectedLinesNotifier();
     });
