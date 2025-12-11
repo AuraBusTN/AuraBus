@@ -112,8 +112,10 @@ export const getStopDetails = async (stopId) => {
         busCapacity: extraBusInfo.capacity,
         busType: extraBusInfo.type,
 
-        occupancyRealTime,
-        occupancyExpected,
+        occupancy: {
+          realTime: occupancyRealTime,
+          expected: occupancyExpected,
+        },
 
         lastUpdate: element.lastEventRecivedAt,
         delay: element.delay,

@@ -6,6 +6,9 @@ class StopTrip {
   final String routeLongName;
   final Color? routeColor;
   final int? busId;
+  final int busCapacity;
+  final String busType;
+  final OccupancyStatus occupancy;
   final DateTime? lastUpdate;
   final int? delay;
   final int lastStopId;
@@ -21,6 +24,9 @@ class StopTrip {
     required this.routeLongName,
     required this.routeColor,
     required this.busId,
+    required this.busCapacity,
+    required this.busType,
+    required this.occupancy,
     required this.lastUpdate,
     required this.delay,
     required this.lastStopId,
@@ -40,6 +46,11 @@ class StopTrip {
           ? _parseHexColor(json['routeColor'])
           : null,
       busId: json['busId'],
+      busCapacity: json['busCapacity'],
+      busType: json['busType'],
+      occupancy: OccupancyStatus.fromJson(
+        json['occupancy'] as Map<String, dynamic>,
+      ),
       lastUpdate: json['lastUpdate'] != null
           ? DateTime.parse(json['lastUpdate'])
           : null,
@@ -72,6 +83,38 @@ class StopTripTime {
       stopId: json['stopId'],
       stopName: json['stopName'],
       arrivalTimeScheduled: json['arrivalTimeScheduled'],
+    );
+  }
+}
+
+class OccupancyData {
+  final int percentage;
+  final int passengers;
+
+  OccupancyData({required this.percentage, required this.passengers});
+
+  factory OccupancyData.fromJson(Map<String, dynamic> json) {
+    return OccupancyData(
+      percentage: json['percentage'],
+      passengers: json['passengers'],
+    );
+  }
+}
+
+class OccupancyStatus {
+  final OccupancyData realTime;
+  final OccupancyData expected;
+
+  OccupancyStatus({required this.realTime, required this.expected});
+
+  factory OccupancyStatus.fromJson(Map<String, dynamic> json) {
+    return OccupancyStatus(
+      realTime: OccupancyData.fromJson(
+        json['realTime'] as Map<String, dynamic>,
+      ),
+      expected: OccupancyData.fromJson(
+        json['expected'] as Map<String, dynamic>,
+      ),
     );
   }
 }

@@ -32,26 +32,28 @@ components:
             - standard_single
             - articulated
           description: "Type of the bus"
-        occupancyRealTime:
+        occupancy:
           type: object
           description: "Occupancy information of the bus"
           properties:
-            percentage:
-              type: integer
-              description: "Occupancy percentage of the bus"
-            passengers:
-              type: integer
-              description: "Estimated number of passengers on the bus"
-        occupancyExpected:
-          type: object
-          description: "Expected occupancy information of the bus based on historical data"
-          properties:
-            percentage:
-              type: integer
-              description: "Expected occupancy percentage of the bus"
-            passengers:
-              type: integer
-              description: "Expected number of passengers on the bus"
+            realTime:
+              type: object
+              properties:
+                percentage:
+                  type: integer
+                  description: "Real-time occupancy percentage of the bus"
+                passengers:
+                  type: integer
+                  description: "Real-time number of passengers on the bus"
+            expected:
+              type: object
+              properties:
+                percentage:
+                  type: integer
+                  description: "Expected occupancy percentage of the bus"
+                passengers:
+                  type: integer
+                  description: "Expected number of passengers on the bus"
         lastUpdate:
           type: string
           format: date-time

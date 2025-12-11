@@ -261,8 +261,6 @@ class _BusCardHeader extends StatelessWidget {
 
   const _BusCardHeader({required this.arrival});
 
-  static const int _kPlaceholderOvercrowding = 0;
-
   @override
   Widget build(BuildContext context) {
     final updatedAt = arrival.lastUpdate;
@@ -315,9 +313,6 @@ class _BusCardHeader extends StatelessWidget {
         ),
       );
     }
-
-    final overcrowding = _kPlaceholderOvercrowding;
-    final overcrowdingFraction = overcrowding / 100.0;
 
     final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now().toUtc();
@@ -393,7 +388,7 @@ class _BusCardHeader extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: LinearProgressIndicator(
-                          value: overcrowdingFraction,
+                          value: arrival.occupancy.expected.percentage / 100,
                           minHeight: 5,
                           backgroundColor: Colors.grey.shade300,
                         ),
@@ -401,7 +396,7 @@ class _BusCardHeader extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "$overcrowding%",
+                      "${arrival.occupancy.expected.percentage}%",
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
