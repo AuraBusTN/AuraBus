@@ -125,7 +125,7 @@ class _StopDetailsContent extends ConsumerWidget {
         const SizedBox(height: 4),
 
         SizedBox(
-          height: 120,
+          height: 100,
           child: ListView.separated(
             clipBehavior: Clip.none,
             scrollDirection: Axis.horizontal,

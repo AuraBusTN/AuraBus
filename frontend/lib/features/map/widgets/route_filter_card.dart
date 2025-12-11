@@ -24,10 +24,8 @@ class RouteFilterCard extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 100,
-        height: 100,
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        width: 80,
+        height: 80,
         decoration: BoxDecoration(
           color: isSelected ? primary.withValues(alpha: 0.1) : Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -44,7 +42,7 @@ class RouteFilterCard extends StatelessWidget {
           ],
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               'assets/images/bus_icon.png',
