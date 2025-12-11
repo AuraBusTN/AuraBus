@@ -36,19 +36,14 @@ class _MapScreenState extends ConsumerState<MapScreen>
         final markers = rawMarkers.map((marker) {
           return marker.copyWith(
             onTapParam: () {
-              final stopId = int.parse(
-                marker.markerId.value,
-              ); // Safety: IDs are always generated from integers in the codebase
+              final stopId = int.parse(marker.markerId.value);
               final stopInfo = stops.firstWhere(
                 (s) => s.stopId == stopId,
                 orElse: () => throw Exception("Stop not found"),
               );
-              mapController.openStopModal(
-                context,
-                stopId,
-                stopInfo.stopName,
-                stopInfo.routes,
-              );
+
+              // Refactored call: passing the object directly
+              mapController.openStopModal(context, stopInfo);
             },
           );
         }).toSet();

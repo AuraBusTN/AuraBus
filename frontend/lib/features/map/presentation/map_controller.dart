@@ -1,9 +1,9 @@
 import 'package:aurabus/features/map/data/map_providers.dart';
+import 'package:aurabus/features/map/data/models/stop_info.dart'; // Import StopInfo
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../data/models/route_info.dart';
 import 'stop_details_modal.dart';
 
 final mapControllerProvider = Provider<MapController>((ref) {
@@ -28,36 +28,26 @@ class MapController {
     _gmaps = null;
   }
 
-  void openStopModal(
-    BuildContext context,
-    int stopId,
-    String stopName,
-    List<RouteInfo> stopRoutes,
-  ) {
-    final _ = ref.refresh(stopDetailsProvider(stopId));
+  Future<void> openStopModal(BuildContext context, StopInfo stopInfo) async {
+    // 1. Trigger the refresh.
+    final _ = ref.refresh(stopDetailsProvider(stopInfo.stopId));
+
+    // 2. Yield to the event loop for one frame.
+    // This ensures the provider update registers and the animation start isn't blocked by sync work.
+    await Future.delayed(Duration.zero);
+
+    if (!context.mounted) return;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => StopDetailsModal(
-        stopId: stopId,
-        stopName: stopName,
-        stopRoutes: stopRoutes,
-      ),
+      useRootNavigator:
+          true, // Fix: Use root navigator to ensure proper animation over the map
+      builder: (_) => StopDetailsModal(stopInfo: stopInfo),
     ).whenComplete(() {
       final notifier = ref.read(selectedLinesProvider.notifier);
       notifier.clear();
     });
-  }
-
-  /// Optional: camera animation
-  Future<void> moveCamera(LatLng target, {double zoom = 16}) async {
-    if (_gmaps == null) return;
-    await _gmaps!.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: target, zoom: zoom),
-      ),
-    );
   }
 }
