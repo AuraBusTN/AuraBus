@@ -53,6 +53,14 @@ final stopDetailsProvider = FutureProvider.family<List<StopTrip>, int>((
   return repo.fetchStopTrips(stopId);
 });
 
+final stopsMapProvider = Provider<Map<int, StopInfo>>((ref) {
+  final stopsAsync = ref.watch(stopsListProvider);
+  return stopsAsync.maybeWhen(
+    data: (stops) => {for (var s in stops) s.stopId: s},
+    orElse: () => {},
+  );
+});
+
 class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
   @override
   Set<RouteInfo> build() => {};
@@ -71,4 +79,17 @@ class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
 final selectedLinesProvider =
     NotifierProvider<SelectedLinesNotifier, Set<RouteInfo>>(() {
       return SelectedLinesNotifier();
+    });
+
+final sortedUniqueLinesProvider =
+    Provider.family<List<StopTrip>, List<StopTrip>>((ref, arrivals) {
+      return {for (final a in arrivals) a.routeShortName: a}.values.toList()
+        ..sort((a, b) {
+          final numA = int.tryParse(a.routeShortName);
+          final numB = int.tryParse(b.routeShortName);
+          if (numA != null && numB != null) return numA.compareTo(numB);
+          if (numA != null) return -1;
+          if (numB != null) return 1;
+          return a.routeShortName.compareTo(b.routeShortName);
+        });
     });

@@ -22,8 +22,7 @@ class StopDetailsModal extends ConsumerWidget {
 
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.85,
-      maxChildSize: 0.95,
+      initialChildSize: 0.9,
       builder: (_, controller) {
         return Container(
           decoration: BoxDecoration(
@@ -63,6 +62,8 @@ class _StopDetailsContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final uniqueLines = ref.watch(sortedUniqueLinesProvider(arrivals));
+
     final selectedLines = ref.watch(selectedLinesProvider);
 
     final filteredArrivals = selectedLines.isEmpty
@@ -70,21 +71,6 @@ class _StopDetailsContent extends ConsumerWidget {
         : arrivals
               .where((a) => selectedLines.any((r) => r.routeId == a.routeId))
               .toList();
-
-    final uniqueLines =
-        {for (final a in arrivals) a.routeShortName: a}.values.toList()
-          ..sort((a, b) {
-            final numA = int.tryParse(a.routeShortName);
-            final numB = int.tryParse(b.routeShortName);
-            if (numA != null && numB != null) {
-              return numA.compareTo(numB);
-            } else if (numA != null) {
-              return -1;
-            } else if (numB != null) {
-              return 1;
-            }
-            return a.routeShortName.compareTo(b.routeShortName);
-          });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

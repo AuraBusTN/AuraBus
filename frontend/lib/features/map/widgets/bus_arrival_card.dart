@@ -437,21 +437,23 @@ class _BlinkingDotState extends State<_BlinkingDot>
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _controller,
-      child: Container(
-        width: 10,
-        height: 10,
-        decoration: BoxDecoration(
-          color: widget.color,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: widget.color.withValues(alpha: 0.5),
-              blurRadius: 4,
-              spreadRadius: 1,
-            ),
-          ],
+    return RepaintBoundary(
+      child: FadeTransition(
+        opacity: _controller,
+        child: Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            color: widget.color,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: widget.color.withValues(alpha: 0.5),
+                blurRadius: 4,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
         ),
       ),
     );
