@@ -1,10 +1,9 @@
 import 'dart:convert';
+import 'package:aurabus/common/models/stop_data.dart';
+import 'package:aurabus/common/models/stop_details.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'models/stop_data.dart';
-import 'models/stop_details.dart';
 
 class MapRepository {
   final String baseUrl;

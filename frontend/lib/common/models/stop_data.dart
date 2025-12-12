@@ -1,6 +1,9 @@
+import 'package:aurabus/common/models/utils.dart';
+import 'package:flutter/material.dart';
+
 class StopData {
   final double? distance;
-  final List<Route> routes;
+  final List<BusRoute> routes;
   final String stopCode;
   final String? stopDesc;
   final int stopId;
@@ -33,7 +36,7 @@ class StopData {
     return StopData(
       distance: json['distance'] as double?,
       routes: (json['routes'] as List<dynamic>)
-          .map((e) => Route.fromJson(e as Map<String, dynamic>))
+          .map((e) => BusRoute.fromJson(e as Map<String, dynamic>))
           .toList(),
       stopCode: (json['stopCode'] as String?) ?? '',
       stopDesc: json['stopDesc'] as String?,
@@ -50,17 +53,17 @@ class StopData {
   }
 }
 
-class Route {
+class BusRoute {
   final int areaId;
-  final String? news;
-  final String? routeColor;
+  final List<String> news;
+  final Color routeColor;
   final int routeId;
   final String routeLongName;
   final String routeShortName;
   final int routeType;
   final String type;
 
-  Route({
+  BusRoute({
     required this.areaId,
     required this.news,
     required this.routeColor,
@@ -71,11 +74,11 @@ class Route {
     required this.type,
   });
 
-  factory Route.fromJson(Map<String, dynamic> json) {
-    return Route(
+  factory BusRoute.fromJson(Map<String, dynamic> json) {
+    return BusRoute(
       areaId: json['areaId'] as int,
-      news: (json['news'] as String?) ?? '',
-      routeColor: (json['routeColor'] as String?) ?? '',
+      news: (json['news'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      routeColor: parseHexColor(json['routeColor'] as String? ?? '000000'),
       routeId: json['routeId'] as int,
       routeLongName: (json['routeLongName'] as String?) ?? '',
       routeShortName: (json['routeShortName'] as String?) ?? '',

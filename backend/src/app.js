@@ -4,6 +4,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { setupSwagger } from "./swagger.js";
 import stopsRouter from "./routes/stops.routes.js";
+import routesRouter from "./routes/routes.routes.js";
+
 
 export const app = express();
 
@@ -19,6 +21,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/stops", stopsRouter);
+app.use("/routes", routesRouter);
+
 
 app.use((req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);

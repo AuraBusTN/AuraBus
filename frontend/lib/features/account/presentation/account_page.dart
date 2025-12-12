@@ -1,3 +1,4 @@
+import 'package:aurabus/features/account/favorites/favorites_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
@@ -7,7 +8,7 @@ import 'package:aurabus/features/account/widgets/account_section.dart';
 import 'package:aurabus/features/account/widgets/contact_us_body.dart';
 import 'package:aurabus/features/account/widgets/subscription_body.dart';
 
-enum AccountSectionType { info, subscription, contact, ranking }
+enum AccountSectionType { info, subscription, contact, ranking ,favorites }
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -83,6 +84,17 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 onTap: () => toggleSection(AccountSectionType.ranking),
               ),
+              const SizedBox(height: 12),
+
+              AccountSection(
+                title: "Fauvorites",
+                isExpanded: expandedSections.contains(
+                  AccountSectionType.favorites,
+                ),                
+                onTap: () => toggleSection(AccountSectionType.favorites),
+                child: const FavoritesPage(),
+              ),
+
               const SizedBox(height: 12),
               AccountSection(
                 title: l10n.logoutButton,

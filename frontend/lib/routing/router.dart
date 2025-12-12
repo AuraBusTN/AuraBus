@@ -18,6 +18,7 @@ class AppRoute {
   static const String account = '/account';
   static const String login = '/login';
   static const String signup = '/signup';
+
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -45,11 +46,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoute.tickets,
             builder: (_, _) => const TicketPage(),
           ),
-          GoRoute(path: AppRoute.map, builder: (_, _) => const MapScreen()),
+          GoRoute(
+            path: AppRoute.map, 
+            builder: (_, _) => const MapScreen()
+          ),
           GoRoute(
             path: AppRoute.account,
             builder: (_, _) => const AccountPage(),
           ),
+
         ],
       ),
     ],

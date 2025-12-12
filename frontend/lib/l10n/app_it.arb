@@ -55,5 +55,7 @@
     "subscriptionTypeLabel": "Tipo:",
     "subscriptionStartDateLabel": "Data inizio:",
     "subscriptionExpirationDateLabel": "Data scadenza:",
-    "statusValid": "Valido"
+    "statusValid": "Valido",
+    "noRoute": "Nessuna linea disponibile",
+
 }

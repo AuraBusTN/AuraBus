@@ -1,6 +1,6 @@
+import 'package:aurabus/common/models/stop_details.dart';
 import 'package:aurabus/features/map/presentation/map_controller.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
-import 'package:aurabus/features/map/data/models/stop_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

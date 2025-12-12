@@ -1,3 +1,4 @@
+import 'package:aurabus/common/models/utils.dart';
 import 'package:flutter/material.dart';
 
 class StopArrival {
@@ -36,7 +37,7 @@ class StopArrival {
       routeId: json['routeId'] as int,
       routeShortName: json['routeShortName'] as String,
       routeLongName: json['routeLongName'] as String,
-      routeColor: _parseHexColor(json['routeColor'] as String? ?? '000000'),
+      routeColor: parseHexColor(json['routeColor'] as String? ?? '000000'),
       busId: json['busId'] as int? ?? 0,
       lastUpdate: (json['lastUpdate'] as String?)?.isNotEmpty == true
           ? DateTime.parse(json['lastUpdate'])
@@ -78,8 +79,3 @@ class StopTime {
   }
 }
 
-Color _parseHexColor(String hex) {
-  // "70B442" -> 0xFF70B442
-  final value = int.parse('FF$hex', radix: 16);
-  return Color(value);
-}
