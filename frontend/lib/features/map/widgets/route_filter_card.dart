@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:aurabus/features/map/data/models/stop_trip_info.dart';
+import 'package:aurabus/features/map/data/models/route_info.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/theme.dart';
 
 class RouteFilterCard extends StatelessWidget {
-  final StopTrip line;
+  final RouteInfo line;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -46,7 +46,7 @@ class RouteFilterCard extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/bus_icon.png',
-              width: 50, // Increased icon size
+              width: 50,
               height: 50,
               fit: BoxFit.contain,
               errorBuilder: (_, _, _) => Icon(
@@ -60,7 +60,7 @@ class RouteFilterCard extends StatelessWidget {
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isSelected ? primary : AppColors.textPrimary,
-                fontSize: 13, // Slightly larger text
+                fontSize: 13,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

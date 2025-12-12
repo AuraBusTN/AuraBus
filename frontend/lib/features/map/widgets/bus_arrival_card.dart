@@ -417,6 +417,7 @@ class _BlinkingDot extends StatefulWidget {
 class _BlinkingDotState extends State<_BlinkingDot>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -424,9 +425,9 @@ class _BlinkingDotState extends State<_BlinkingDot>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
-      lowerBound: .4,
-      upperBound: 1,
     )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0.4, end: 1.0).animate(_controller);
   }
 
   @override
@@ -439,7 +440,7 @@ class _BlinkingDotState extends State<_BlinkingDot>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: FadeTransition(
-        opacity: _controller,
+        opacity: _animation,
         child: Container(
           width: 10,
           height: 10,

@@ -6,7 +6,6 @@ import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'package:aurabus/features/map/data/models/stop_info.dart';
 import 'package:aurabus/features/map/data/models/stop_trip_info.dart';
-import 'package:aurabus/features/map/data/models/route_info.dart';
 import 'package:aurabus/features/map/widgets/bus_arrival_card.dart';
 import 'package:aurabus/features/map/widgets/route_filter_card.dart';
 
@@ -62,7 +61,7 @@ class _StopDetailsContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final uniqueLines = ref.watch(sortedUniqueLinesProvider(arrivals));
+    final uniqueLines = ref.watch(sortedUniqueLinesProvider(stopInfo.stopId));
 
     final selectedLines = ref.watch(selectedLinesProvider);
 
@@ -71,6 +70,8 @@ class _StopDetailsContent extends ConsumerWidget {
         : arrivals
               .where((a) => selectedLines.any((r) => r.routeId == a.routeId))
               .toList();
+
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +100,7 @@ class _StopDetailsContent extends ConsumerWidget {
                     onPressed: () {
                       ref.read(selectedLinesProvider.notifier).clear();
                     },
-                    child: const Text("Clear"),
+                    child: Text(l10n.clear),
                   ),
                 ),
               ),
@@ -116,22 +117,15 @@ class _StopDetailsContent extends ConsumerWidget {
             itemCount: uniqueLines.length,
             separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
-              final line = uniqueLines[index];
-              final routeInfo = stopInfo.routes.cast<RouteInfo?>().firstWhere(
-                (r) => r?.routeId == line.routeId,
-                orElse: () => null,
-              );
+              final route = uniqueLines[index];
 
-              final isSelected =
-                  routeInfo != null && selectedLines.contains(routeInfo);
+              final isSelected = selectedLines.contains(route);
 
               return RouteFilterCard(
-                line: line,
+                line: route,
                 isSelected: isSelected,
                 onTap: () {
-                  if (routeInfo != null) {
-                    ref.read(selectedLinesProvider.notifier).toggle(routeInfo);
-                  }
+                  ref.read(selectedLinesProvider.notifier).toggle(route);
                 },
               );
             },
@@ -147,9 +141,7 @@ class _StopDetailsContent extends ConsumerWidget {
             itemBuilder: (context, index) {
               final bus = filteredArrivals[index];
               return Padding(
-                key: ValueKey(
-                  "${bus.routeId}_${bus.arrivalTimeScheduled.millisecondsSinceEpoch}",
-                ),
+                key: ValueKey("${bus.routeId}"),
                 padding: const EdgeInsets.only(bottom: 12),
                 child: BusArrivalCard(
                   arrival: bus,

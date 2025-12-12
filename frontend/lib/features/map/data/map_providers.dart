@@ -81,15 +81,40 @@ final selectedLinesProvider =
       return SelectedLinesNotifier();
     });
 
-final sortedUniqueLinesProvider =
-    Provider.family<List<StopTrip>, List<StopTrip>>((ref, arrivals) {
-      return {for (final a in arrivals) a.routeShortName: a}.values.toList()
-        ..sort((a, b) {
-          final numA = int.tryParse(a.routeShortName);
-          final numB = int.tryParse(b.routeShortName);
-          if (numA != null && numB != null) return numA.compareTo(numB);
-          if (numA != null) return -1;
-          if (numB != null) return 1;
-          return a.routeShortName.compareTo(b.routeShortName);
-        });
-    });
+final sortedUniqueLinesProvider = Provider.family<List<RouteInfo>, int>((
+  ref,
+  stopId,
+) {
+  final stopsMap = ref.watch(stopsMapProvider);
+  final stop = stopsMap[stopId];
+
+  if (stop == null) return const [];
+
+  final routes = List<RouteInfo>.from(stop.routes);
+
+  routes.sort((a, b) {
+    final regExp = RegExp(r'^(\d+)(.*)$');
+
+    final matchA = regExp.firstMatch(a.routeShortName);
+    final matchB = regExp.firstMatch(b.routeShortName);
+
+    final numA = matchA != null ? int.parse(matchA.group(1)!) : null;
+    final numB = matchB != null ? int.parse(matchB.group(1)!) : null;
+
+    if (numA != null && numB != null) {
+      final compareNums = numA.compareTo(numB);
+
+      if (compareNums != 0) return compareNums;
+
+      return a.routeShortName.compareTo(b.routeShortName);
+    }
+
+    if (numA != null) return -1;
+
+    if (numB != null) return 1;
+
+    return a.routeShortName.compareTo(b.routeShortName);
+  });
+
+  return routes;
+});

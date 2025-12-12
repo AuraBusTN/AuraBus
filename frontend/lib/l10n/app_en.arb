@@ -70,5 +70,6 @@
     "subscriptionTypeLabel": "Type:",
     "subscriptionStartDateLabel": "Start date:",
     "subscriptionExpirationDateLabel": "Expiration Date:",
-    "statusValid": "Valid"
+    "statusValid": "Valid",
+    "clear": "Clear"
 }

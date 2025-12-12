@@ -26,7 +26,7 @@ class StopInfo {
     required this.stopLon,
     required this.stopName,
     required this.street,
-    required this.town,
+    this.town,
     required this.type,
     required this.wheelchairBoarding,
   });

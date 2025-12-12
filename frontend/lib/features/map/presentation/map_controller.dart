@@ -28,10 +28,8 @@ class MapController {
     _gmaps = null;
   }
 
-  Future<void> openStopModal(BuildContext context, StopInfo stopInfo) async {
+  void openStopModal(BuildContext context, StopInfo stopInfo) {
     final _ = ref.refresh(stopDetailsProvider(stopInfo.stopId));
-
-    await Future.delayed(Duration.zero);
 
     if (!context.mounted) return;
 

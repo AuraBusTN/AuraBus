@@ -1,6 +1,6 @@
 class RouteInfo {
   final int areaId;
-  final Null news;
+  final Object? news;
   final String? routeColor;
   final int routeId;
   final String routeLongName;
