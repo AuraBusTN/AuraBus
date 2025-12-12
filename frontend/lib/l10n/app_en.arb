@@ -71,6 +71,5 @@
     "subscriptionStartDateLabel": "Start date:",
     "subscriptionExpirationDateLabel": "Expiration Date:",
     "statusValid": "Valid",
-    "noRoute": "Nessuna linea disponibile",
-
+    "noRoute": "Nessuna linea disponibile"
 }
