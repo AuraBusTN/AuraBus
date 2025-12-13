@@ -210,28 +210,31 @@ class _LoginPageState extends State<LoginPage> {
 
             Align(
               alignment: Alignment.bottomCenter,
-              child: FadeInSlide(
-                delay: 0.5,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 30.0),
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      Text(
-                        l10n.noAccount,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      GestureDetector(
-                        onTap: () => context.push(AppRoute.signup),
-                        child: Text(
-                          l10n.signUpLink,
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
+              child: SafeArea(
+                top: false,
+                child: FadeInSlide(
+                  delay: 0.5,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 30.0),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        Text(
+                          l10n.noAccount,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        GestureDetector(
+                          onTap: () => context.push(AppRoute.signup),
+                          child: Text(
+                            l10n.signUpLink,
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

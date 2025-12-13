@@ -47,5 +47,7 @@
 	<true/>
 	<key>GOOGLE_MAPS_API_KEY</key>
 	<string>$(GOOGLE_MAPS_API_KEY)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open to locate the user on the map</string>
 </dict>
 </plist>

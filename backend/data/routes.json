@@ -51,20 +51,7 @@
     },
     {
         "areaId": 23,
-        "news": [
-            {
-                "idFeed": 7558,
-                "agencyId": "12",
-                "serviceType": "Urbano Trento",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2025-11-13T23:00:00.000+0000",
-                "header": "Chiusura via ai Bòlleri a Martignano",
-                "details": "Causa lavori di scavo urgenti a causa di una rottura acquedotto viene chiusa al traffico via ai Bòlleri a Martignano.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-piazzale-mezzocorona-fs-2021-619",
-                "routeIds": "408"
-            }
-        ],
+        "news": [],
         "routeColor": "0A5543",
         "routeId": 408,
         "routeLongName": "P.Dante Martignano Cognola / Montevaccino",
@@ -154,32 +141,7 @@
     },
     {
         "areaId": 23,
-        "news": [
-            {
-                "idFeed": 7509,
-                "agencyId": "12",
-                "serviceType": "Urbano Trento",
-                "startDate": "2025-10-29T23:00:00.000+0000",
-                "endDate": "2025-11-30T23:00:00.000+0000",
-                "header": "Senso unico in via Soprasasso",
-                "details": "Causa lavori di scavo per sostituzione rete acquedotto viene istituito un senso unico di marcia direzione Sud - Nord in via Soprasasso.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/sospensione-fermata-a-vigo-di-fassa-2021-573",
-                "routeIds": "539"
-            },
-            {
-                "idFeed": 7554,
-                "agencyId": "12",
-                "serviceType": "Urbano Trento",
-                "startDate": "2025-11-11T23:00:00.000+0000",
-                "endDate": "2025-11-14T23:00:00.000+0000",
-                "header": "Divieto di transito in via Bettini",
-                "details": "Causa lavori di asfaltatura in via Bettini viene impedito l'accesso al capolinea di Madonna Bianca.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/sospensione-fermata-sanzio-castello-per-giro-citta-2021-615",
-                "routeIds": "539"
-            }
-        ],
+        "news": [],
         "routeColor": "007BC3",
         "routeId": 539,
         "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
@@ -199,20 +161,7 @@
     },
     {
         "areaId": 24,
-        "news": [
-            {
-                "idFeed": 7555,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2026-01-05T23:00:00.000+0000",
-                "header": "Divieto di transito in via Campagnole, Borgo S. Caterina e via Dante per mercato settimanale a Rovereto",
-                "details": "Tutti i martedì nel periodo compreso dal 18 novembre 2025 al 06 gennaio 2026 dalle ore 06.00 alle ore 16.30, vengono chiuse al transito veicolare via Campagnole, Borgo S. Caterina e via Dante causa svolgimento del mercato settimanale a Rovereto.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-iv-novembre-a-lavis-2021-616",
-                "routeIds": "562,563,566"
-            }
-        ],
+        "news": [],
         "routeColor": null,
         "routeId": 566,
         "routeLongName": "Via Magazol S.Giorgio Cornacalda",
@@ -222,226 +171,13 @@
     },
     {
         "areaId": 24,
-        "news": [
-            {
-                "idFeed": 7333,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-09-14T22:00:00.000+0000",
-                "endDate": "2025-11-27T23:00:00.000+0000",
-                "header": "Modifica percorso in via S. Maria a Rovereto",
-                "details": "Causa lavori in via S.Maria a Rovereto, viene modificato il percorso delle liee A - 7, a partire da inizio servizio di martedì 16 settembre 2025 e fino a termine necessità.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/sospensione-fermata-canazei-via-pareda-2021-536",
-                "routeIds": "512,562"
-            }
-        ],
+        "news": [],
         "routeColor": null,
         "routeId": 512,
         "routeLongName": "Moietto Rosmini Campana Dei Caduti",
         "routeShortName": "7",
         "routeType": 3,
         "type": "U"
-    },
-    {
-        "areaId": 22,
-        "news": [
-            {
-                "idFeed": 7556,
-                "agencyId": "12",
-                "serviceType": "Extraurbano provinciale",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2025-12-31T23:00:00.000+0000",
-                "header": "Bus&Go",
-                "details": "Da venerdì 14 novembre al 31 dicembre 2025 è riprende il servizio a chiamata Bus&Go. Il servizio è sospeso il giorno di Natale, 25 dicembre.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-degasperi-a-cles-2021-617",
-                "routeIds": "417,420,423"
-            }
-        ],
-        "routeColor": null,
-        "routeId": 417,
-        "routeLongName": "Linea 3 integrata:Nago-Torbole-Riva-Arco-Bolognano",
-        "routeShortName": "B863",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 22,
-        "news": [
-            {
-                "idFeed": 7556,
-                "agencyId": "12",
-                "serviceType": "Extraurbano provinciale",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2025-12-31T23:00:00.000+0000",
-                "header": "Bus&Go",
-                "details": "Da venerdì 14 novembre al 31 dicembre 2025 è riprende il servizio a chiamata Bus&Go. Il servizio è sospeso il giorno di Natale, 25 dicembre.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-degasperi-a-cles-2021-617",
-                "routeIds": "417,420,423"
-            }
-        ],
-        "routeColor": null,
-        "routeId": 420,
-        "routeLongName": "Linea 1: Riva -Varone -Arco -S.Giorgio-Brione-Riva",
-        "routeShortName": "B861",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 22,
-        "news": [
-            {
-                "idFeed": 7556,
-                "agencyId": "12",
-                "serviceType": "Extraurbano provinciale",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2025-12-31T23:00:00.000+0000",
-                "header": "Bus&Go",
-                "details": "Da venerdì 14 novembre al 31 dicembre 2025 è riprende il servizio a chiamata Bus&Go. Il servizio è sospeso il giorno di Natale, 25 dicembre.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-degasperi-a-cles-2021-617",
-                "routeIds": "417,420,423"
-            }
-        ],
-        "routeColor": null,
-        "routeId": 423,
-        "routeLongName": "Linea 2: Riva-Brione-S.Giorgio-Arco-Varone-Riva",
-        "routeShortName": "B862",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 22,
-        "news": [],
-        "routeColor": null,
-        "routeId": 672,
-        "routeLongName": " Riva del Garda-Deva-Pranzo-Campi",
-        "routeShortName": "B869",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 21,
-        "news": [],
-        "routeColor": null,
-        "routeId": 549,
-        "routeLongName": "Linea 1 Pergine Valsugana - Madrano - Nogarè",
-        "routeShortName": "B461",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 21,
-        "news": [],
-        "routeColor": null,
-        "routeId": 551,
-        "routeLongName": "Linea 2 Pergine-Zivignago-Canezza-Viarago-Serso",
-        "routeShortName": "B462",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 21,
-        "news": [
-            {
-                "idFeed": 7316,
-                "agencyId": "12",
-                "serviceType": "Extraurbano provinciale",
-                "startDate": "2025-08-28T22:00:00.000+0000",
-                "endDate": "2025-11-14T23:00:00.000+0000",
-                "header": "Istituzione senso unico in Via Rosmini, a Pergine Valsugana",
-                "details": "Da martedì 02 settembre 2025 e fino al 14 novembre 2025 (salvo imprevisti) in Via Rosmini a Pergine Valsugana è istituito un senso unico di marcia in direzione centro città.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/variazione-orario-call-center-2021-520",
-                "routeIds": "552"
-            }
-        ],
-        "routeColor": null,
-        "routeId": 552,
-        "routeLongName": "Linea 6 Pergine Valsugana-Costasavina-Roncogno",
-        "routeShortName": "B466",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 21,
-        "news": [
-            {
-                "idFeed": 7498,
-                "agencyId": "12",
-                "serviceType": "Urbano",
-                "startDate": "2025-10-27T23:00:00.000+0000",
-                "endDate": "2026-06-26T22:00:00.000+0000",
-                "header": "Sospensione prolungamento Ischia-Tenna e ritorno",
-                "details": "Nei giorni non di scuola non si effettua  il prolungamento Ischia-Tenna e ritorno della corsa 504 della linea B464 del servizio urbano di Pergine.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/sospensione-prolungamento-ischia-tenna-e-ritorno-2025-1341",
-                "routeIds": "554"
-            }
-        ],
-        "routeColor": null,
-        "routeId": 554,
-        "routeLongName": "Linea 4 Pergine Valsugana - Ischia",
-        "routeShortName": "B464",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 21,
-        "news": [],
-        "routeColor": null,
-        "routeId": 556,
-        "routeLongName": "Linea 3 Pergine Valsugana-Masetti-Assizzi-Zava",
-        "routeShortName": "B463",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 21,
-        "news": [
-            {
-                "idFeed": 7333,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-09-14T22:00:00.000+0000",
-                "endDate": "2025-11-27T23:00:00.000+0000",
-                "header": "Modifica percorso in via S. Maria a Rovereto",
-                "details": "Causa lavori in via S.Maria a Rovereto, viene modificato il percorso delle liee A - 7, a partire da inizio servizio di martedì 16 settembre 2025 e fino a termine necessità.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/sospensione-fermata-canazei-via-pareda-2021-536",
-                "routeIds": "512,562"
-            },
-            {
-                "idFeed": 7555,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2026-01-05T23:00:00.000+0000",
-                "header": "Divieto di transito in via Campagnole, Borgo S. Caterina e via Dante per mercato settimanale a Rovereto",
-                "details": "Tutti i martedì nel periodo compreso dal 18 novembre 2025 al 06 gennaio 2026 dalle ore 06.00 alle ore 16.30, vengono chiuse al transito veicolare via Campagnole, Borgo S. Caterina e via Dante causa svolgimento del mercato settimanale a Rovereto.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-iv-novembre-a-lavis-2021-616",
-                "routeIds": "562,563,566"
-            }
-        ],
-        "routeColor": null,
-        "routeId": 562,
-        "routeLongName": "Linea 5 Pergine V-Susà-S.Vito-Canale-S.Caterina",
-        "routeShortName": "B465",
-        "routeType": 3,
-        "type": "E"
-    },
-    {
-        "areaId": 21,
-        "news": [],
-        "routeColor": null,
-        "routeId": 640,
-        "routeLongName": "Linea 8: Pergine I.-Ospedale Villa Rosa-Zivignago",
-        "routeShortName": "B468",
-        "routeType": 3,
-        "type": "E"
     },
     {
         "areaId": 23,
@@ -575,20 +311,7 @@
     },
     {
         "areaId": 24,
-        "news": [
-            {
-                "idFeed": 7524,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-11-04T23:00:00.000+0000",
-                "endDate": "2025-11-13T23:00:00.000+0000",
-                "header": "Chiusura via Giardini a Villa Lagarina",
-                "details": "Causa manifestazione sportiva , viene chiusa al traffico veicolare via Giardini nel comune di Villa Lagarina nei giorni : martedì 11 - mercoledì 12 - e giovedì 13 novembre 2025 , nella sola fascia oraria dalle 11.00 alle 18.00.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-giardini-a-villa-lagarina-2025-1464",
-                "routeIds": "582,602"
-            }
-        ],
+        "news": [],
         "routeColor": null,
         "routeId": 602,
         "routeLongName": "Savignano Pomarolo",
@@ -608,20 +331,7 @@
     },
     {
         "areaId": 24,
-        "news": [
-            {
-                "idFeed": 7555,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2026-01-05T23:00:00.000+0000",
-                "header": "Divieto di transito in via Campagnole, Borgo S. Caterina e via Dante per mercato settimanale a Rovereto",
-                "details": "Tutti i martedì nel periodo compreso dal 18 novembre 2025 al 06 gennaio 2026 dalle ore 06.00 alle ore 16.30, vengono chiuse al transito veicolare via Campagnole, Borgo S. Caterina e via Dante causa svolgimento del mercato settimanale a Rovereto.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-iv-novembre-a-lavis-2021-616",
-                "routeIds": "562,563,566"
-            }
-        ],
+        "news": [],
         "routeColor": null,
         "routeId": 563,
         "routeLongName": "Ossario Osp. S.Giorgio Osp. Ossario",
@@ -651,32 +361,7 @@
     },
     {
         "areaId": 24,
-        "news": [
-            {
-                "idFeed": 7296,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2024-09-05T22:00:00.000+0000",
-                "endDate": "2025-12-30T23:00:00.000+0000",
-                "header": "Divieto di transito dei mezzi del trasporto pubblico locale su via degli Alpini a Villa Lagarina.",
-                "details": "Causa modifica della viabilità, è vietato il transito dei mezzi del trasporto pubblico locale a Villa Lagarina, sul tratto di via degli Alpini, compreso tra la rotatoria della A.22 e l'intersezione con via Segantini/ via Zandonai. (ordinanza 59/2024)",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/giro-ciclistico-della-bolghera-2021-503",
-                "routeIds": "582"
-            },
-            {
-                "idFeed": 7524,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-11-04T23:00:00.000+0000",
-                "endDate": "2025-11-13T23:00:00.000+0000",
-                "header": "Chiusura via Giardini a Villa Lagarina",
-                "details": "Causa manifestazione sportiva , viene chiusa al traffico veicolare via Giardini nel comune di Villa Lagarina nei giorni : martedì 11 - mercoledì 12 - e giovedì 13 novembre 2025 , nella sola fascia oraria dalle 11.00 alle 18.00.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-giardini-a-villa-lagarina-2025-1464",
-                "routeIds": "582,602"
-            }
-        ],
+        "news": [],
         "routeColor": null,
         "routeId": 582,
         "routeLongName": "Nomi Villa Lagarina Stazione Mori",
@@ -696,32 +381,7 @@
     },
     {
         "areaId": 24,
-        "news": [
-            {
-                "idFeed": 7333,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-09-14T22:00:00.000+0000",
-                "endDate": "2025-11-27T23:00:00.000+0000",
-                "header": "Modifica percorso in via S. Maria a Rovereto",
-                "details": "Causa lavori in via S.Maria a Rovereto, viene modificato il percorso delle liee A - 7, a partire da inizio servizio di martedì 16 settembre 2025 e fino a termine necessità.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/sospensione-fermata-canazei-via-pareda-2021-536",
-                "routeIds": "512,562"
-            },
-            {
-                "idFeed": 7555,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-11-12T23:00:00.000+0000",
-                "endDate": "2026-01-05T23:00:00.000+0000",
-                "header": "Divieto di transito in via Campagnole, Borgo S. Caterina e via Dante per mercato settimanale a Rovereto",
-                "details": "Tutti i martedì nel periodo compreso dal 18 novembre 2025 al 06 gennaio 2026 dalle ore 06.00 alle ore 16.30, vengono chiuse al transito veicolare via Campagnole, Borgo S. Caterina e via Dante causa svolgimento del mercato settimanale a Rovereto.",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/chiusura-via-iv-novembre-a-lavis-2021-616",
-                "routeIds": "562,563,566"
-            }
-        ],
+        "news": [],
         "routeColor": null,
         "routeId": 562,
         "routeLongName": "Brione Cesari Ospedale Podesta' Brione",
@@ -751,20 +411,7 @@
     },
     {
         "areaId": 24,
-        "news": [
-            {
-                "idFeed": 7438,
-                "agencyId": "12",
-                "serviceType": "Generale",
-                "startDate": "2025-10-13T22:00:00.000+0000",
-                "endDate": "2025-12-30T23:00:00.000+0000",
-                "header": "Arretramento fermata via Valteri a Noriglio",
-                "details": "Causa lavori la fermata di via Valteri a Noriglio, viene arretrata di circa 70m a partire da mercoledì 15 ottobre 2025",
-                "stopId": "",
-                "url": "https://www.trentinotrasporti.it/avvisi/arretramento-fermata-via-valteri-a-noriglio-2025-1100",
-                "routeIds": "580"
-            }
-        ],
+        "news": [],
         "routeColor": null,
         "routeId": 580,
         "routeLongName": "Costa Corso Rosmini S.Giorgio/Ospedale",

@@ -184,4 +184,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get statusValid => 'Valido';
+
+  @override
+  String get clear => 'Reset';
 }

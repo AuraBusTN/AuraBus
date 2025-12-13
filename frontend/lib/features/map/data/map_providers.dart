@@ -1,11 +1,12 @@
+import 'package:aurabus/features/map/data/models/route_info.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'map_repository.dart';
 import 'map_marker_loader.dart';
-import 'models/stop_data.dart';
-import 'models/stop_details.dart';
+import 'models/stop_info.dart';
+import 'models/stop_trip_info.dart';
 
 final mapRepositoryProvider = Provider((ref) => MapRepository());
 
@@ -23,14 +24,17 @@ final stopIconProvider = FutureProvider<BitmapDescriptor>((ref) async {
   return MapMarkerLoader.loadStopIcon();
 });
 
+final stopsListProvider = FutureProvider<List<StopInfo>>((ref) async {
+  final repo = ref.read(mapRepositoryProvider);
+  return repo.loadLocalStops();
+});
+
 final markersProvider = FutureProvider<Set<Marker>>((ref) async {
   ref.keepAlive();
-
-  final repo = ref.read(mapRepositoryProvider);
   final icon = await ref.read(stopIconProvider.future);
-  final stops = await repo.loadLocalStops();
+  final stops = await ref.watch(stopsListProvider.future);
 
-  return stops.map((StopData stop) {
+  return stops.map((StopInfo stop) {
     return Marker(
       markerId: MarkerId(stop.stopId.toString()),
       position: LatLng(stop.stopLat, stop.stopLon),
@@ -41,23 +45,31 @@ final markersProvider = FutureProvider<Set<Marker>>((ref) async {
   }).toSet();
 });
 
-final stopDetailsProvider = FutureProvider.family<List<StopArrival>, int>((
+final stopDetailsProvider = FutureProvider.family<List<StopTrip>, int>((
   ref,
   stopId,
 ) async {
   final repo = ref.read(mapRepositoryProvider);
-  return repo.fetchStopDetails(stopId);
+  return repo.fetchStopTrips(stopId);
 });
 
-class SelectedLinesNotifier extends Notifier<Set<String>> {
-  @override
-  Set<String> build() => {};
+final stopsMapProvider = Provider<Map<int, StopInfo>>((ref) {
+  final stopsAsync = ref.watch(stopsListProvider);
+  return stopsAsync.maybeWhen(
+    data: (stops) => {for (var s in stops) s.stopId: s},
+    orElse: () => {},
+  );
+});
 
-  void toggle(String routeShortName) {
-    if (state.contains(routeShortName)) {
-      state = {...state}..remove(routeShortName);
+class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
+  @override
+  Set<RouteInfo> build() => {};
+
+  void toggle(RouteInfo route) {
+    if (state.contains(route)) {
+      state = {...state}..remove(route);
     } else {
-      state = {...state, routeShortName};
+      state = {...state, route};
     }
   }
 
@@ -65,6 +77,44 @@ class SelectedLinesNotifier extends Notifier<Set<String>> {
 }
 
 final selectedLinesProvider =
-    NotifierProvider<SelectedLinesNotifier, Set<String>>(() {
+    NotifierProvider<SelectedLinesNotifier, Set<RouteInfo>>(() {
       return SelectedLinesNotifier();
     });
+
+final sortedUniqueLinesProvider = Provider.family<List<RouteInfo>, int>((
+  ref,
+  stopId,
+) {
+  final stopsMap = ref.watch(stopsMapProvider);
+  final stop = stopsMap[stopId];
+
+  if (stop == null) return const [];
+
+  final routes = List<RouteInfo>.from(stop.routes);
+
+  routes.sort((a, b) {
+    final regExp = RegExp(r'^(\d+)(.*)$');
+
+    final matchA = regExp.firstMatch(a.routeShortName);
+    final matchB = regExp.firstMatch(b.routeShortName);
+
+    final numA = matchA != null ? int.parse(matchA.group(1)!) : null;
+    final numB = matchB != null ? int.parse(matchB.group(1)!) : null;
+
+    if (numA != null && numB != null) {
+      final compareNums = numA.compareTo(numB);
+
+      if (compareNums != 0) return compareNums;
+
+      return a.routeShortName.compareTo(b.routeShortName);
+    }
+
+    if (numA != null) return -1;
+
+    if (numB != null) return 1;
+
+    return a.routeShortName.compareTo(b.routeShortName);
+  });
+
+  return routes;
+});

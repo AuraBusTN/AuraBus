@@ -55,5 +55,6 @@
     "subscriptionTypeLabel": "Tipo:",
     "subscriptionStartDateLabel": "Data inizio:",
     "subscriptionExpirationDateLabel": "Data scadenza:",
-    "statusValid": "Valido"
+    "statusValid": "Valido",
+    "clear": "Reset"
 }

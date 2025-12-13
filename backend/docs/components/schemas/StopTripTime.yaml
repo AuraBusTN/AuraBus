@@ -1,6 +1,6 @@
 components:
   schemas:
-    StopTime:
+    StopTripTime:
       type: object
       properties:
         stopId:

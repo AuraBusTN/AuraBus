@@ -1,53 +1,109 @@
-import 'package:aurabus/features/map/data/map_providers.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:aurabus/features/map/data/map_providers.dart';
+import 'package:aurabus/features/map/data/models/stop_info.dart';
 import 'stop_details_modal.dart';
 
 final mapControllerProvider = Provider<MapController>((ref) {
-  return MapController(ref);
+  final controller = MapController(ref);
+  ref.onDispose(controller.dispose);
+  return controller;
 });
 
 class MapController {
   final Ref ref;
 
   GoogleMapController? _gmaps;
-
   GoogleMapController? get controller => _gmaps;
+
+  final ValueNotifier<bool> showLocation = ValueNotifier(false);
+
+  StreamSubscription<ServiceStatus>? _serviceStatusSubscription;
 
   MapController(this.ref);
 
   void onMapCreated(GoogleMapController c) {
     _gmaps = c;
+    _initLocationLogic();
+  }
+
+  Future<void> _initLocationLogic() async {
+    _serviceStatusSubscription = Geolocator.getServiceStatusStream().listen((
+      status,
+    ) {
+      if (status == ServiceStatus.enabled) {
+        _enableLocationFeature();
+      } else {
+        showLocation.value = false;
+      }
+    });
+
+    final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (isServiceEnabled) {
+      _enableLocationFeature();
+    }
+  }
+
+  Future<void> _enableLocationFeature() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return;
+    }
+
+    showLocation.value = true;
+
+    try {
+      final position = await Geolocator.getCurrentPosition();
+      _gmaps?.animateCamera(
+        CameraUpdate.newLatLng(LatLng(position.latitude, position.longitude)),
+      );
+    } catch (e) {
+      // Handle potential errors, e.g., timeout or location services disabled
+    }
+  }
+
+  void onAppResumed() async {
+    final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (isServiceEnabled) {
+      _enableLocationFeature();
+    } else {
+      showLocation.value = false;
+    }
   }
 
   void dispose() {
     _gmaps?.dispose();
     _gmaps = null;
+    _serviceStatusSubscription?.cancel();
+    showLocation.dispose();
   }
 
-  void openStopModal(BuildContext context, int stopId, String stopName) {
-    final _ = ref.refresh(stopDetailsProvider(stopId));
+  void openStopModal(BuildContext context, StopInfo stopInfo) {
+    final _ = ref.refresh(stopDetailsProvider(stopInfo.stopId));
+
+    if (!context.mounted) return;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => StopDetailsModal(stopId: stopId, stopName: stopName),
+      useRootNavigator: true,
+      builder: (_) => StopDetailsModal(stopInfo: stopInfo),
     ).whenComplete(() {
       final notifier = ref.read(selectedLinesProvider.notifier);
       notifier.clear();
     });
-  }
-
-  /// Optional: camera animation
-  Future<void> moveCamera(LatLng target, {double zoom = 16}) async {
-    if (_gmaps == null) return;
-    await _gmaps!.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: target, zoom: zoom),
-      ),
-    );
   }
 }
