@@ -24,6 +24,15 @@ const options = {
         description: "Development Server",
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
   apis: [
     path.join(__dirname, "../docs/paths/*.yaml"),

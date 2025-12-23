@@ -4,11 +4,17 @@ import 'package:aurabus/l10n/app_localizations.dart';
 class AccountInfoBody extends StatelessWidget {
   final bool busNotificationEnabled;
   final ValueChanged<bool> onNotificationToggle;
+  final String firstName;
+  final String lastName;
+  final String email;
 
   const AccountInfoBody({
     super.key,
     required this.busNotificationEnabled,
     required this.onNotificationToggle,
+    this.firstName = "John",
+    this.lastName = "Doe",
+    this.email = "",
   });
 
   @override
@@ -26,12 +32,17 @@ class AccountInfoBody extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'John Doe',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                Text(
+                  '$firstName $lastName',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
                 Text(
-                  AppLocalizations.of(context)!.editProfilePicture,
+                  email.isNotEmpty
+                      ? email
+                      : AppLocalizations.of(context)!.editProfilePicture,
                   style: const TextStyle(fontSize: 12, color: Colors.black54),
                 ),
               ],

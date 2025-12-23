@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:aurabus/common/widgets/clickable_text.dart';
 import 'package:aurabus/common/widgets/generic_button.dart';
@@ -7,15 +8,16 @@ import 'package:aurabus/common/widgets/custom_text_field.dart';
 import 'package:aurabus/common/widgets/fade_in_slide.dart';
 import 'package:aurabus/routing/router.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -27,9 +29,24 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _handleLogin() {
+  Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement login logic
+      FocusScope.of(context).unfocus();
+
+      final success = await ref
+          .read(authProvider.notifier)
+          .login(emailController.text.trim(), passwordController.text);
+
+      if (mounted) {
+        if (success) {
+          context.go(AppRoute.account);
+        } else {
+          final error = ref.read(authProvider).error ?? "Errore sconosciuto";
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error), backgroundColor: Colors.red),
+          );
+        }
+      }
     }
   }
 
@@ -37,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final l10n = AppLocalizations.of(context)!;
+    final isLoading = ref.watch(authProvider).isLoading;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -145,10 +163,12 @@ class _LoginPageState extends State<LoginPage> {
                         delay: 0.3,
                         child: Column(
                           children: [
-                            GenericButton(
-                              textLabel: l10n.loginButton,
-                              onPressed: _handleLogin,
-                            ),
+                            isLoading
+                                ? const CircularProgressIndicator()
+                                : GenericButton(
+                                    textLabel: l10n.loginButton,
+                                    onPressed: _handleLogin,
+                                  ),
 
                             const SizedBox(height: 30),
 
@@ -179,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             GoogleButton(
                               onPressed: () {
-                                // TODO: Implement Google Sign-In
+                                // TODO: Implement Google Sign-In later
                               },
                             ),
 
@@ -202,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back, size: 28),
                     onPressed: () =>
-                        context.canPop() ? context.pop() : context.go('/'),
+                        context.canPop() ? context.pop() : context.go('/map'),
                   ),
                 ),
               ),

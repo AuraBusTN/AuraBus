@@ -18,6 +18,8 @@ services:
       API_URL: ${API_URL}
       API_USER: ${API_USER}
       API_PASSWORD: ${API_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      REFRESH_SECRET: ${REFRESH_SECRET}
 
   db:
     container_name: aurabus_mongo_db

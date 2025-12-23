@@ -1,0 +1,75 @@
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "mario.rossi@email.com"
+        password:
+          type: string
+          format: password
+          example: "PasswordSegreta123!"
+
+    SignupRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+      properties:
+        firstName:
+          type: string
+          example: "Mario"
+        lastName:
+          type: string
+          example: "Rossi"
+        email:
+          type: string
+          format: email
+          example: "mario.rossi@email.com"
+        password:
+          type: string
+          format: password
+          description: "Minimo 6 caratteri"
+          example: "PasswordSegreta123!"
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          description: "Il token di lunga durata ricevuto al login"
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        accessToken:
+          type: string
+          description: "Token breve (15 min) per chiamate API"
+        refreshToken:
+          type: string
+          description: "Token lungo (7 gg) per rinnovare la sessione"
+        user:
+          $ref: '#/components/schemas/User'
+
+    RefreshTokenResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        accessToken:
+          type: string
+          description: "Nuovo Access Token valido"
