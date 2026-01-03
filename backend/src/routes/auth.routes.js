@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import {
   signup,
   login,
+  googleLogin,
   refreshToken,
   logout,
   getMe,
@@ -31,6 +32,12 @@ router.post(
     body("password").notEmpty().withMessage("Password is required"),
   ],
   login
+);
+
+router.post(
+  "/google",
+  [body("idToken").notEmpty().withMessage("Google ID token is required")],
+  googleLogin
 );
 
 router.post(

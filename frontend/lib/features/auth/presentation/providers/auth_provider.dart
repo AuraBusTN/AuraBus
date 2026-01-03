@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aurabus/core/network/dio_client.dart';
 import 'package:aurabus/core/services/token_storage_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:aurabus/core/config/google_web_client_id.dart';
 import '../../data/auth_repository.dart';
 import '../../data/models/user_model.dart';
 
@@ -33,6 +36,30 @@ class AuthState {
 }
 
 class AuthNotifier extends Notifier<AuthState> {
+  static Future<void>? _googleInitFuture;
+  static String? _initializedWebClientId;
+
+  static Future<void> _ensureGoogleInitialized({String? webClientId}) {
+    if (!kIsWeb) {
+      return _googleInitFuture ??= GoogleSignIn.instance.initialize();
+    }
+
+    if (webClientId == null || webClientId.trim().isEmpty) {
+      return Future<void>.error(
+        ArgumentError('Missing GOOGLE_AUTH_CLIENT_ID for Web'),
+      );
+    }
+
+    final normalized = webClientId.trim();
+    final alreadyInitializedWithSameClientId =
+        _googleInitFuture != null && _initializedWebClientId == normalized;
+    if (alreadyInitializedWithSameClientId) return _googleInitFuture!;
+
+    _initializedWebClientId = normalized;
+    _googleInitFuture = GoogleSignIn.instance.initialize(clientId: normalized);
+    return _googleInitFuture!;
+  }
+
   @override
   AuthState build() {
     Future.microtask(() => checkAuthStatus());
@@ -96,6 +123,86 @@ class AuthNotifier extends Notifier<AuthState> {
       state = state.copyWith(isLoading: false, error: e.toString());
       return false;
     }
+  }
+
+  Future<bool> loginWithGoogle() async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      if (kIsWeb) {
+        state = state.copyWith(
+          isLoading: false,
+          error:
+              'Google sign-in on Web uses the embedded Google button (not a popup).',
+        );
+        return false;
+      }
+
+      await _ensureGoogleInitialized();
+
+      final account = await GoogleSignIn.instance.authenticate(
+        scopeHint: const ['email'],
+      );
+
+      final idToken = account.authentication.idToken;
+      if (idToken == null || idToken.isEmpty) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Google sign-in did not return an ID token',
+        );
+        return false;
+      }
+
+      return await loginWithGoogleIdToken(idToken);
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        state = state.copyWith(isLoading: false, error: null);
+        return false;
+      }
+      state = state.copyWith(
+        isLoading: false,
+        error: e.description ?? e.toString(),
+      );
+      return false;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> loginWithGoogleIdToken(String idToken) async {
+    if (idToken.trim().isEmpty) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Google sign-in did not return an ID token',
+      );
+      return false;
+    }
+
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final user = await _repository.googleLogin(idToken.trim());
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: true,
+        user: user,
+        error: null,
+      );
+      return true;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      return false;
+    }
+  }
+
+  Future<void> ensureGoogleReadyForWeb() async {
+    if (!kIsWeb) return;
+    final webClientId = getGoogleAuthClientId();
+    await _ensureGoogleInitialized(webClientId: webClientId);
+  }
+
+  void setAuthError(String? message) {
+    state = state.copyWith(isLoading: false, error: message);
   }
 
   Future<void> logout() async {

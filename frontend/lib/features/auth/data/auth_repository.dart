@@ -57,6 +57,25 @@ class AuthRepository {
       throw 'Error during signup';
     }
   }
+
+  Future<User> googleLogin(String idToken) async {
+    try {
+      final response = await _dioClient.dio.post(
+        '/auth/google',
+        data: {'idToken': idToken},
+      );
+
+      await _tokenStorage.saveTokens(
+        accessToken: response.data['accessToken'],
+        refreshToken: response.data['refreshToken'],
+      );
+
+      return User.fromJson(response.data['user']);
+    } on DioException catch (e) {
+      throw e.response?.data['message'] ?? 'Error during Google login';
+    }
+  }
+
   Future<void> logout() async {
     final refreshToken = await _tokenStorage.getRefreshToken();
     if (refreshToken != null) {
@@ -65,8 +84,7 @@ class AuthRepository {
           '/auth/logout',
           data: {'refreshToken': refreshToken},
         );
-      } catch (_) {
-      }
+      } catch (_) {}
     }
     await _tokenStorage.clearTokens();
   }

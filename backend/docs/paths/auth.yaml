@@ -46,6 +46,36 @@
       401:
         description: Invalid credentials
 
+/auth/google:
+  post:
+    tags:
+      - Authentication
+    summary: Login with Google
+    description: Exchange a Google ID Token for AuraBus access/refresh tokens.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GoogleLoginRequest'
+    responses:
+      200:
+        description: Google login successful
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthResponse'
+      400:
+        description: Validation error / token missing email
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      401:
+        description: Unverified email or invalid token
+      403:
+        description: Google account mismatch for this email
+
 /auth/refresh-token:
   post:
     tags:

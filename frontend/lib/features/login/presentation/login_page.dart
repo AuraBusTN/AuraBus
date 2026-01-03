@@ -21,9 +21,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  ProviderSubscription<AuthState>? _authSub;
+
+  static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+
+  @override
+  void initState() {
+    super.initState();
+    _authSub = ref.listenManual<AuthState>(authProvider, (previous, next) {
+      final wasAuthed = previous?.isAuthenticated ?? false;
+      final isAuthed = next.isAuthenticated;
+      if (!wasAuthed && isAuthed && mounted) {
+        context.go(AppRoute.account);
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _authSub?.close();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -46,6 +62,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             SnackBar(content: Text(error), backgroundColor: Colors.red),
           );
         }
+      }
+    }
+  }
+
+  Future<void> _handleGoogleLogin() async {
+    FocusScope.of(context).unfocus();
+
+    final success = await ref.read(authProvider.notifier).loginWithGoogle();
+
+    if (!mounted) return;
+    if (success) {
+      context.go(AppRoute.account);
+    } else {
+      final error = ref.read(authProvider).error;
+      if (error != null && error.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -126,9 +160,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 if (value == null || value.isEmpty) {
                                   return l10n.requiredField;
                                 }
-                                // Simple email validation
-                                // TODO: Replace with more robust validation
-                                if (!value.contains('@')) {
+                                if (!_emailRegex.hasMatch(value.trim())) {
                                   return l10n.invalidEmail;
                                 }
                                 return null;
@@ -198,9 +230,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             const SizedBox(height: 30),
 
                             GoogleButton(
-                              onPressed: () {
-                                // TODO: Implement Google Sign-In later
-                              },
+                              onPressed: isLoading ? null : _handleGoogleLogin,
                             ),
 
                             const SizedBox(height: 100),

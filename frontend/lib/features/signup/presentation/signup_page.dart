@@ -26,10 +26,26 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+
   bool termsChecked = false;
+  ProviderSubscription<AuthState>? _authSub;
+
+  @override
+  void initState() {
+    super.initState();
+    _authSub = ref.listenManual<AuthState>(authProvider, (previous, next) {
+      final wasAuthed = previous?.isAuthenticated ?? false;
+      final isAuthed = next.isAuthenticated;
+      if (!wasAuthed && isAuthed && mounted) {
+        context.go(AppRoute.account);
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _authSub?.close();
     firstNameController.dispose();
     lastNameController.dispose();
     emailController.dispose();
@@ -68,6 +84,24 @@ class _SignupPageState extends ConsumerState<SignupPage> {
             SnackBar(content: Text(error), backgroundColor: Colors.red),
           );
         }
+      }
+    }
+  }
+
+  Future<void> _handleGoogleLogin() async {
+    FocusScope.of(context).unfocus();
+
+    final success = await ref.read(authProvider.notifier).loginWithGoogle();
+
+    if (!mounted) return;
+    if (success) {
+      context.go(AppRoute.account);
+    } else {
+      final error = ref.read(authProvider).error;
+      if (error != null && error.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -159,9 +193,10 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                               label: l10n.emailLabel,
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
-                              // TODO: Replace with more robust validation
                               validator: (v) =>
-                                  !v!.contains('@') ? l10n.invalidEmail : null,
+                                  (v == null || !_emailRegex.hasMatch(v.trim()))
+                                  ? l10n.invalidEmail
+                                  : null,
                             ),
 
                             CustomTextField(
@@ -169,9 +204,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                               label: l10n.passwordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
-                              // TODO: Replace with more robust validation
-                              validator: (v) =>
-                                  v!.length < 6 ? l10n.passwordMinChars : null,
+                              validator: (v) => (v == null || v.length < 6)
+                                  ? l10n.passwordMinChars
+                                  : null,
                             ),
 
                             CustomTextField(
@@ -179,9 +214,14 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                               label: l10n.confirmPasswordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
-                              validator: (v) => v != passwordController.text
-                                  ? l10n.passwordMismatch
-                                  : null,
+                              validator: (v) {
+                                if (v == null || v.isEmpty) {
+                                  return l10n.requiredField;
+                                }
+                                return v != passwordController.text
+                                    ? l10n.passwordMismatch
+                                    : null;
+                              },
                             ),
                           ],
                         ),
@@ -234,7 +274,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
                             const SizedBox(height: 25),
 
-                            GoogleButton(onPressed: () {}),
+                            GoogleButton(
+                              onPressed: isLoading ? null : _handleGoogleLogin,
+                            ),
 
                             const SizedBox(height: 100),
                           ],

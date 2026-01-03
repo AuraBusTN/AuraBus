@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'package:aurabus/features/map/data/models/stop_info.dart';
@@ -94,6 +96,47 @@ class MapController {
     final _ = ref.refresh(stopDetailsProvider(stopInfo.stopId));
 
     if (!context.mounted) return;
+
+    if (kIsWeb) {
+      showGeneralDialog<void>(
+        context: context,
+        useRootNavigator: true,
+        barrierDismissible: true,
+        barrierLabel: MaterialLocalizations.of(
+          context,
+        ).modalBarrierDismissLabel,
+        barrierColor: Colors.black54,
+        transitionDuration: const Duration(milliseconds: 200),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return PointerInterceptor(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => Navigator.of(context).maybePop(),
+                    child: const SizedBox.expand(),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: PointerInterceptor(
+                    child: StopDetailsModal(stopInfo: stopInfo),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ).whenComplete(() {
+        final notifier = ref.read(selectedLinesProvider.notifier);
+        notifier.clear();
+      });
+      return;
+    }
 
     showModalBottomSheet(
       context: context,

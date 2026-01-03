@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "52432316260",
+    "project_id": "aurabus-a9d50",
+    "storage_bucket": "aurabus-a9d50.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52432316260:android:376d4449a5062cb16e3c71",
+        "android_client_info": {
+          "package_name": "com.aurabus.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52432316260-jkm4agcai966n0886jasgkfotp13mtqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aurabus.application",
+            "certificate_hash": "3f867dc9c6bcc795df29fde484bbf59b59604e6d"
+          }
+        },
+        {
+          "client_id": "52432316260-1b5hb4dd5diti7ih0o73jv78ppbr40o1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8ojpvRKW52yZ8zUrxy6jmtiU67FqZPMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52432316260-1b5hb4dd5diti7ih0o73jv78ppbr40o1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

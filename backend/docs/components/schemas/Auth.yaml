@@ -49,6 +49,16 @@ components:
           description: "Il token di lunga durata ricevuto al login"
           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
+    GoogleLoginRequest:
+      type: object
+      required:
+        - idToken
+      properties:
+        idToken:
+          type: string
+          description: "Google ID Token (JWT) obtained from Google Sign-In"
+          example: "eyJhbGciOiJSUzI1NiIsImtpZCI6Ij..."
+
     AuthResponse:
       type: object
       properties:

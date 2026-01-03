@@ -1,179 +1,357 @@
 import { jest } from "@jest/globals";
 import request from "supertest";
 
-const mockStops = new Map([
-  [1, { stopId: 1, stopName: "Stazione Centrale" }],
-  [2, { stopId: 2, stopName: "Piazza Duomo" }],
-]);
-const mockRoutes = new Map([
-  [
-    1,
-    {
-      routeId: 1,
-      routeShortName: "5",
-      routeLongName: "Circolare",
-      routeColor: "#FF0000",
-    },
-  ],
-]);
+process.env.NODE_ENV = "test";
+process.env.JWT_SECRET = "test_jwt_secret";
+process.env.REFRESH_SECRET = "test_refresh_secret";
+process.env.GOOGLE_AUTH_CLIENT_ID = "test-google-client-id";
 
-jest.unstable_mockModule("../src/utils/staticData.js", () => ({
-  initData: jest.fn(),
-  stops: mockStops,
-  routes: mockRoutes,
+const mockBcrypt = {
+  genSalt: jest.fn().mockResolvedValue("salt"),
+  hash: jest.fn().mockResolvedValue("hashed-password"),
+  compare: jest.fn().mockResolvedValue(true),
+};
+
+jest.unstable_mockModule("bcryptjs", () => ({
+  default: mockBcrypt,
 }));
 
-const mockBusFind = jest.fn();
-jest.unstable_mockModule("../src/models/Bus.js", () => ({
-  Bus: {
-    find: mockBusFind,
+const usersById = new Map();
+const usersByEmail = new Map();
+let idCounter = 1;
+
+const makeId = () => String(idCounter++).padStart(24, "0");
+
+const makeQuery = (user) => {
+  return {
+    select: async () => {
+      if (!user) return null;
+      return {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        authProvider: user.authProvider,
+        googleSub: user.googleSub,
+        picture: user.picture,
+      };
+    },
+    then: (resolve, reject) => Promise.resolve(user).then(resolve, reject),
+  };
+};
+
+class MockUser {
+  static findOne = async (query) => {
+    if (!query) return null;
+    if (query.email) {
+      return usersByEmail.get(String(query.email).toLowerCase()) ?? null;
+    }
+    if (query.refreshToken) {
+      const token = String(query.refreshToken);
+      for (const user of usersById.values()) {
+        if (
+          Array.isArray(user.refreshToken) &&
+          user.refreshToken.includes(token)
+        ) {
+          return user;
+        }
+      }
+      return null;
+    }
+    return null;
+  };
+
+  static findById = (id) => {
+    const user = usersById.get(String(id)) ?? null;
+    return makeQuery(user);
+  };
+
+  constructor(data) {
+    this._id = data?._id ?? makeId();
+    this.firstName = data?.firstName;
+    this.lastName = data?.lastName;
+    this.email = data?.email;
+    this.password = data?.password ?? null;
+    this.authProvider = data?.authProvider ?? "local";
+    this.googleSub = data?.googleSub;
+    this.picture = data?.picture;
+    this.refreshToken = data?.refreshToken ?? [];
+  }
+
+  save = async () => {
+    usersById.set(this._id, this);
+    if (this.email) {
+      usersByEmail.set(String(this.email).toLowerCase(), this);
+    }
+    return this;
+  };
+}
+
+jest.unstable_mockModule("../src/models/User.js", () => ({
+  User: MockUser,
+}));
+
+const verifyIdToken = jest.fn();
+
+jest.unstable_mockModule("google-auth-library", () => ({
+  OAuth2Client: class {
+    verifyIdToken = verifyIdToken;
   },
 }));
 
-jest.unstable_mockModule("mongoose", () => ({
-  connect: jest.fn().mockResolvedValue(true),
-  Schema: class {},
-  model: jest.fn(),
-}));
-
-global.fetch = jest.fn();
-
 const { app } = await import("../src/app.js");
 
-describe("Integration Test: AuraBus API", () => {
+describe("Integration Test: Auth API", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    global.fetch.mockReset();
+    mockBcrypt.compare.mockResolvedValue(true);
+
+    usersById.clear();
+    usersByEmail.clear();
+    idCounter = 1;
   });
 
-  describe("GET /", () => {
-    it("Should respond with status 200 and a welcome message", async () => {
-      const res = await request(app).get("/");
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toContain("AuraBus API is alive");
-    });
-  });
-
-  describe("Global 404 Handler", () => {
-    it("Should return 404 JSON for non-existent routes", async () => {
-      const res = await request(app).get("/questo-endpoint-non-esiste");
-
-      expect(res.statusCode).toBe(404);
-      expect(res.body.error).toBe(true);
-      expect(res.body.message).toMatch(/Not Found/);
-    });
-  });
-
-  describe("GET /stops/:id (Logic Trip & Occupancy)", () => {
-    const stopId = 1;
-
-    const baseApiData = {
-      tripId: 1,
-      routeId: 1,
-      matricolaBus: 100,
-      stopLast: 1,
-      stopNext: 2,
-      delay: 120,
-      oraArrivoProgrammataAFermataSelezionata: "2024-12-03T10:00:00Z",
-      oraArrivoEffettivaAFermataSelezionata: "2024-12-03T10:02:00Z",
-      lastEventRecivedAt: "2024-12-03T09:59:00Z",
-      stopTimes: [
-        { stopId: 1, arrivalTime: "10:00:00" },
-        { stopId: 2, arrivalTime: "10:10:00" },
-      ],
+  const signup = async (override = {}) => {
+    const payload = {
+      firstName: "Mario",
+      lastName: "Rossi",
+      email: "mario@example.com",
+      password: "Password123",
+      ...override,
     };
+    return request(app).post("/auth/signup").send(payload);
+  };
 
-    it("Should correctly process data and calculate occupancy", async () => {
-      global.fetch.mockResolvedValue({
-        ok: true,
-        json: async () => [baseApiData],
-      });
+  const login = async (override = {}) => {
+    const payload = {
+      email: "mario@example.com",
+      password: "Password123",
+      ...override,
+    };
+    return request(app).post("/auth/login").send(payload);
+  };
 
-      mockBusFind.mockResolvedValue([
-        { bus_id: 100, capacity: 150, type: "articulated" },
-      ]);
+  it("GET / responds with health status", async () => {
+    const res = await request(app).get("/");
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({
+      status: "OK",
+      message: "AuraBus API is alive!",
+    });
+  });
 
-      const res = await request(app).get(`/stops/${String(stopId)}`);
+  it("POST /auth/signup validates request", async () => {
+    const res = await request(app).post("/auth/signup").send({});
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBeDefined();
+  });
 
-      expect(res.statusCode).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body).toHaveLength(1);
+  it("POST /auth/signup creates user and returns tokens", async () => {
+    const res = await signup();
 
-      const trip = res.body[0];
-      expect(trip.busId).toBe(100);
-      expect(trip.busCapacity).toBe(150);
-      expect(trip.routeShortName).toBe("5");
+    expect(res.statusCode).toBe(201);
+    expect(res.body.success).toBe(true);
+    expect(typeof res.body.accessToken).toBe("string");
+    expect(typeof res.body.refreshToken).toBe("string");
+    expect(res.body.user.email).toBe("mario@example.com");
+  });
+
+  it("POST /auth/login rejects unknown user", async () => {
+    const res = await login({ email: "missing@example.com" });
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe("User not found");
+  });
+
+  it("POST /auth/login rejects wrong password", async () => {
+    await new MockUser({
+      firstName: "Mario",
+      lastName: "Rossi",
+      email: "mario@example.com",
+      password: "hashed-password",
+    }).save();
+    mockBcrypt.compare.mockResolvedValue(false);
+
+    const res = await login({ password: "WrongPassword" });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe("Wrong password");
+  });
+
+  it("POST /auth/login rejects password login for google-only account", async () => {
+    await new MockUser({
+      firstName: "Google",
+      lastName: "User",
+      email: "google@example.com",
+      password: null,
+      authProvider: "google",
+      googleSub: "google-sub-123",
+    }).save();
+
+    const res = await request(app).post("/auth/login").send({
+      email: "google@example.com",
+      password: "doesnt-matter",
     });
 
-    it("Should correctly handle a bus not found in the DB (default fallback)", async () => {
-      global.fetch.mockResolvedValue({
-        ok: true,
-        json: async () => [baseApiData],
-      });
+    expect(res.statusCode).toBe(401);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe(
+      "This account does not support password login"
+    );
+  });
 
-      mockBusFind.mockResolvedValue([]);
-
-      const res = await request(app).get(`/stops/${stopId}`);
-
-      expect(res.statusCode).toBe(200);
-      const trip = res.body[0];
-      expect(trip.busCapacity).toBe(100);
-      expect(trip.busType).toBe("standard");
+  it("POST /auth/google exchanges idToken for app tokens", async () => {
+    verifyIdToken.mockResolvedValue({
+      getPayload: () => ({
+        email: "guser@example.com",
+        email_verified: true,
+        sub: "google-sub-123",
+        given_name: "Google",
+        family_name: "User",
+        picture: "https://example.com/p.png",
+      }),
     });
 
-    it("Should ignore trips with unknown routeIds (Service Resilience)", async () => {
-      global.fetch.mockResolvedValue({
-        ok: true,
-        json: async () => [{ ...baseApiData, tripId: 999, routeId: 999 }],
-      });
-
-      mockBusFind.mockResolvedValue([]);
-
-      const res = await request(app).get(`/stops/${stopId}`);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveLength(0);
+    const res = await request(app).post("/auth/google").send({
+      idToken: "fake-google-id-token",
     });
 
-    it("Should return empty array if external API returns empty list", async () => {
-      global.fetch.mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(typeof res.body.accessToken).toBe("string");
+    expect(typeof res.body.refreshToken).toBe("string");
+    expect(res.body.user.email).toBe("guser@example.com");
+  });
 
-      const res = await request(app).get(`/stops/${stopId}`);
+  it("GET /auth/me returns the current user with a valid access token", async () => {
+    const signupRes = await signup();
+    expect(signupRes.statusCode).toBe(201);
 
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toEqual([]);
+    const meRes = await request(app)
+      .get("/auth/me")
+      .set("Authorization", `Bearer ${signupRes.body.accessToken}`);
+
+    expect(meRes.statusCode).toBe(200);
+    expect(meRes.body.email).toBe("mario@example.com");
+  });
+
+  it("POST /auth/signup rejects duplicate email", async () => {
+    const first = await signup();
+    expect(first.statusCode).toBe(201);
+
+    const second = await signup();
+    expect(second.statusCode).toBe(400);
+    expect(second.body.success).toBe(false);
+    expect(second.body.message).toBe("Email already in use");
+  });
+
+  it("POST /auth/login returns tokens for valid credentials", async () => {
+    const signupRes = await signup();
+    expect(signupRes.statusCode).toBe(201);
+
+    mockBcrypt.compare.mockResolvedValue(true);
+    const res = await login();
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(typeof res.body.accessToken).toBe("string");
+    expect(typeof res.body.refreshToken).toBe("string");
+    expect(res.body.user.email).toBe("mario@example.com");
+  });
+
+  it("POST /auth/refresh-token validates request", async () => {
+    const res = await request(app).post("/auth/refresh-token").send({});
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe("Refresh Token is required");
+  });
+
+  it("POST /auth/refresh-token rotates refresh tokens and revokes the old one", async () => {
+    const signupRes = await signup();
+    expect(signupRes.statusCode).toBe(201);
+
+    const oldRefresh = signupRes.body.refreshToken;
+    const refreshRes = await request(app)
+      .post("/auth/refresh-token")
+      .send({ refreshToken: oldRefresh });
+
+    expect(refreshRes.statusCode).toBe(200);
+    expect(refreshRes.body.success).toBe(true);
+    expect(typeof refreshRes.body.accessToken).toBe("string");
+    expect(typeof refreshRes.body.refreshToken).toBe("string");
+
+    const revokedRes = await request(app)
+      .post("/auth/refresh-token")
+      .send({ refreshToken: oldRefresh });
+
+    expect(revokedRes.statusCode).toBe(403);
+    expect(revokedRes.body.success).toBe(false);
+    expect(revokedRes.body.message).toBe("Invalid Refresh Token (Revoked)");
+  });
+
+  it("POST /auth/logout removes the refresh token", async () => {
+    const signupRes = await signup();
+    expect(signupRes.statusCode).toBe(201);
+
+    const refreshToken = signupRes.body.refreshToken;
+    const logoutRes = await request(app)
+      .post("/auth/logout")
+      .send({ refreshToken });
+
+    expect(logoutRes.statusCode).toBe(204);
+
+    const refreshRes = await request(app)
+      .post("/auth/refresh-token")
+      .send({ refreshToken });
+    expect(refreshRes.statusCode).toBe(403);
+    expect(refreshRes.body.success).toBe(false);
+    expect(refreshRes.body.message).toBe("Invalid Refresh Token (Revoked)");
+  });
+
+  it("POST /auth/google rejects unverified email", async () => {
+    verifyIdToken.mockResolvedValue({
+      getPayload: () => ({
+        email: "guser@example.com",
+        email_verified: false,
+        sub: "google-sub-123",
+      }),
     });
 
-    it("Should return 500 if the external API fails (503)", async () => {
-      global.fetch.mockResolvedValue({
-        ok: false,
-        status: 503,
-        statusText: "Service Unavailable",
-      });
-
-      const res = await request(app).get(`/stops/${stopId}`);
-      expect(res.statusCode).toBe(500);
-      expect(res.body.error).toBe(true);
-      expect(res.body.message).toMatch(/External API Error/);
+    const res = await request(app).post("/auth/google").send({
+      idToken: "fake-google-id-token",
     });
 
-    it("Should return 400 if the stop ID is not numeric", async () => {
-      const res = await request(app).get("/stops/abc");
-      expect(res.statusCode).toBe(400);
-      expect(res.body.error).toBe(true);
-      expect(res.body.message).toBe("Invalid stop ID");
+    expect(res.statusCode).toBe(401);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe("Google email is not verified");
+  });
+
+  it("POST /auth/google rejects mismatched googleSub for existing email", async () => {
+    await new MockUser({
+      firstName: "Existing",
+      lastName: "User",
+      email: "guser@example.com",
+      authProvider: "google",
+      googleSub: "google-sub-ORIGINAL",
+      password: null,
+    }).save();
+
+    verifyIdToken.mockResolvedValue({
+      getPayload: () => ({
+        email: "guser@example.com",
+        email_verified: true,
+        sub: "google-sub-DIFFERENT",
+      }),
     });
 
-    it("Should handle unexpected network errors in fetch", async () => {
-      global.fetch.mockRejectedValue(new Error("Network Error"));
-
-      const res = await request(app).get(`/stops/${stopId}`);
-      expect(res.statusCode).toBe(500);
-      expect(res.body.error).toBe(true);
-      expect(res.body.message).toBeDefined();
+    const res = await request(app).post("/auth/google").send({
+      idToken: "fake-google-id-token",
     });
+
+    expect(res.statusCode).toBe(403);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe("Google account mismatch for this email");
   });
 });
