@@ -79,7 +79,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
         if (success) {
           context.go(AppRoute.account);
         } else {
-          final error = ref.read(authProvider).error ?? "Errore registrazione";
+          final error = ref.read(authProvider).error ?? "Registration failed";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(error), backgroundColor: Colors.red),
           );

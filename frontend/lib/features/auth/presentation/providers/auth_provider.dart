@@ -132,8 +132,6 @@ class AuthNotifier extends Notifier<AuthState> {
       if (kIsWeb) {
         state = state.copyWith(
           isLoading: false,
-          error:
-              'Google sign-in on Web uses the embedded Google button (not a popup).',
         );
         return false;
       }

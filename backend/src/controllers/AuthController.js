@@ -34,7 +34,7 @@ const getGoogleAudiences = () => {
 };
 
 const generateAccessToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 };
 
 const generateRefreshToken = (id) => {
@@ -271,8 +271,7 @@ export const refreshToken = async (req, res, next) => {
         .json({ success: false, message: "Invalid Refresh Token (Revoked)" });
     }
 
-    const oldRefreshToken = req.body.refreshToken;
-    user.refreshToken = user.refreshToken.filter((t) => t !== oldRefreshToken);
+    user.refreshToken = user.refreshToken.filter((t) => t !== refreshToken);
 
     const newAccessToken = generateAccessToken(user._id);
     const newRefreshToken = generateRefreshToken(user._id);

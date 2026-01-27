@@ -57,7 +57,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         if (success) {
           context.go(AppRoute.account);
         } else {
-          final error = ref.read(authProvider).error ?? "Errore sconosciuto";
+          final error = ref.read(authProvider).error ?? "Unknown error";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(error), backgroundColor: Colors.red),
           );
