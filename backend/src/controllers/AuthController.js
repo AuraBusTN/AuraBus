@@ -156,12 +156,15 @@ export const googleLogin = async (req, res, next) => {
 
     const { idToken } = req.body;
 
-    const audiences = getGoogleAudiences();
-    if (audiences.length === 0 && process.env.NODE_ENV === "production") {
+    const allowMissingAudienceCheck =
+      process.env.NODE_ENV === "test" ||
+      process.env.GOOGLE_AUTH_ALLOW_MISSING_AUDIENCE === "true";
+
+    if (audiences.length === 0 && !allowMissingAudienceCheck) {
       return res.status(500).json({
         success: false,
         message:
-          "Google login is not configured (missing GOOGLE_AUTH_CLIENT_ID/GOOGLE_AUTH_CLIENT_IDS)",
+          "Google login is not configured (missing GOOGLE_AUTH_CLIENT_ID). Set it or use GOOGLE_AUTH_ALLOW_MISSING_AUDIENCE=true to bypass.",
       });
     }
 
@@ -324,7 +327,7 @@ export const getMe = async (req, res, next) => {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
-    res.json(user);
+    res.status(200).json({ success: true, user: user });
   } catch (error) {
     next(error);
   }

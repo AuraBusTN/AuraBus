@@ -36,7 +36,7 @@ components:
         password:
           type: string
           format: password
-          description: "Minimo 6 caratteri"
+          description: "Minimum 6 characters"
           example: "PasswordSegreta123!"
 
     RefreshTokenRequest:
@@ -46,7 +46,7 @@ components:
       properties:
         refreshToken:
           type: string
-          description: "Il token di lunga durata ricevuto al login"
+          description: "Long-lived token received at login"
           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
     GoogleLoginRequest:
@@ -67,10 +67,10 @@ components:
           example: true
         accessToken:
           type: string
-          description: "Token breve (15 min) per chiamate API"
+          description: "Short-lived token (1h) for API calls"
         refreshToken:
           type: string
-          description: "Token lungo (7 gg) per rinnovare la sessione"
+          description: "Long-lived token (7 days) to renew the session"
         user:
           $ref: '#/components/schemas/User'
 
@@ -82,4 +82,4 @@ components:
           example: true
         accessToken:
           type: string
-          description: "Nuovo Access Token valido"
+          description: "New valid Access Token"

@@ -8,7 +8,7 @@ export const apiLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: {
-    error: true,
+    success: false,
     message: "Too many requests from this IP, please try again later.",
   },
   skip: (req) => isTest || req.method === "OPTIONS",
@@ -20,7 +20,7 @@ export const authLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: {
-    error: true,
+    success: false,
     message: "Too many login attempts, account temporarily locked.",
   },
   skip: () => isTest,

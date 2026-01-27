@@ -205,8 +205,6 @@ paths:
         - Authentication
       summary: Logout
       description: Invalidates the specific Refresh Token by removing it from the database.
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -258,7 +256,7 @@ paths:
                   success:
                     type: boolean
                     example: true
-                  data:
+                  user:
                     $ref: '#/components/schemas/User'
         '401':
           description: Expired or missing Access Token

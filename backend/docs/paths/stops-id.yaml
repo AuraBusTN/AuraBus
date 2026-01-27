@@ -1,7 +1,8 @@
 paths:
   /stops/{id}:
     get:
-      summary: Ottieni dettagli di una specifica fermata
+      summary: Get Stop Details by ID
+      description: Retrieves detailed information about a specific stop using its numeric ID.
       tags: [Stops]
       parameters:
         - in: path
@@ -9,51 +10,51 @@ paths:
           schema:
             type: integer
           required: true
-          description: ID numerico della fermata
+          description: The numeric ID of the stop to retrieve.
       responses:
         '200':
-          description: Dettagli fermata restituiti con successo
+          description: Successful response with stop details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Stop'
+                $ref: '#/components/schemas/StopTrip'
         
         '400':
-          description: ID non valido
+          description: ID not a valid number
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         
         '404':
-          description: Fermata non trovata
+          description: Fermata not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
 
         '429':
-          description: Troppe richieste
+          description: Too Many Requests
           headers:
             RateLimit-Limit:
               schema:
                 type: integer
-              description: Limite massimo richieste
+              description: Maximum number of requests allowed
             RateLimit-Remaining:
               schema:
                 type: integer
-              description: Richieste rimanenti
+              description: Remaining requests
             RateLimit-Reset:
               schema:
                 type: integer
-              description: Secondi al reset
+              description: Seconds until reset
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RateLimitError'
 
         '500':
-          description: Errore interno del server (es. API esterne down)
+          description: Internal Server Error (e.g., external APIs down)
           content:
             application/json:
               schema:

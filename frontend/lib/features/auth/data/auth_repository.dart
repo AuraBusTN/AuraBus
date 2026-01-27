@@ -92,7 +92,7 @@ class AuthRepository {
   Future<User?> getUserProfile() async {
     try {
       final response = await _dioClient.dio.get('/auth/me');
-      return User.fromJson(response.data);
+      return User.fromJson(response.data['user']);
     } catch (_) {
       return null;
     }

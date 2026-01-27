@@ -22,7 +22,9 @@ class AppRoute {
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authListenable = AuthListenable(ref);
-  
+
+  ref.onDispose(authListenable.dispose);
+
   return GoRouter(
     refreshListenable: authListenable,
     navigatorKey: _rootKey,
@@ -30,7 +32,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: AppRoute.login,
-        parentNavigatorKey: _rootKey, 
+        parentNavigatorKey: _rootKey,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const LoginPage(),
@@ -60,26 +62,36 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: AppRoute.tickets,
-                pageBuilder: (context, state) => const NoTransitionPage(child: TicketPage()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: TicketPage()),
               ),
             ],
           ),
-          
+
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoute.map, 
-                pageBuilder: (context, state) => const NoTransitionPage(child: MapScreen()),
+                path: AppRoute.map,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: MapScreen()),
               ),
             ],
           ),
-          
+
           // Account
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: AppRoute.account,
-                pageBuilder: (context, state) => const NoTransitionPage(child: AccountPage()),
+                redirect: (context, state) {
+                  final authState = ref.read(authProvider);
+                  if (!authState.isAuthenticated) {
+                    return AppRoute.login;
+                  }
+                  return null;
+                },
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: AccountPage()),
               ),
             ],
           ),
