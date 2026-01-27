@@ -1,34 +1,59 @@
-
+paths:
   /stops/{id}:
     get:
-      summary: Retrieves real-time trip updates for a specific stop
-      tags:
-        - Stops
+      summary: Ottieni dettagli di una specifica fermata
+      tags: [Stops]
       parameters:
         - in: path
           name: id
-          required: true
           schema:
             type: integer
-            example: 247
-          description: The unique ID of the stop to query.
+          required: true
+          description: ID numerico della fermata
       responses:
         '200':
-          description: A list of upcoming trips for the selected stop.
+          description: Dettagli fermata restituiti con successo
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StopTrip'
-        '500':
-          description: Internal server error, or error from the external API due to invalid data (e.g., malformed JSON, missing required fields, or unexpected data types). A 500 error is returned when the external API responds but the data cannot be processed. A 502 error is returned when the external API is unreachable or returns a non-successful HTTP response.
+                $ref: '#/components/schemas/Stop'
+        
+        '400':
+          description: ID non valido
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '502':
-          description: Bad Gateway. Unable to contact the external API (upstream).
+        
+        '404':
+          description: Fermata non trovata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        '429':
+          description: Troppe richieste
+          headers:
+            RateLimit-Limit:
+              schema:
+                type: integer
+              description: Limite massimo richieste
+            RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Richieste rimanenti
+            RateLimit-Reset:
+              schema:
+                type: integer
+              description: Secondi al reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+
+        '500':
+          description: Errore interno del server (es. API esterne down)
           content:
             application/json:
               schema:

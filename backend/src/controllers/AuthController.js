@@ -49,7 +49,8 @@ export const signup = async (req, res, next) => {
     const validationResponse = sendValidationErrorIfAny(req, res);
     if (validationResponse) return;
 
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, password } = req.body;
+    const email = req.body.email.toLowerCase();
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -96,7 +97,8 @@ export const login = async (req, res, next) => {
     const validationResponse = sendValidationErrorIfAny(req, res);
     if (validationResponse) return;
 
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = req.body.email.toLowerCase();
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -248,12 +250,6 @@ export const refreshToken = async (req, res, next) => {
   if (validationResponse) return;
 
   const { refreshToken } = req.body;
-
-  if (!refreshToken) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Refresh Token Required" });
-  }
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);

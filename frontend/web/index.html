@@ -19,7 +19,7 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -46,22 +46,25 @@
   <script src="env.js"></script>
 
   <script>
-    if (window.env) {
-      if (window.env.GOOGLE_MAPS_API_KEY) {
-        var script = document.createElement('script');
-        script.src = "https://maps.googleapis.com/maps/api/js?key=" + window.env.GOOGLE_MAPS_API_KEY + "&v=weekly&libraries=marker";
-        script.defer = true;
-        document.head.appendChild(script);
-      }
+    function loadFlutterApp() {
+      var script = document.createElement('script');
+      script.src = "flutter_bootstrap.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
 
-      if (window.env.GOOGLE_AUTH_CLIENT_ID) {
-        var meta = document.createElement('meta');
-        meta.name = "google-signin-client_id";
-        meta.content = window.env.GOOGLE_AUTH_CLIENT_ID;
-        document.head.appendChild(meta);
-      }
+    if (window.env && window.env.GOOGLE_MAPS_API_KEY) {
+      var script = document.createElement('script');
+      script.src = "https://maps.googleapis.com/maps/api/js?key=" + window.env.GOOGLE_MAPS_API_KEY + "&v=weekly&libraries=marker";
+      script.defer = true;
+      script.onload = loadFlutterApp;
+      script.onerror = loadFlutterApp;
+      
+      document.head.appendChild(script);
+    } else {
+      loadFlutterApp();
     }
   </script>
-  <script src="flutter_bootstrap.js" async></script>
-</body>
+  
+  </body>
 </html>

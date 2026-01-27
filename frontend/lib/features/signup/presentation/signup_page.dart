@@ -29,23 +29,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
   bool termsChecked = false;
-  ProviderSubscription<AuthState>? _authSub;
-
-  @override
-  void initState() {
-    super.initState();
-    _authSub = ref.listenManual<AuthState>(authProvider, (previous, next) {
-      final wasAuthed = previous?.isAuthenticated ?? false;
-      final isAuthed = next.isAuthenticated;
-      if (!wasAuthed && isAuthed && mounted) {
-        context.go(AppRoute.account);
-      }
-    });
-  }
 
   @override
   void dispose() {
-    _authSub?.close();
     firstNameController.dispose();
     lastNameController.dispose();
     emailController.dispose();
