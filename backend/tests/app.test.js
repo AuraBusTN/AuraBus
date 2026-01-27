@@ -235,7 +235,7 @@ describe("Integration Test: Auth API", () => {
       .set("Authorization", `Bearer ${signupRes.body.accessToken}`);
 
     expect(meRes.statusCode).toBe(200);
-    expect(meRes.body.email).toBe("mario@example.com");
+    expect(meRes.body.user.email).toBe("mario@example.com");
   });
 
   it("POST /auth/signup rejects duplicate email", async () => {
