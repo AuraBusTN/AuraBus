@@ -1,4 +1,5 @@
 @TestOn('browser')
+library;
 import 'package:aurabus/features/map/presentation/map_controller.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'package:aurabus/features/map/data/models/stop_trip_info.dart';
