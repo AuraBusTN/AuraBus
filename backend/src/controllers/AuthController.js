@@ -156,6 +156,8 @@ export const googleLogin = async (req, res, next) => {
 
     const { idToken } = req.body;
 
+    const audiences = getGoogleAudiences();
+
     const allowMissingAudienceCheck =
       process.env.NODE_ENV === "test" ||
       process.env.GOOGLE_AUTH_ALLOW_MISSING_AUDIENCE === "true";
