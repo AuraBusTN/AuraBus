@@ -16,7 +16,18 @@ const userSchema = new mongoose.Schema(
     picture: { type: String, required: false },
     refreshToken: { type: [String], default: [] },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      versionKey: false,
+      transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.password;
+        delete ret.refreshToken;
+      },
+    },
+  },
 );
 
 export const User = mongoose.model("User", userSchema);
