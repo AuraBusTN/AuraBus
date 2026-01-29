@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:aurabus/core/network/dio_client.dart';
 import 'package:aurabus/core/services/token_storage_service.dart';
+import 'package:aurabus/core/errors/auth_exception.dart';
 import 'models/user_model.dart';
 
 class AuthRepository {
@@ -23,7 +24,10 @@ class AuthRepository {
 
       return User.fromJson(response.data['user']);
     } on DioException catch (e) {
-      throw e.response?.data['message'] ?? 'Error during login';
+      final message = e.response?.data['message'] ?? 'Error during login';
+      throw AuthException(message, statusCode: e.response?.statusCode);
+    } catch (e) {
+      throw AuthException('Unexpected error during login: $e');
     }
   }
 
@@ -51,10 +55,10 @@ class AuthRepository {
 
       return User.fromJson(response.data['user']);
     } on DioException catch (e) {
-      if (e.response?.data != null && e.response!.data['message'] != null) {
-        throw e.response!.data['message'];
-      }
-      throw 'Error during signup';
+      final message = e.response?.data['message'] ?? 'Error during signup';
+      throw AuthException(message, statusCode: e.response?.statusCode);
+    } catch (e) {
+      throw AuthException('Unexpected error during signup: $e');
     }
   }
 
@@ -72,7 +76,11 @@ class AuthRepository {
 
       return User.fromJson(response.data['user']);
     } on DioException catch (e) {
-      throw e.response?.data['message'] ?? 'Error during Google login';
+      final message =
+          e.response?.data['message'] ?? 'Error during Google login';
+      throw AuthException(message, statusCode: e.response?.statusCode);
+    } catch (e) {
+      throw AuthException('Unexpected error during Google login: $e');
     }
   }
 

@@ -12,11 +12,18 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    if (json['id'] == null || (json['id'] as String).isEmpty) {
+      throw const FormatException('Missing required field: id');
+    }
+    if (json['email'] == null || (json['email'] as String).isEmpty) {
+      throw const FormatException('Missing required field: email');
+    }
+
     return User(
-      id: json['id'] ?? '',
+      id: json['id'] as String,
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
-      email: json['email'] ?? '',
+      email: json['email'] as String,
     );
   }
 }

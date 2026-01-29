@@ -20,11 +20,12 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: {
       virtuals: true,
-      versionKey: false,
+      versionKey: true,
       transform: function (doc, ret) {
         delete ret._id;
         delete ret.password;
         delete ret.refreshToken;
+        delete ret.__v;
       },
     },
   },
