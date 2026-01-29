@@ -16,24 +16,40 @@ process.on("unhandledRejection", (err) => {
   process.exit(1);
 });
 
+let isJobRunning = false;
+
 async function startServer() {
   try {
     await loaders();
 
-    cron.schedule("*/1 * * * *", () => {
-      runIngestionJob();
-    });
-    console.log("⏰ Ingestion Cron Job scheduled (every 1 minute).");
+    cron.schedule("*/1 * * * *", async () => {
+      if (isJobRunning) {
+        console.warn("⚠️  Previous Job still running. Skip.");
+        return;
+      }
 
-    app.listen(config.api.port, () => {
+      isJobRunning = true;
+
+      try {
+        await runIngestionJob();
+      } catch (error) {
+        console.error("❌ Critical Error inside the Cron Job:", error);
+      } finally {
+        isJobRunning = false;
+      }
+    });
+
+    console.log("⏰ Ingestion Cron Job scheduled (Safe Mode).");
+
+    app.listen(config.api.port || config.port || 8888, () => {
       console.log(`
         ################################################
-        🛡️  Server listening on port: ${config.api.port} 🛡️
+        🛡️  Server listening on port: ${config.api.port || config.port || 8888} 🛡️
         ################################################
       `);
     });
   } catch (err) {
-    console.error("❌ Failed to start server:", err);
+    console.error("❌ Error starting server:", err);
     process.exit(1);
   }
 }

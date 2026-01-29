@@ -29,7 +29,7 @@ export const runIngestionJob = async () => {
   if (currentHour >= 1 && currentHour < 5) return;
 
   console.log(
-    `🎯 [${now.toISOString()}] Ingestion Focalized (Next Stop Only)...`,
+    `🎯 [${now.toISOString()}] Ingestion (Cluster + Terminus Fix)...`,
   );
 
   if (!config.tnt.url) return;
@@ -50,6 +50,7 @@ export const runIngestionJob = async () => {
       if (!Array.isArray(trips) || trips.length === 0) continue;
 
       const metricsBatch = [];
+      const pendingUpdates = new Map();
 
       for (const trip of trips) {
         if (!trip.stopTimes || trip.stopTimes.length === 0) continue;
@@ -61,45 +62,80 @@ export const runIngestionJob = async () => {
           (a, b) => a.stopSequence - b.stopSequence,
         );
 
-        const nextStop = sortedStops.find(
+        let nextStopIndex = sortedStops.findIndex(
           (s) => s.stopSequence > lastPassedSequence,
         );
 
-        if (!nextStop) continue;
-
-        const uniqueKey = `${trip.tripId}_${nextStop.stopId}`;
-        const lastRecordedDelay = lastReadings.get(uniqueKey);
-
-        if (
-          lastRecordedDelay !== undefined &&
-          lastRecordedDelay === currentDelay
-        ) {
-          totalSkipped++;
-          continue;
+        if (nextStopIndex === -1) {
+          const lastStop = sortedStops[sortedStops.length - 1];
+          if (lastStop.stopSequence === lastPassedSequence) {
+            nextStopIndex = sortedStops.length - 1;
+          } else {
+            continue;
+          }
         }
 
-        lastReadings.set(uniqueKey, currentDelay);
+        const stopsToSave = [];
 
-        const [h, m] = nextStop.arrivalTime.split(":");
-        const arrivalDate = new Date();
-        arrivalDate.setHours(h, m, 0, 0);
+        const primaryNextStop = sortedStops[nextStopIndex];
+        stopsToSave.push(primaryNextStop);
 
-        metricsBatch.push({
-          timestamp: arrivalDate,
-          metadata: {
-            tripId: trip.tripId,
-            routeId: String(trip.routeId),
-            directionId: trip.directionId,
-            stopId: nextStop.stopId,
-            type: trip.type,
-          },
-          delay: currentDelay,
-          ingestedAt: now,
-        });
+        let lookAhead = 1;
+        while (nextStopIndex + lookAhead < sortedStops.length) {
+          const candidateStop = sortedStops[nextStopIndex + lookAhead];
+          if (candidateStop.arrivalTime === primaryNextStop.arrivalTime) {
+            stopsToSave.push(candidateStop);
+            lookAhead++;
+          } else {
+            break;
+          }
+        }
+
+        for (const stop of stopsToSave) {
+          const uniqueKey = `${trip.tripId}_${stop.stopId}`;
+          const lastRecordedDelay = lastReadings.get(uniqueKey);
+
+          if (
+            lastRecordedDelay !== undefined &&
+            lastRecordedDelay === currentDelay
+          ) {
+            totalSkipped++;
+            continue;
+          }
+
+          pendingUpdates.set(uniqueKey, currentDelay);
+
+          const [hStr, mStr] = stop.arrivalTime.split(":");
+          const h = parseInt(hStr, 10);
+          const m = parseInt(mStr, 10);
+
+          let arrivalDate = new Date(now);
+          arrivalDate.setHours(h, m, 0, 0);
+
+          if (currentHour > 20 && h < 4) {
+            arrivalDate.setDate(arrivalDate.getDate() + 1);
+          }
+
+          metricsBatch.push({
+            timestamp: arrivalDate,
+            metadata: {
+              tripId: trip.tripId,
+              routeId: String(trip.routeId),
+              directionId: trip.directionId,
+              stopId: stop.stopId,
+              type: trip.type,
+            },
+            delay: currentDelay,
+            ingestedAt: now,
+          });
+        }
       }
 
       if (metricsBatch.length > 0) {
         await TripMetric.insertMany(metricsBatch, { ordered: false });
+        for (const [key, val] of pendingUpdates) {
+          lastReadings.set(key, val);
+        }
         totalSaved += metricsBatch.length;
       }
 
@@ -110,6 +146,6 @@ export const runIngestionJob = async () => {
   }
 
   console.log(
-    `✅ Cycle finished. New records (Next Stop Only): ${totalSaved} | Unchanged: ${totalSkipped}`,
+    `✅ Cycle finished. New: ${totalSaved} | Skipped: ${totalSkipped}`,
   );
 };
