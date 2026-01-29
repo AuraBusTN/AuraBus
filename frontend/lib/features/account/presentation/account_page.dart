@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
-import 'package:aurabus/routing/router.dart';
 import 'package:aurabus/features/account/widgets/account_info_body.dart';
 import 'package:aurabus/features/account/widgets/account_section.dart';
 import 'package:aurabus/features/account/widgets/contact_us_body.dart';
 import 'package:aurabus/features/account/widgets/subscription_body.dart';
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
+import 'package:aurabus/routing/router.dart';
+import 'package:go_router/go_router.dart';
 
 enum AccountSectionType { info, subscription, contact, ranking }
 
-class AccountPage extends StatefulWidget {
+class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  ConsumerState<AccountPage> createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountPageState extends ConsumerState<AccountPage> {
   final Set<AccountSectionType> expandedSections = {};
   bool busNotificationEnabled = true;
 
@@ -30,6 +32,7 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final user = ref.watch(authProvider).user;
 
     return Scaffold(
       body: SafeArea(
@@ -49,6 +52,9 @@ class _AccountPageState extends State<AccountPage> {
                 isExpanded: expandedSections.contains(AccountSectionType.info),
                 onTap: () => toggleSection(AccountSectionType.info),
                 child: AccountInfoBody(
+                  firstName: user?.firstName ?? "Utente",
+                  lastName: user?.lastName ?? "",
+                  email: user?.email ?? "",
                   busNotificationEnabled: busNotificationEnabled,
                   onNotificationToggle: (v) =>
                       setState(() => busNotificationEnabled = v),
@@ -84,10 +90,17 @@ class _AccountPageState extends State<AccountPage> {
                 onTap: () => toggleSection(AccountSectionType.ranking),
               ),
               const SizedBox(height: 12),
+
               AccountSection(
                 title: l10n.logoutButton,
                 isExpanded: false,
-                onTap: () => context.push(AppRoute.login),
+                onTap: () async {
+                  await ref.read(authProvider.notifier).logout();
+                  if (context.mounted) {
+                    context.go(AppRoute.map);
+                    context.push(AppRoute.login);
+                  }
+                },
               ),
             ],
           ),

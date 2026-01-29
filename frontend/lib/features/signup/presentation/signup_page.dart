@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/common/widgets/generic_button.dart';
@@ -6,15 +7,17 @@ import 'package:aurabus/common/widgets/google_button.dart';
 import 'package:aurabus/common/widgets/custom_text_field.dart';
 import 'package:aurabus/features/signup/widgets/terms_and_conditions.dart';
 import 'package:aurabus/common/widgets/fade_in_slide.dart';
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
+import 'package:aurabus/routing/router.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  ConsumerState<SignupPage> createState() => _SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupPageState extends ConsumerState<SignupPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -22,6 +25,8 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
   bool termsChecked = false;
 
@@ -35,7 +40,7 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  void _handleSignup() {
+  Future<void> _handleSignup() async {
     final l10n = AppLocalizations.of(context)!;
     if (_formKey.currentState!.validate()) {
       if (!termsChecked) {
@@ -44,7 +49,46 @@ class _SignupPageState extends State<SignupPage> {
         ).showSnackBar(SnackBar(content: Text(l10n.termsError)));
         return;
       }
-      // TODO: Implement signup logic
+
+      FocusScope.of(context).unfocus();
+
+      final success = await ref
+          .read(authProvider.notifier)
+          .signup(
+            firstNameController.text.trim(),
+            lastNameController.text.trim(),
+            emailController.text.trim(),
+            passwordController.text,
+          );
+
+      if (mounted) {
+        if (success) {
+          context.go(AppRoute.account);
+        } else {
+          final error = ref.read(authProvider).error ?? "Registration failed";
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error), backgroundColor: Colors.red),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _handleGoogleLogin() async {
+    FocusScope.of(context).unfocus();
+
+    final success = await ref.read(authProvider.notifier).loginWithGoogle();
+
+    if (!mounted) return;
+    if (success) {
+      context.go(AppRoute.account);
+    } else {
+      final error = ref.read(authProvider).error;
+      if (error != null && error.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
@@ -52,6 +96,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final l10n = AppLocalizations.of(context)!;
+    final isLoading = ref.watch(authProvider).isLoading;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -134,9 +179,10 @@ class _SignupPageState extends State<SignupPage> {
                               label: l10n.emailLabel,
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
-                              // TODO: Replace with more robust validation
                               validator: (v) =>
-                                  !v!.contains('@') ? l10n.invalidEmail : null,
+                                  (v == null || !_emailRegex.hasMatch(v.trim()))
+                                  ? l10n.invalidEmail
+                                  : null,
                             ),
 
                             CustomTextField(
@@ -144,9 +190,9 @@ class _SignupPageState extends State<SignupPage> {
                               label: l10n.passwordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
-                              // TODO: Replace with more robust validation
-                              validator: (v) =>
-                                  v!.length < 6 ? l10n.passwordMinChars : null,
+                              validator: (v) => (v == null || v.length < 6)
+                                  ? l10n.passwordMinChars
+                                  : null,
                             ),
 
                             CustomTextField(
@@ -154,9 +200,14 @@ class _SignupPageState extends State<SignupPage> {
                               label: l10n.confirmPasswordLabel,
                               icon: Icons.lock_outline,
                               obscureText: true,
-                              validator: (v) => v != passwordController.text
-                                  ? l10n.passwordMismatch
-                                  : null,
+                              validator: (v) {
+                                if (v == null || v.isEmpty) {
+                                  return l10n.requiredField;
+                                }
+                                return v != passwordController.text
+                                    ? l10n.passwordMismatch
+                                    : null;
+                              },
                             ),
                           ],
                         ),
@@ -175,10 +226,12 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
 
-                            GenericButton(
-                              textLabel: l10n.signupButton,
-                              onPressed: _handleSignup,
-                            ),
+                            isLoading
+                                ? const CircularProgressIndicator()
+                                : GenericButton(
+                                    textLabel: l10n.signupButton,
+                                    onPressed: _handleSignup,
+                                  ),
 
                             const SizedBox(height: 25),
 
@@ -207,7 +260,9 @@ class _SignupPageState extends State<SignupPage> {
 
                             const SizedBox(height: 25),
 
-                            GoogleButton(onPressed: () {}),
+                            GoogleButton(
+                              onPressed: isLoading ? null : _handleGoogleLogin,
+                            ),
 
                             const SizedBox(height: 100),
                           ],

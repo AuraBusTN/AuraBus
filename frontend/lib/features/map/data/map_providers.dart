@@ -2,13 +2,17 @@ import 'package:aurabus/features/map/data/models/route_info.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 
 import 'map_repository.dart';
 import 'map_marker_loader.dart';
 import 'models/stop_info.dart';
 import 'models/stop_trip_info.dart';
 
-final mapRepositoryProvider = Provider((ref) => MapRepository());
+final mapRepositoryProvider = Provider((ref) {
+  final dioClient = ref.watch(dioClientProvider);
+  return MapRepository(dioClient);
+});
 
 final mapStyleProvider = FutureProvider<String?>((ref) async {
   ref.keepAlive();
