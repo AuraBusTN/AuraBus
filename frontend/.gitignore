@@ -47,3 +47,6 @@ app.*.map.json
 /android/app/release
 secrets.dart
 build_web.sh
+
+/web/env.js
+/ios/Flutter/Keys.xcconfig

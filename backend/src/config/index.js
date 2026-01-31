@@ -12,7 +12,15 @@ if (fs.existsSync(envPath)) {
   console.log(`✅ .env found at: ${envPath}`);
   dotenv.config({ path: envPath });
 } else {
-  console.warn(`⚠️  WARNING: .env file NOT found at: ${envPath}`);
+  if (process.env.NODE_ENV === "production" || process.env.MONGO_USER) {
+    console.log(
+      `ℹ️  .env file not found, but environment variables seem to be set. Skipping file load.`,
+    );
+  } else {
+    console.warn(
+      `⚠️  WARNING: .env file NOT found at: ${envPath}. Ensure variables are set via environment.`,
+    );
+  }
 }
 
 const config = {
@@ -43,8 +51,8 @@ if (!config.db.pass) missingTntConfig.push("MONGO_PASSWORD");
 if (missingTntConfig.length > 0) {
   throw new Error(
     `❌ CRITICAL ERROR: Missing required TNT API configuration: ${missingTntConfig.join(
-      ", "
-    )}`
+      ", ",
+    )}`,
   );
 }
 

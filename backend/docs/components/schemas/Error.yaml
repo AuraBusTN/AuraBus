@@ -3,7 +3,9 @@ components:
     Error:
       type: object
       properties:
-        error:
+        success:
+          type: boolean
+          example: false
+        message:
           type: string
-          description: Error message
-          example: "An error occurred."
+          example: "Error description"

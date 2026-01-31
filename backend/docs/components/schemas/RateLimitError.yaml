@@ -1,0 +1,13 @@
+components:
+  schemas:
+    RateLimitError:
+      type: object
+      properties:
+        error:
+          type: boolean
+          example: true
+          description: Indicates that a rate limit error occurred
+        message:
+          type: string
+          example: Too many requests from this IP, please try again later.
+          description: Error message describing the limit reached

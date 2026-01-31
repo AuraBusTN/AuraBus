@@ -37,3 +37,4 @@ Flutter/Debug.xcconfig
 Flutter/Release.xcconfig
 Runner/Keys.xcconfig
 Runner.xcodeproj/project.pbxproj
+GoogleService-Info.plist

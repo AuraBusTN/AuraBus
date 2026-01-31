@@ -1,52 +1,39 @@
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:aurabus/routing/router.dart';
-import 'package:aurabus/features/account/presentation/account_page.dart';
-import 'package:aurabus/features/map/presentation/map_screen.dart';
-import 'package:aurabus/features/tickets/presentation/ticket_page.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 
-class HomePage extends StatefulWidget {
-  final Widget child;
-  const HomePage({super.key, required this.child});
+class HomePage extends ConsumerWidget {
+  final StatefulNavigationShell navigationShell;
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+  const HomePage({super.key, required this.navigationShell});
 
-class _HomePageState extends State<HomePage> {
-  int _indexFromLocation(BuildContext context) {
-    final loc = GoRouterState.of(context).uri.toString();
-    if (loc.startsWith(AppRoute.tickets)) return 0;
-    if (loc.startsWith(AppRoute.map)) return 1;
-    if (loc.startsWith(AppRoute.account)) return 2;
-    return 1;
+  void _onItemTapped(int index, BuildContext context, WidgetRef ref) {
+    if (index == 2) {
+      final isLoggedIn = ref.read(authProvider).isAuthenticated;
+
+      if (!isLoggedIn) {
+        context.push(AppRoute.login);
+        return;
+      }
+    }
+
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    final currentIndex = _indexFromLocation(context);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: const [TicketPage(), MapScreen(), AccountPage()],
-      ),
+      body: navigationShell,
+
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (i) {
-          switch (i) {
-            case 0:
-              context.go(AppRoute.tickets);
-              break;
-            case 1:
-              context.go(AppRoute.map);
-              break;
-            case 2:
-              context.go(AppRoute.account);
-              break;
-          }
-        },
+        currentIndex: navigationShell.currentIndex,
+        onTap: (index) => _onItemTapped(index, context, ref),
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.confirmation_number_outlined),

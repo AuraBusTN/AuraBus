@@ -18,6 +18,9 @@ services:
       API_URL: ${API_URL}
       API_USER: ${API_USER}
       API_PASSWORD: ${API_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      REFRESH_SECRET: ${REFRESH_SECRET}
+      GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
 
   db:
     container_name: aurabus_mongo_db
