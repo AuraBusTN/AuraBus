@@ -25,5 +25,5 @@ components:
           example: 1250
         rank:
           type: integer
-          description: Position in leaderboard (only in responses leaderboard)
+          description: Position in the leaderboard
           example: 5
