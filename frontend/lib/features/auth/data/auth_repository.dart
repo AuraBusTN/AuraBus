@@ -3,6 +3,7 @@ import 'package:aurabus/core/network/dio_client.dart';
 import 'package:aurabus/core/services/token_storage_service.dart';
 import 'package:aurabus/core/errors/auth_exception.dart';
 import 'models/user_model.dart';
+import 'package:aurabus/features/ranking/data/models/leaderboard_data.dart';
 
 class AuthRepository {
   final DioClient _dioClient;
@@ -103,6 +104,26 @@ class AuthRepository {
       return User.fromJson(response.data['user']);
     } catch (_) {
       return null;
+    }
+  }
+
+  Future<LeaderboardData> getLeaderboard() async {
+    try {
+      final response = await _dioClient.dio.get('/users/leaderboard');
+      final data = response.data;
+
+      final topList = (data['topUsers'] as List)
+          .map((e) => User.fromJson(e))
+          .toList();
+
+      User? meUser;
+      if (data['me'] != null) {
+        meUser = User.fromJson(data['me']);
+      }
+
+      return LeaderboardData(topUsers: topList, me: meUser);
+    } catch (e) {
+      throw AuthException('Error loading leaderboard: $e');
     }
   }
 }

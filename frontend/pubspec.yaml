@@ -46,6 +46,7 @@ dependencies:
     google_sign_in_web: ^1.1.0
     pointer_interceptor: ^0.10.1
     google_sign_in_platform_interface: ^3.1.0
+    skeletonizer: ^2.1.2
 
 dev_dependencies:
     flutter_test:

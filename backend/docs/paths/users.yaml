@@ -1,0 +1,30 @@
+/users/leaderboard:
+  get:
+    summary: Obtain Leaderboard
+    description: Returns the Top 10 users and the current user's position.
+    tags:
+      - Users
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: Leaderboard successfully retrieved
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                topUsers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
+                me:
+                  description: Current user object (populated if the user is not in the top 10)
+                  nullable: true
+                  allOf:
+                    - $ref: '#/components/schemas/User'
+      '401':
+        $ref: '#/components/schemas/Error'

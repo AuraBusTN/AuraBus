@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
     googleSub: { type: String, required: false, index: true },
     picture: { type: String, required: false },
     refreshToken: { type: [String], default: [] },
+    points: { type: Number, default: 0, index: true },
   },
   {
     timestamps: true,

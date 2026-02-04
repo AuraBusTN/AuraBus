@@ -1,3 +1,4 @@
+
 components:
   schemas:
     User:
@@ -5,14 +6,25 @@ components:
       properties:
         id:
           type: string
-          example: "60d0fe4f5311236168a109ca"
+          example: 60d0fe4f5311236168a109ca
         firstName:
           type: string
-          example: "Mario"
+          example: Mario
         lastName:
           type: string
-          example: "Rossi"
+          example: Rossi
         email:
           type: string
           format: email
-          example: "mario.rossi@email.com"
+          example: mario.rossi@example.com
+        picture:
+          type: string
+          example: https://example.com/pic.png
+        points:
+          type: integer
+          description: Points accumulated by the user (only in responses leaderboard)
+          example: 1250
+        rank:
+          type: integer
+          description: Position in leaderboard (only in responses leaderboard)
+          example: 5

@@ -49,7 +49,7 @@ export const signup = async (req, res, next) => {
     const validationResponse = sendValidationErrorIfAny(req, res);
     if (validationResponse) return;
 
-    const { firstName, lastName, password } = req.body;
+    const { firstName, lastName, password, points } = req.body;
     const email = req.body.email.toLowerCase();
 
     const existingUser = await User.findOne({ email });
@@ -66,12 +66,13 @@ export const signup = async (req, res, next) => {
       firstName,
       lastName,
       email,
+      points,
       password: hashedPassword,
       authProvider: "local",
     });
 
-    const accessToken = generateAccessToken(newUser._id);
-    const refreshToken = generateRefreshToken(newUser._id);
+    const accessToken = generateAccessToken(newUser.id);
+    const refreshToken = generateRefreshToken(newUser.id);
 
     newUser.refreshToken.push(refreshToken);
     await newUser.save();
@@ -81,10 +82,12 @@ export const signup = async (req, res, next) => {
       accessToken,
       refreshToken,
       user: {
-        id: newUser._id,
+        id: newUser.id,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         email: newUser.email,
+        points: newUser.points,
+        picture: newUser.picture,
       },
     });
   } catch (error) {
@@ -121,8 +124,8 @@ export const login = async (req, res, next) => {
         .json({ success: false, message: "Wrong password" });
     }
 
-    const accessToken = generateAccessToken(user._id);
-    const newRefreshToken = generateRefreshToken(user._id);
+    const accessToken = generateAccessToken(user.id);
+    const newRefreshToken = generateRefreshToken(user.id);
 
     let oldTokens = user.refreshToken || [];
 
@@ -138,10 +141,12 @@ export const login = async (req, res, next) => {
       accessToken,
       refreshToken: newRefreshToken,
       user: {
-        id: user._id,
+        id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        points: user.points,
+        picture: user.picture,
       },
     });
   } catch (error) {
@@ -226,8 +231,8 @@ export const googleLogin = async (req, res, next) => {
       user.picture = user.picture || payload.picture;
     }
 
-    const accessToken = generateAccessToken(user._id);
-    const newRefreshToken = generateRefreshToken(user._id);
+    const accessToken = generateAccessToken(user.id);
+    const newRefreshToken = generateRefreshToken(user.id);
 
     let oldTokens = user.refreshToken || [];
     if (oldTokens.length >= 5) oldTokens.shift();
@@ -239,10 +244,12 @@ export const googleLogin = async (req, res, next) => {
       accessToken,
       refreshToken: newRefreshToken,
       user: {
-        id: user._id,
+        id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        points: user.points,
+        picture: user.picture,
       },
     });
   } catch (error) {
@@ -274,8 +281,8 @@ export const refreshToken = async (req, res, next) => {
 
     user.refreshToken = user.refreshToken.filter((t) => t !== refreshToken);
 
-    const newAccessToken = generateAccessToken(user._id);
-    const newRefreshToken = generateRefreshToken(user._id);
+    const newAccessToken = generateAccessToken(user.id);
+    const newRefreshToken = generateRefreshToken(user.id);
 
     user.refreshToken.push(newRefreshToken);
     await user.save();
@@ -309,7 +316,7 @@ export const logout = async (req, res, next) => {
 
     if (user) {
       user.refreshToken = user.refreshToken.filter(
-        (token) => token !== refreshToken
+        (token) => token !== refreshToken,
       );
       await user.save();
     }
@@ -323,7 +330,7 @@ export const logout = async (req, res, next) => {
 export const getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId).select(
-      "-password -refreshToken"
+      "-password -refreshToken",
     );
     if (!user)
       return res

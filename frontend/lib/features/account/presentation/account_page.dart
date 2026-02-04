@@ -55,6 +55,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   firstName: user?.firstName ?? "Utente",
                   lastName: user?.lastName ?? "",
                   email: user?.email ?? "",
+                  profilePictureUrl: user?.picture,
                   busNotificationEnabled: busNotificationEnabled,
                   onNotificationToggle: (v) =>
                       setState(() => busNotificationEnabled = v),
@@ -87,7 +88,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 isExpanded: expandedSections.contains(
                   AccountSectionType.ranking,
                 ),
-                onTap: () => toggleSection(AccountSectionType.ranking),
+                onTap: () => context.push(AppRoute.ranking),
               ),
               const SizedBox(height: 12),
 
