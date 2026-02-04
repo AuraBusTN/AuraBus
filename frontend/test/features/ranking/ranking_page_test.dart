@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
+import '../../utils/device_definitions.dart';
 
 final mockUser = User(
   id: '1',
@@ -50,22 +51,51 @@ void main() {
     );
   }
 
-  testWidgets('RankingPage shows user points and leaderboard list', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      createRankingPage([
-        authProvider.overrideWith(() => FakeAuthNotifier(mockUser)),
-        leaderboardProvider.overrideWith(
-          (ref) => Future.value(mockLeaderboardData),
-        ),
-      ]),
-    );
+  group('RankingPage Functional Tests', () {
+    testWidgets('RankingPage shows user points and leaderboard list', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        createRankingPage([
+          authProvider.overrideWith(() => FakeAuthNotifier(mockUser)),
+          leaderboardProvider.overrideWith(
+            (ref) => Future.value(mockLeaderboardData),
+          ),
+        ]),
+      );
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.text('1500'), findsOneWidget);
-    expect(find.text('Top'), findsOneWidget);
+      expect(find.text('1500'), findsOneWidget);
+      expect(find.text('Top'), findsOneWidget);
+    });
+  });
+
+  group('RankingPage Responsiveness Tests', () {
+    for (var device in TestDevices.all) {
+      testWidgets(
+        'Renders correctly on ${device.name} (${device.size.width}x${device.size.height})',
+        (tester) async {
+          tester.view.physicalSize = device.size;
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(tester.view.resetPhysicalSize);
+
+          await tester.pumpWidget(
+            createRankingPage([
+              authProvider.overrideWith(() => FakeAuthNotifier(mockUser)),
+              leaderboardProvider.overrideWith(
+                (ref) => Future.value(mockLeaderboardData),
+              ),
+            ]),
+          );
+
+          await tester.pumpAndSettle();
+
+          expect(find.text('1500'), findsOneWidget);
+          expect(find.text('Top'), findsOneWidget);
+        },
+      );
+    }
   });
 }
 

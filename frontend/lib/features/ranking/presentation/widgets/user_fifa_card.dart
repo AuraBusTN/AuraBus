@@ -55,33 +55,37 @@ class UserFifaCard extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: Icon(Icons.shield, color: current.color, size: 35),
                 ),
-                const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.yourTier.toUpperCase(),
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.yourTier.toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    Text(
-                      RankingUtils.getTierName(
-                        context,
-                        current.type,
-                      ).toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w900,
+                      Text(
+                        RankingUtils.getTierName(
+                          context,
+                          current.type,
+                        ).toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w900,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -120,19 +124,24 @@ class UserFifaCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${l10n.nextTier} ${RankingUtils.getTierName(context, next.type)}',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
+                      Flexible(
+                        child: Text(
+                          '${l10n.nextTier} ${RankingUtils.getTierName(context, next.type)}',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      const SizedBox(width: 8),
                       Text(
                         '${next.minPoints - points} ${l10n.missingPoints}',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 12,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
