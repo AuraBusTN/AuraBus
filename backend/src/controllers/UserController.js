@@ -4,16 +4,24 @@ export const getLeaderboard = async (req, res, next) => {
   try {
     const currentUserId = req.userId;
 
-    const [topUsers, currentUser, countAbove] = await Promise.all([
+    const currentUser = await User.findById(currentUserId).select(
+      "firstName lastName points",
+    );
+
+    if (!currentUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const [topUsers, countAbove] = await Promise.all([
       User.find()
         .sort({ points: -1 })
         .limit(10)
         .select("firstName lastName points"),
 
-      User.findById(currentUserId).select("firstName lastName points"),
-
       User.countDocuments({
-        points: { $gt: (await User.findById(currentUserId)).points },
+        points: { $gt: currentUser.points },
       }),
     ]);
 

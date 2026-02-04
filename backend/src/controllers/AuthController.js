@@ -49,7 +49,7 @@ export const signup = async (req, res, next) => {
     const validationResponse = sendValidationErrorIfAny(req, res);
     if (validationResponse) return;
 
-    const { firstName, lastName, password, points } = req.body;
+    const { firstName, lastName, password } = req.body;
     const email = req.body.email.toLowerCase();
 
     const existingUser = await User.findOne({ email });
@@ -66,7 +66,6 @@ export const signup = async (req, res, next) => {
       firstName,
       lastName,
       email,
-      points,
       password: hashedPassword,
       authProvider: "local",
     });

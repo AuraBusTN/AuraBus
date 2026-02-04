@@ -122,8 +122,12 @@ class AuthRepository {
       }
 
       return LeaderboardData(topUsers: topList, me: meUser);
+    } on DioException catch (e) {
+      final message =
+          e.response?.data['message'] ?? 'Error loading leaderboard';
+      throw AuthException(message, statusCode: e.response?.statusCode);
     } catch (e) {
-      throw AuthException('Error loading leaderboard: $e');
+      throw AuthException('Unexpected error loading leaderboard: $e');
     }
   }
 }
