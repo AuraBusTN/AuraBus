@@ -74,7 +74,7 @@ paths:
     
     post:
       summary: Update user's favorite routes
-      description: Replaces the user's favorite routes list with the provided array. Maximum 20 routes allowed.
+      description: Replaces the user's favorite routes list with the provided array.
       tags:
         - Users
       security:
@@ -128,10 +128,6 @@ paths:
                   value:
                     success: false
                     message: "Each route ID must be an integer"
-                tooManyRoutes:
-                  value:
-                    success: false
-                    message: "Cannot have more than 20 favorite routes"
         '401':
           description: Unauthorized - Token missing or invalid
           content:
