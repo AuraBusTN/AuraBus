@@ -1,0 +1,21 @@
+paths:
+  /routes:
+    get:
+      summary: Get All Routes
+      description: Retrieves a list of all available bus routes with basic identification details.
+      tags: [Routes]
+      responses:
+        "200":
+          description: A list of filtered route objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RouteBase"
+        "500":
+          description: Internal Server Error (e.g., external APIs down)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

@@ -1,0 +1,22 @@
+components:
+  schemas:
+    RouteBase:
+      type: object
+      properties:
+        routeId:
+          type: integer
+          description: "Unique identifier for the route"
+          example: 396
+        routeShortName:
+          type: string
+          description: "Short name or number of the route"
+          example: "3"
+        routeLongName:
+          type: string
+          description: "Full descriptive name of the route"
+          example: "Cortesano Gardolo P.Dante Villazzano 3"
+        routeColor:
+          type: string
+          example: "C52720"
+          description: "Hex color code associated with the route"
+          nullable: true
