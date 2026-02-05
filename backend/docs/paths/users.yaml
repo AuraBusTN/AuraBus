@@ -33,3 +33,114 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  
+  /users/favorite-routes:
+    get:
+      summary: Get user's favorite routes
+      description: Returns the list of favorite route IDs for the authenticated user.
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Favorite routes successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  favoriteRoutes:
+                    type: array
+                    items:
+                      type: integer
+                    example: [101, 202, 303]
+                    description: Array of favorite route IDs (integers)
+        '401':
+          description: Unauthorized - Token missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    post:
+      summary: Update user's favorite routes
+      description: Replaces the user's favorite routes list with the provided array. Maximum 20 routes allowed.
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - favoriteRoutes
+              properties:
+                favoriteRoutes:
+                  type: array
+                  items:
+                    type: integer
+                  example: [101, 202, 303]
+                  description: Array of route IDs (integers) to set as favorites (duplicates will be removed)
+      responses:
+        '200':
+          description: Favorite routes updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Favorite routes updated successfully"
+                  favoriteRoutes:
+                    type: array
+                    items:
+                      type: integer
+                    example: [101, 202, 303]
+        '400':
+          description: Bad request - Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                notAnArray:
+                  value:
+                    success: false
+                    message: "favoriteRoutes must be an array"
+                invalidRouteFormat:
+                  value:
+                    success: false
+                    message: "Each route ID must be an integer"
+                tooManyRoutes:
+                  value:
+                    success: false
+                    message: "Cannot have more than 20 favorite routes"
+        '401':
+          description: Unauthorized - Token missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

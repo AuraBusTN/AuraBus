@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
     picture: { type: String, required: false },
     refreshToken: { type: [String], default: [] },
     points: { type: Number, default: 0, index: true },
+    favoriteRoutes: {
+      type: [{ type: Number }],
+      default: [],
+    },
   },
   {
     timestamps: true,
