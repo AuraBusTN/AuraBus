@@ -5,20 +5,6 @@ components:
         - $ref: "#/components/schemas/RouteBase"
         - type: object
           properties:
-            routeId:
-              type: integer
-              description: "Id of the route"
-            routeShortName:
-              type: string
-              description: "Short name of the route"
-            routeLongName:
-              type: string
-              description: "Full name of the route"
-            routeColor:
-              type: string
-              example: "#00A88F"
-              description: "Color associated with the route"
-              nullable: true
             busId:
               type: integer
               description: "Id of the bus. Usually null because the trip has not begun yet"
