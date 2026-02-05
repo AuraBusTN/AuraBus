@@ -18,5 +18,5 @@ components:
         routeColor:
           type: string
           example: "C52720"
-          description: "Hex color code associated with the route"
+          description: "Hex color code associated with the route (without the # prefix)"
           nullable: true
