@@ -1,89 +1,77 @@
 components:
   schemas:
     StopTrip:
-      type: object
-      properties:
-        routeId:
-          type: integer
-          description: "Id of the route"
-        routeShortName:
-          type: string
-          description: "Short name of the route"
-        routeLongName:
-          type: string
-          description: "Full name of the route"
-        routeColor:
-          type: string
-          example: "#00A88F"
-          description: "Color associated with the route"
-          nullable: true
-        busId:
-          type: integer
-          description: "Id of the bus. Usually null because the trip has not begun yet"
-          nullable: true
-        busCapacity:
-          type: integer
-          description: "Capacity of the bus"
-        busType:
-          type: string
-          enum:
-            - mini
-            - standard
-            - standard_single
-            - articulated
-          description: "Type of the bus"
-        occupancy:
-          type: object
-          description: "Occupancy information of the bus"
+      allOf:
+        - $ref: "#/components/schemas/RouteBase"
+        - type: object
           properties:
-            realTime:
+            busId:
+              type: integer
+              description: "Id of the bus. Usually null because the trip has not begun yet"
+              nullable: true
+            busCapacity:
+              type: integer
+              description: "Capacity of the bus"
+            busType:
+              type: string
+              enum:
+                - mini
+                - standard
+                - standard_single
+                - articulated
+              description: "Type of the bus"
+            occupancy:
               type: object
+              description: "Occupancy information of the bus"
               properties:
-                percentage:
-                  type: integer
-                  description: "Real-time occupancy percentage of the bus"
-                passengers:
-                  type: integer
-                  description: "Real-time number of passengers on the bus"
-            expected:
-              type: object
-              properties:
-                percentage:
-                  type: integer
-                  description: "Expected occupancy percentage of the bus"
-                passengers:
-                  type: integer
-                  description: "Expected number of passengers on the bus"
-        lastUpdate:
-          type: string
-          format: date-time
-          description: "Timestamp of the last update for this trip. Null if the trip has not begun yet or there is no real-time data."
-          nullable: true
-        delay:
-          type: integer
-          nullable: true
-          description: "Delay in minutes. It can be negative if the bus is ahead of schedule. Null if the bus has not begun its trip or there is no real-time data."
-        lastStopId:
-          type: integer
-          description: "Id of the last stop the bus passed"
-        nextStopId:
-          type: integer
-          description: "Id of the next stop the bus will pass"
-        passedStopCount:
-          type: integer
-          description: "Number of stops the bus has already passed"
-        arrivalTimeScheduled:
-          type: string
-          format: date-time
-          example: "2025-12-04T21:26:00Z"
-          description: "Scheduled arrival time at the next stop"
-        arrivalTimeEstimated:
-          type: string
-          format: date-time
-          example: "2025-12-04T21:26:00Z"
-          description: "Estimated arrival time at the next stop. It is useful because it considers real-time delays"
-        stopTimes:
-          type: array
-          description: "List of stop times for the trip"
-          items:
-            $ref: '#/components/schemas/StopTripTime'
+                realTime:
+                  type: object
+                  properties:
+                    percentage:
+                      type: integer
+                      description: "Real-time occupancy percentage of the bus"
+                    passengers:
+                      type: integer
+                      description: "Real-time number of passengers on the bus"
+                expected:
+                  type: object
+                  properties:
+                    percentage:
+                      type: integer
+                      description: "Expected occupancy percentage of the bus"
+                    passengers:
+                      type: integer
+                      description: "Expected number of passengers on the bus"
+            lastUpdate:
+              type: string
+              format: date-time
+              description: "Timestamp of the last update for this trip. Null if the trip has not begun yet or there is no real-time data."
+              nullable: true
+            delay:
+              type: integer
+              nullable: true
+              description: "Delay in minutes. It can be negative if the bus is ahead of schedule. Null if the bus has not begun its trip or there is no real-time data."
+            lastStopId:
+              type: integer
+              description: "Id of the last stop the bus passed"
+            nextStopId:
+              type: integer
+              description: "Id of the next stop the bus will pass"
+            passedStopCount:
+              type: integer
+              description: "Number of stops the bus has already passed"
+            arrivalTimeScheduled:
+              type: string
+              format: date-time
+              example: "2025-12-04T21:26:00Z"
+              description: "Scheduled arrival time at the next stop"
+            arrivalTimeEstimated:
+              type: string
+              format: date-time
+              example: "2025-12-04T21:26:00Z"
+              description: "Estimated arrival time at the next stop. It is useful because it considers real-time delays"
+            stopTimes:
+              type: array
+              description: "List of stop times for the trip"
+              items:
+                $ref: "#/components/schemas/StopTripTime"
