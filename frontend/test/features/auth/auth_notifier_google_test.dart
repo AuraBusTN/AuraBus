@@ -1,10 +1,10 @@
 import 'package:aurabus/features/auth/data/auth_repository.dart';
 import 'package:aurabus/features/auth/data/models/user_model.dart';
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
+import 'package:aurabus/features/ranking/data/models/leaderboard_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
-
 import '../../utils/fake_google_sign_in_platform.dart';
 
 class _FakeAuthRepository implements AuthRepository {
@@ -46,6 +46,11 @@ class _FakeAuthRepository implements AuthRepository {
     String password,
   ) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<LeaderboardData> getLeaderboard() async {
+    return LeaderboardData(topUsers: [], me: null);
   }
 }
 

@@ -445,6 +445,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear'**
   String get clear;
+
+  /// No description provided for @rankingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AuraRanking'**
+  String get rankingTitle;
+
+  /// No description provided for @tiersAndRewards.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiers & Rewards'**
+  String get tiersAndRewards;
+
+  /// No description provided for @globalLeaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Global Leaderboard'**
+  String get globalLeaderboard;
+
+  /// No description provided for @noUsersInLeaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'No users in the leaderboard yet.'**
+  String get noUsersInLeaderboard;
+
+  /// No description provided for @errorLoadingLeaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading leaderboard'**
+  String get errorLoadingLeaderboard;
+
+  /// No description provided for @yourTier.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR TIER'**
+  String get yourTier;
+
+  /// No description provided for @points.
+  ///
+  /// In en, this message translates to:
+  /// **'POINTS'**
+  String get points;
+
+  /// No description provided for @pointsAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'pts'**
+  String get pointsAbbr;
+
+  /// No description provided for @maxLevelReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Max level reached!'**
+  String get maxLevelReached;
+
+  /// No description provided for @nextTier.
+  ///
+  /// In en, this message translates to:
+  /// **'Next:'**
+  String get nextTier;
+
+  /// No description provided for @missingPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'missing'**
+  String get missingPoints;
+
+  /// No description provided for @tierElite.
+  ///
+  /// In en, this message translates to:
+  /// **'Elite'**
+  String get tierElite;
+
+  /// No description provided for @tierGold.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold'**
+  String get tierGold;
+
+  /// No description provided for @tierSilver.
+  ///
+  /// In en, this message translates to:
+  /// **'Silver'**
+  String get tierSilver;
+
+  /// No description provided for @tierBronze.
+  ///
+  /// In en, this message translates to:
+  /// **'Bronze'**
+  String get tierBronze;
+
+  /// No description provided for @rewardAnnual.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Subscription'**
+  String get rewardAnnual;
+
+  /// No description provided for @rewardMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Subscription'**
+  String get rewardMonthly;
+
+  /// No description provided for @reward10Rides.
+  ///
+  /// In en, this message translates to:
+  /// **'10 Free Rides'**
+  String get reward10Rides;
+
+  /// No description provided for @reward2Rides.
+  ///
+  /// In en, this message translates to:
+  /// **'2 Free Rides'**
+  String get reward2Rides;
+
+  /// No description provided for @youLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get youLabel;
 }
 
 class _AppLocalizationsDelegate

@@ -7,6 +7,7 @@ class AccountInfoBody extends StatelessWidget {
   final String firstName;
   final String lastName;
   final String email;
+  final String? profilePictureUrl;
 
   const AccountInfoBody({
     super.key,
@@ -15,18 +16,29 @@ class AccountInfoBody extends StatelessWidget {
     this.firstName = "John",
     this.lastName = "Doe",
     this.email = "",
+    this.profilePictureUrl,
   });
 
   @override
   Widget build(BuildContext context) {
+    final ImageProvider imageProvider =
+        (profilePictureUrl != null && profilePictureUrl!.isNotEmpty)
+        ? NetworkImage(profilePictureUrl!)
+        : const AssetImage('assets/images/profile_pic.png') as ImageProvider;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 28,
-              backgroundImage: AssetImage('assets/images/profile_pic.png'),
+              backgroundColor:
+                  Colors.grey.shade200,
+              backgroundImage: imageProvider,
+              onBackgroundImageError: (exception, stackTrace) {
+                // Handle image loading error if necessary
+              },
             ),
             const SizedBox(width: 12),
             Column(

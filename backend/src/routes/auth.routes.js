@@ -22,7 +22,7 @@ router.post(
     body("firstName").notEmpty().withMessage("First name is required"),
     body("lastName").notEmpty().withMessage("Last name is required"),
   ],
-  signup
+  signup,
 );
 
 router.post(
@@ -31,19 +31,19 @@ router.post(
     body("email").isEmail().withMessage("Email is required"),
     body("password").notEmpty().withMessage("Password is required"),
   ],
-  login
+  login,
 );
 
 router.post(
   "/google",
   [body("idToken").notEmpty().withMessage("Google ID token is required")],
-  googleLogin
+  googleLogin,
 );
 
 router.post(
   "/refresh-token",
   [body("refreshToken").notEmpty().withMessage("Refresh Token is required")],
-  refreshToken
+  refreshToken,
 );
 
 router.post(
@@ -53,9 +53,8 @@ router.post(
       .notEmpty()
       .withMessage("Refresh Token is required for logout"),
   ],
-  logout
+  logout,
 );
 
 router.get("/me", verifyToken, getMe);
-
 export default router;

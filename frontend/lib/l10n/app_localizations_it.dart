@@ -187,4 +187,64 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get clear => 'Reset';
+
+  @override
+  String get rankingTitle => 'AuraRanking';
+
+  @override
+  String get tiersAndRewards => 'Fasce e Premi';
+
+  @override
+  String get globalLeaderboard => 'Classifica Globale';
+
+  @override
+  String get noUsersInLeaderboard => 'Nessun utente in classifica.';
+
+  @override
+  String get errorLoadingLeaderboard => 'Errore caricamento classifica';
+
+  @override
+  String get yourTier => 'LA TUA FASCIA';
+
+  @override
+  String get points => 'PUNTI';
+
+  @override
+  String get pointsAbbr => 'pti';
+
+  @override
+  String get maxLevelReached => 'Livello massimo raggiunto!';
+
+  @override
+  String get nextTier => 'Prossima:';
+
+  @override
+  String get missingPoints => 'mancanti';
+
+  @override
+  String get tierElite => 'Elite';
+
+  @override
+  String get tierGold => 'Gold';
+
+  @override
+  String get tierSilver => 'Silver';
+
+  @override
+  String get tierBronze => 'Bronze';
+
+  @override
+  String get rewardAnnual => 'Abbonamento Annuale';
+
+  @override
+  String get rewardMonthly => 'Abbonamento Mensile';
+
+  @override
+  String get reward10Rides => '10 Corse Gratis';
+
+  @override
+  String get reward2Rides => '2 Corse Gratis';
+
+  @override
+  String get youLabel => 'Tu';
 }

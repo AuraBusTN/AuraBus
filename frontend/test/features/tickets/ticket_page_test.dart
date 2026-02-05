@@ -3,25 +3,49 @@ import 'package:aurabus/features/tickets/widgets/ticket_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../../utils/test_app_wrapper.dart';
+import '../../utils/device_definitions.dart';
 
 void main() {
-  testWidgets('TicketPage renders correctly', (tester) async {
-    tester.view.physicalSize = const Size(1080, 2400);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.resetPhysicalSize);
+  group('TicketPage Functional Tests', () {
+    testWidgets('TicketPage renders correctly', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
 
-    await tester.pumpWidget(createTestApp(child: const TicketPage()));
+      await tester.pumpWidget(createTestApp(child: const TicketPage()));
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.text('My Tickets'), findsOneWidget);
+      expect(find.text('My Tickets'), findsOneWidget);
 
-    expect(find.byType(TicketCard), findsNWidgets(3));
+      expect(find.byType(TicketCard), findsNWidgets(3));
 
-    await tester.drag(
-      find.byType(SingleChildScrollView),
-      const Offset(0, -200),
-    );
-    await tester.pump();
+      await tester.drag(
+        find.byType(SingleChildScrollView),
+        const Offset(0, -200),
+      );
+      await tester.pump();
+    });
+  });
+
+  group('TicketPage Responsiveness Tests', () {
+    for (var device in TestDevices.all) {
+      testWidgets(
+        'Renders correctly on ${device.name} (${device.size.width}x${device.size.height})',
+        (tester) async {
+          tester.view.physicalSize = device.size;
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(tester.view.resetPhysicalSize);
+
+          await tester.pumpWidget(createTestApp(child: const TicketPage()));
+
+          await tester.pumpAndSettle();
+
+          expect(find.text('My Tickets'), findsOneWidget);
+
+          expect(find.byType(TicketCard), findsNWidgets(3));
+        },
+      );
+    }
   });
 }

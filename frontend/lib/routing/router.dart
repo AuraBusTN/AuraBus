@@ -1,3 +1,4 @@
+import 'package:aurabus/features/ranking/presentation/ranking_page.dart';
 import 'package:aurabus/features/signup/presentation/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,7 @@ class AppRoute {
   static const String account = '/account';
   static const String login = '/login';
   static const String signup = '/signup';
+  static const String ranking = '/ranking';
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -51,6 +53,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             return FadeTransition(opacity: animation, child: child);
           },
         ),
+      ),
+      GoRoute(
+        path: AppRoute.ranking,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const RankingPage(),
       ),
 
       StatefulShellRoute.indexedStack(

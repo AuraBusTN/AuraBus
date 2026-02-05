@@ -6,6 +6,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import { setupSwagger } from "./swagger.js";
 import stopsRouter from "./routes/stops.routes.js";
 import authRouter from "./routes/auth.routes.js";
+import usersRouter from "./routes/users.routes.js";
 import { apiLimiter, authLimiter } from "./middlewares/rateLimiter.js";
 
 export const app = express();
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authLimiter, authRouter);
 app.use("/stops", apiLimiter, stopsRouter);
+app.use("/users", apiLimiter, usersRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
