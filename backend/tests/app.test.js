@@ -1,5 +1,6 @@
 import { jest } from "@jest/globals";
 import request from "supertest";
+import { initData } from "../src/utils/staticData.js";
 
 process.env.NODE_ENV = "test";
 process.env.JWT_SECRET = "test_jwt_secret";
@@ -119,12 +120,36 @@ jest.unstable_mockModule("google-auth-library", () => ({
 const { app } = await import("../src/app.js");
 
 describe("Integration Test: API", () => {
+  beforeAll(async () => {
+    await initData();
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
     mockBcrypt.compare.mockResolvedValue(true);
     usersById.clear();
     usersByEmail.clear();
     idCounter = 1;
+  });
+
+  describe("Routes: List", () => {
+    it("GET /routes returns a list of all routes with filtered fields", async () => {
+      const res = await request(app).get("/routes");
+
+      expect(res.statusCode).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
+      expect(res.body.length).toBeGreaterThan(0);
+
+      const firstRoute = res.body[0];
+      expect(firstRoute).toHaveProperty("routeId");
+      expect(firstRoute).toHaveProperty("routeShortName");
+      expect(firstRoute).toHaveProperty("routeLongName");
+      expect(firstRoute).toHaveProperty("routeColor");
+      
+      expect(firstRoute).not.toHaveProperty("areaId");
+      expect(firstRoute).not.toHaveProperty("routeType");
+      expect(firstRoute).not.toHaveProperty("type");
+    });
   });
 
   const signup = async (override = {}) => {
