@@ -91,5 +91,6 @@
     "rewardMonthly": "Monthly Subscription",
     "reward10Rides": "10 Free Rides",
     "reward2Rides": "2 Free Rides",
-    "youLabel": "You"
+    "youLabel": "You",
+    "searchPlaceholder": "Search stop..."
 }
