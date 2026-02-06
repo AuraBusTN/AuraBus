@@ -54,3 +54,82 @@ export const getLeaderboard = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getFavoriteRoutes = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const user = await User.findById(userId).select("favoriteRoutes");
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      favoriteRoutes: user.favoriteRoutes || [],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateFavoriteRoutes = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { favoriteRoutes } = req.body;
+
+    if (favoriteRoutes === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "favoriteRoutes field is required",
+      });
+    }
+
+    if (!Array.isArray(favoriteRoutes)) {
+      return res.status(400).json({
+        success: false,
+        message: "favoriteRoutes must be an array",
+      });
+    }
+
+    if (
+      !favoriteRoutes.every((route) => Number.isInteger(route) && route > 0)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Each route ID must be a positive integer",
+      });
+    }
+
+    const uniqueRoutes = [...new Set(favoriteRoutes)];
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { favoriteRoutes: uniqueRoutes },
+      { new: true, runValidators: true, select: "favoriteRoutes" },
+    );
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Favorite routes updated successfully",
+      favoriteRoutes: user.favoriteRoutes,
+    });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    next(error);
+  }
+};
