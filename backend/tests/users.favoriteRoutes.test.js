@@ -38,6 +38,19 @@ class MockUser {
     }
     return null;
   };
+  toJSON() {
+    return {
+      id: this.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      authProvider: this.authProvider,
+      googleSub: this.googleSub,
+      picture: this.picture,
+      points: this.points,
+      favoriteRoutes: this.favoriteRoutes,
+    };
+  }
 
   static findById = (id) => {
     const user = usersById.get(String(id)) ?? null;
@@ -186,6 +199,16 @@ describe("User Favorite Routes API", () => {
       expect(response.body.favoriteRoutes).toContain(202);
       expect(response.body.favoriteRoutes).toContain(303);
     });
+    it("should reject request when favoriteRoutes field is missing", async () => {
+      const response = await request(app)
+        .post("/users/favorite-routes")
+        .set("Authorization", `Bearer ${authToken}`)
+        .send({});
+
+      expect(response.status).toBe(400);
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe("favoriteRoutes field is required");
+    });
 
     it("should reject non-array input", async () => {
       const response = await request(app)
@@ -208,7 +231,9 @@ describe("User Favorite Routes API", () => {
 
       expect(response.status).toBe(400);
       expect(response.body.success).toBe(false);
-      expect(response.body.message).toBe("Each route ID must be an integer");
+      expect(response.body.message).toBe(
+        "Each route ID must be a positive integer",
+      );
     });
 
     it("should reject floating point numbers", async () => {
@@ -221,7 +246,9 @@ describe("User Favorite Routes API", () => {
 
       expect(response.status).toBe(400);
       expect(response.body.success).toBe(false);
-      expect(response.body.message).toBe("Each route ID must be an integer");
+      expect(response.body.message).toBe(
+        "Each route ID must be a positive integer",
+      );
     });
 
     it("should allow exactly 20 routes", async () => {
@@ -238,13 +265,11 @@ describe("User Favorite Routes API", () => {
     });
 
     it("should allow clearing all favorites with empty array", async () => {
-      // First set some favorites
       await request(app)
         .post("/users/favorite-routes")
         .set("Authorization", `Bearer ${authToken}`)
         .send({ favoriteRoutes: [101, 202] });
 
-      // Then clear them
       const response = await request(app)
         .post("/users/favorite-routes")
         .set("Authorization", `Bearer ${authToken}`)
@@ -254,19 +279,20 @@ describe("User Favorite Routes API", () => {
       expect(response.body.favoriteRoutes).toEqual([]);
     });
 
-    it("should handle negative route IDs", async () => {
+    it("should reject negative route IDs", async () => {
       const favoriteRoutes = [101, -1, 303];
-
       const response = await request(app)
         .post("/users/favorite-routes")
         .set("Authorization", `Bearer ${authToken}`)
         .send({ favoriteRoutes });
 
-      expect(response.status).toBe(200);
-      expect(response.body.favoriteRoutes).toContain(-1);
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(
+        "Each route ID must be a positive integer",
+      );
     });
 
-    it("should handle zero as route ID", async () => {
+    it("should reject zero as route ID", async () => {
       const favoriteRoutes = [0, 101, 202];
 
       const response = await request(app)
@@ -274,8 +300,10 @@ describe("User Favorite Routes API", () => {
         .set("Authorization", `Bearer ${authToken}`)
         .send({ favoriteRoutes });
 
-      expect(response.status).toBe(200);
-      expect(response.body.favoriteRoutes).toContain(0);
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(
+        "Each route ID must be a positive integer",
+      );
     });
   });
 

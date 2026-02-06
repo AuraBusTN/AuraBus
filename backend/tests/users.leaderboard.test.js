@@ -4,6 +4,7 @@ import request from "supertest";
 process.env.NODE_ENV = "test";
 process.env.JWT_SECRET = "test_jwt_secret";
 process.env.REFRESH_SECRET = "test_refresh_secret";
+process.env.GOOGLE_AUTH_CLIENT_ID = "test_google_client_id";
 
 const mockBcrypt = {
   genSalt: jest.fn().mockResolvedValue("salt"),
@@ -62,6 +63,19 @@ class MockUser {
     }
     return null;
   };
+  toJSON() {
+    return {
+      id: this.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      authProvider: this.authProvider,
+      googleSub: this.googleSub,
+      picture: this.picture,
+      points: this.points,
+      favoriteRoutes: this.favoriteRoutes,
+    };
+  }
 
   static findById = (id) => {
     const user = usersById.get(String(id)) ?? null;

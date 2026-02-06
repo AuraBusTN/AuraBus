@@ -81,6 +81,13 @@ export const updateFavoriteRoutes = async (req, res, next) => {
     const userId = req.userId;
     const { favoriteRoutes } = req.body;
 
+    if (favoriteRoutes === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "favoriteRoutes field is required",
+      });
+    }
+
     if (!Array.isArray(favoriteRoutes)) {
       return res.status(400).json({
         success: false,
@@ -88,10 +95,12 @@ export const updateFavoriteRoutes = async (req, res, next) => {
       });
     }
 
-    if (!favoriteRoutes.every((route) => Number.isInteger(route))) {
+    if (
+      !favoriteRoutes.every((route) => Number.isInteger(route) && route > 0)
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Each route ID must be an integer",
+        message: "Each route ID must be a positive integer",
       });
     }
 

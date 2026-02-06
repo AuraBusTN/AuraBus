@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     refreshToken: { type: [String], default: [] },
     points: { type: Number, default: 0, index: true },
     favoriteRoutes: {
-      type: [{ type: Number }],
+      type: [Number],
       default: [],
     },
   },
