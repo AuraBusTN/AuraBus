@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:aurabus/core/utils/color_utils.dart';
+import 'package:aurabus/core/utils/route_utils.dart';
 import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
@@ -12,12 +15,12 @@ import 'package:aurabus/features/map/presentation/map_controller.dart';
 class UnifiedStopEntry {
   final String stopName;
   final Set<RouteInfo> allRoutes;
-  final StopInfo representativeStop;
+  final LatLng location;
 
   UnifiedStopEntry({
     required this.stopName,
     required this.allRoutes,
-    required this.representativeStop,
+    required this.location,
   });
 }
 
@@ -33,6 +36,7 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
   final FocusNode _focusNode = FocusNode();
   List<UnifiedStopEntry> _filteredEntries = [];
   bool _showResults = false;
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -43,6 +47,7 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -55,36 +60,61 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
   }
 
   void _onSearchChanged() {
-    final query = _controller.text.trim().toLowerCase();
-    final allStops = ref.read(stopsListProvider).value ?? [];
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    if (query.isEmpty) {
-      setState(() {
-        _filteredEntries = [];
-        _showResults = false;
-      });
-      return;
-    }
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      if (!mounted) return;
 
-    final Map<String, UnifiedStopEntry> groupedMap = {};
+      final query = _controller.text.trim().toLowerCase();
 
-    for (var stop in allStops) {
-      if (stop.stopName.toLowerCase().contains(query)) {
-        if (!groupedMap.containsKey(stop.stopName)) {
-          groupedMap[stop.stopName] = UnifiedStopEntry(
-            stopName: stop.stopName,
-            allRoutes: {...stop.routes},
-            representativeStop: stop,
-          );
-        } else {
-          groupedMap[stop.stopName]!.allRoutes.addAll(stop.routes);
+      final stopsAsync = ref.read(stopsListProvider);
+      final allStops = stopsAsync.asData?.value ?? [];
+
+      if (query.isEmpty) {
+        setState(() {
+          _filteredEntries = [];
+          _showResults = false;
+        });
+        return;
+      }
+
+      final Map<String, List<StopInfo>> groupedStops = {};
+
+      for (var stop in allStops) {
+        if (stop.stopName.toLowerCase().contains(query)) {
+          groupedStops.putIfAbsent(stop.stopName, () => []).add(stop);
         }
       }
-    }
 
-    setState(() {
-      _filteredEntries = groupedMap.values.take(10).toList();
-      _showResults = true;
+      final List<UnifiedStopEntry> results = [];
+
+      groupedStops.forEach((name, stops) {
+        final allRoutes = <RouteInfo>{};
+        double sumLat = 0;
+        double sumLon = 0;
+
+        for (var stop in stops) {
+          allRoutes.addAll(stop.routes);
+          sumLat += stop.stopLat;
+          sumLon += stop.stopLon;
+        }
+
+        final centerLat = sumLat / stops.length;
+        final centerLon = sumLon / stops.length;
+
+        results.add(
+          UnifiedStopEntry(
+            stopName: name,
+            allRoutes: allRoutes,
+            location: LatLng(centerLat, centerLon),
+          ),
+        );
+      });
+
+      setState(() {
+        _filteredEntries = results.take(10).toList();
+        _showResults = true;
+      });
     });
   }
 
@@ -98,31 +128,15 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
     final mapController = ref.read(mapControllerProvider);
 
     mapController.controller?.animateCamera(
-      CameraUpdate.newLatLngZoom(
-        LatLng(
-          entry.representativeStop.stopLat,
-          entry.representativeStop.stopLon,
-        ),
-        19.0,
-      ),
+      CameraUpdate.newLatLngZoom(entry.location, 17.0),
     );
-  }
-
-  Color _parseRouteColor(String? hex) {
-    if (hex == null || hex.isEmpty) return Colors.black;
-    try {
-      final buffer = StringBuffer();
-      if (hex.length == 6) buffer.write('ff');
-      buffer.write(hex.replaceFirst('#', ''));
-      return Color(int.parse(buffer.toString(), radix: 16));
-    } catch (_) {
-      return Colors.black;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
+    ref.watch(stopsListProvider);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -151,7 +165,10 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
                       icon: const Icon(Icons.close, color: Colors.grey),
                       onPressed: () {
                         _controller.clear();
-                        setState(() => _filteredEntries = []);
+                        setState(() {
+                          _filteredEntries = [];
+                          _showResults = false;
+                        });
                       },
                     )
                   : null,
@@ -197,9 +214,7 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
                     final entry = _filteredEntries[index];
 
                     final sortedRoutes = entry.allRoutes.toList()
-                      ..sort(
-                        (a, b) => a.routeShortName.compareTo(b.routeShortName),
-                      );
+                      ..sort(RouteUtils.compareRoutes);
 
                     return ListTile(
                       contentPadding: const EdgeInsets.symmetric(
@@ -225,7 +240,9 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: _parseRouteColor(route.routeColor),
+                                color: ColorUtils.parseHexColor(
+                                  route.routeColor,
+                                ),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
