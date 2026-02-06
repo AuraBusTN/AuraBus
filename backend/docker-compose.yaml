@@ -33,6 +33,18 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
       - mongo-data:/data/db
+  
+  ai-service:
+    build: ./ai-service  # O ovunque tu abbia messo la cartella
+    container_name: aurabus-ai
+    ports:
+      - "8000:8000"  # Così puoi testarlo dal browser su localhost:8000
+    volumes:
+      - ./ai-service:/app # Hot-reload: vedi le modifiche live
+    env_file:
+      - .env  # Per passare la password di Mongo
+    depends_on:
+      - db # Aspetta che il DB sia pronto
 
 volumes:
   mongo-data:

@@ -1,0 +1,14 @@
+# --- IL SERVER WEB ---
+fastapi==0.128.2        # Il framework veloce per creare l'API
+uvicorn[standard]==0.40.0 # Il server che fa girare FastAPI (come Node per Express)
+pydantic==2.12.5         # Per validare i dati (quello che useremo per le classi StopInfo)
+
+# --- IL CERVELLO AI ---
+xgboost==3.1.3          # Per caricare il tuo file .json e fare predizioni
+pandas==3.0.0           # Per creare le tabelle dati che XGBoost vuole in pasto
+scikit-learn==1.8.0     # Serve per le metriche (MAE, R2) durante il ri-addestramento
+
+# --- MANUTENZIONE E DATI ---
+pymongo[srv]==4.16.0     # Per connettersi ad Atlas e scaricare i nuovi dati
+apscheduler==3.11.2     # Lo "sveglia" che farà partire il training la domenica notte
+python-dotenv==1.2.1    # Per leggere le password dal file .env (sicurezza!)
