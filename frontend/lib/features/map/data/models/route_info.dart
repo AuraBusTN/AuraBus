@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 class RouteInfo {
   final int areaId;
   final Object? news;
-  final String? routeColor;
+  final Color routeColor;
   final int routeId;
   final String routeLongName;
   final String routeShortName;
@@ -21,23 +23,30 @@ class RouteInfo {
 
   factory RouteInfo.fromJson(Map<String, dynamic> json) {
     return RouteInfo(
-      areaId: json['areaId'],
+      areaId: json['areaId'] is int ? json['areaId'] as int : 0,
       news: json['news'],
-      routeColor: json['routeColor'],
-      routeId: json['routeId'],
-      routeLongName: json['routeLongName'],
-      routeShortName: json['routeShortName'],
-      routeType: json['routeType'],
-      type: json['type'],
+      routeColor: parseHexColor(
+        (json['routeColor'] as String?)?.replaceAll('#', '') ?? '000000',
+      ),
+      routeId: json['routeId'] is int ? json['routeId'] as int : -1,
+      routeLongName: json['routeLongName'] as String? ?? '',
+      routeShortName: json['routeShortName'] as String? ?? '',
+      routeType: json['routeType'] is int ? json['routeType'] as int : 0,
+      type: json['type'] as String? ?? '',
     );
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is RouteInfo && other.routeId == routeId;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RouteInfo && other.routeId == routeId;
 
   @override
   int get hashCode => routeId.hashCode;
+}
+
+
+Color parseHexColor(String hex) {
+  final value = int.parse('FF$hex', radix: 16);
+  return Color(value);
 }
