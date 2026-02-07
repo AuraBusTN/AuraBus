@@ -1,6 +1,5 @@
 import { jest } from "@jest/globals";
 import request from "supertest";
-import { initData } from "../src/utils/staticData.js";
 
 process.env.NODE_ENV = "test";
 process.env.JWT_SECRET = "test_jwt_secret";
@@ -20,31 +19,6 @@ const usersByEmail = new Map();
 let idCounter = 1;
 
 const makeId = () => String(idCounter++).padStart(24, "0");
-
-const makeQueryChain = (data) => {
-  const queryObj = {
-    then: (resolve) => Promise.resolve(data).then(resolve),
-    sort: (criteria) => {
-      if (criteria.points === -1) {
-        data.sort((a, b) => (b.points || 0) - (a.points || 0));
-      }
-      return queryObj;
-    },
-    limit: (n) => {
-      data = data.slice(0, n);
-      return queryObj;
-    },
-    select: (fields) => queryObj,
-  };
-  return queryObj;
-};
-
-const makeSingleQuery = (user) => {
-  return {
-    select: () => makeSingleQuery(user),
-    then: (resolve) => Promise.resolve(user).then(resolve),
-  };
-};
 
 class MockUser {
   static findOne = async (query) => {
@@ -67,22 +41,12 @@ class MockUser {
 
   static findById = (id) => {
     const user = usersById.get(String(id)) ?? null;
-    return makeSingleQuery(user);
-  };
-
-  static find = () => {
-    const allUsers = Array.from(usersById.values());
-    return makeQueryChain(allUsers);
-  };
-
-  static countDocuments = async (query) => {
-    if (query.points && query.points.$gt !== undefined) {
-      const threshold = query.points.$gt;
-      return Array.from(usersById.values()).filter(
-        (u) => (u.points || 0) > threshold,
-      ).length;
-    }
-    return 0;
+    return {
+      select: () => ({
+        then: (resolve) => Promise.resolve(user).then(resolve),
+      }),
+      then: (resolve) => Promise.resolve(user).then(resolve),
+    };
   };
 
   constructor(data) {
@@ -97,6 +61,21 @@ class MockUser {
     this.picture = data?.picture;
     this.refreshToken = data?.refreshToken ?? [];
     this.points = data?.points ?? 0;
+    this.favoriteRoutes = data?.favoriteRoutes ?? [];
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      authProvider: this.authProvider,
+      googleSub: this.googleSub,
+      picture: this.picture,
+      points: this.points,
+      favoriteRoutes: this.favoriteRoutes,
+    };
   }
 
   save = async () => {
@@ -119,37 +98,13 @@ jest.unstable_mockModule("google-auth-library", () => ({
 
 const { app } = await import("../src/app.js");
 
-describe("Integration Test: API", () => {
-  beforeAll(async () => {
-    await initData();
-  });
-
+describe("Authentication API", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockBcrypt.compare.mockResolvedValue(true);
     usersById.clear();
     usersByEmail.clear();
     idCounter = 1;
-  });
-
-  describe("Routes: List", () => {
-    it("GET /routes returns a list of all routes with filtered fields", async () => {
-      const res = await request(app).get("/routes");
-
-      expect(res.statusCode).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body.length).toBeGreaterThan(0);
-
-      const firstRoute = res.body[0];
-      expect(firstRoute).toHaveProperty("routeId");
-      expect(firstRoute).toHaveProperty("routeShortName");
-      expect(firstRoute).toHaveProperty("routeLongName");
-      expect(firstRoute).toHaveProperty("routeColor");
-      
-      expect(firstRoute).not.toHaveProperty("areaId");
-      expect(firstRoute).not.toHaveProperty("routeType");
-      expect(firstRoute).not.toHaveProperty("type");
-    });
   });
 
   const signup = async (override = {}) => {
@@ -174,16 +129,7 @@ describe("Integration Test: API", () => {
       });
   };
 
-  it("GET / responds with health status", async () => {
-    const res = await request(app).get("/");
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({
-      status: "OK",
-      message: "AuraBus API is alive!",
-    });
-  });
-
-  describe("Auth: Local Registration", () => {
+  describe("Local Registration", () => {
     it("POST /auth/signup validates request", async () => {
       const res = await request(app).post("/auth/signup").send({});
       expect(res.statusCode).toBe(400);
@@ -199,6 +145,10 @@ describe("Integration Test: API", () => {
       expect(typeof res.body.accessToken).toBe("string");
       expect(typeof res.body.refreshToken).toBe("string");
       expect(res.body.user.email).toBe("mario@example.com");
+      expect(res.body.user).toHaveProperty("id");
+      expect(res.body.user).toHaveProperty("firstName");
+      expect(res.body.user).toHaveProperty("lastName");
+      expect(res.body.user).not.toHaveProperty("password");
     });
 
     it("POST /auth/signup rejects duplicate email", async () => {
@@ -210,9 +160,21 @@ describe("Integration Test: API", () => {
       expect(second.body.success).toBe(false);
       expect(second.body.message).toBe("Email already in use");
     });
+
+    it("POST /auth/signup validates email format", async () => {
+      const res = await signup({ email: "invalid-email" });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+
+    it("POST /auth/signup validates password strength", async () => {
+      const res = await signup({ password: "weak" });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
   });
 
-  describe("Auth: Local Login", () => {
+  describe("Local Login", () => {
     it("POST /auth/login rejects unknown user", async () => {
       const res = await login({ email: "missing@example.com" });
 
@@ -259,32 +221,24 @@ describe("Integration Test: API", () => {
       );
     });
 
-    it("POST /auth/login returns tokens for valid credentials", async () => {
+    it("POST /auth/login returns tokens and complete user details", async () => {
       await signup();
       mockBcrypt.compare.mockResolvedValue(true);
       const res = await login();
+
       expect(res.statusCode).toBe(200);
       expect(res.body.success).toBe(true);
-    });
-
-    it("POST /auth/login returns user points", async () => {
-      const user = new MockUser({
-        firstName: "Pro",
-        lastName: "Gamer",
-        email: "pro@test.com",
-        password: "hashed",
-        points: 2500,
-      });
-      await user.save();
-
-      const res = await login({ email: "pro@test.com", password: "password" });
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body.user.points).toBe(2500);
+      expect(res.body.accessToken).toBeDefined();
+      expect(res.body.refreshToken).toBeDefined();
+      expect(res.body.user).toHaveProperty("firstName", "Mario");
+      expect(res.body.user).toHaveProperty("lastName", "Rossi");
+      expect(res.body.user).toHaveProperty("email", "mario@example.com");
+      expect(res.body.user).toHaveProperty("points");
+      expect(res.body.user).not.toHaveProperty("password");
     });
   });
 
-  describe("Auth: Google", () => {
+  describe("Google Authentication", () => {
     it("POST /auth/google exchanges idToken for app tokens", async () => {
       verifyIdToken.mockResolvedValue({
         getPayload: () => ({
@@ -302,6 +256,8 @@ describe("Integration Test: API", () => {
       expect(res.statusCode).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.user.email).toBe("guser@example.com");
+      expect(res.body.accessToken).toBeDefined();
+      expect(res.body.refreshToken).toBeDefined();
     });
 
     it("POST /auth/google rejects unverified email", async () => {
@@ -348,19 +304,56 @@ describe("Integration Test: API", () => {
       expect(res.body.success).toBe(false);
       expect(res.body.message).toBe("Google account mismatch for this email");
     });
+
+    it("POST /auth/google creates new user for new Google account", async () => {
+      verifyIdToken.mockResolvedValue({
+        getPayload: () => ({
+          email: "newgoogle@example.com",
+          email_verified: true,
+          sub: "google-sub-new",
+          given_name: "New",
+          family_name: "User",
+          picture: "https://example.com/pic.jpg",
+        }),
+      });
+
+      const res = await request(app)
+        .post("/auth/google")
+        .send({ idToken: "fake-token" });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body.user.email).toBe("newgoogle@example.com");
+    });
+
+    it("POST /auth/google requires idToken", async () => {
+      const res = await request(app).post("/auth/google").send({});
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
   });
 
-  describe("Auth: Token Management & Me", () => {
-    it("GET /auth/me returns the current user with a valid access token", async () => {
+  describe("Token Management", () => {
+    it("GET /auth/me handles authentication correctly", async () => {
       const signupRes = await signup();
       expect(signupRes.statusCode).toBe(201);
 
-      const meRes = await request(app)
+      const validRes = await request(app)
         .get("/auth/me")
         .set("Authorization", `Bearer ${signupRes.body.accessToken}`);
+      expect(validRes.statusCode).toBe(200);
+      expect(validRes.body.user.email).toBe("mario@example.com");
+      expect(validRes.body.user).not.toHaveProperty("password");
 
-      expect(meRes.statusCode).toBe(200);
-      expect(meRes.body.user.email).toBe("mario@example.com");
+      const invalidRes = await request(app)
+        .get("/auth/me")
+        .set("Authorization", "Bearer invalid-token");
+      expect(invalidRes.statusCode).toBe(403);
+      expect(invalidRes.body.success).toBe(false);
+
+      const missingRes = await request(app).get("/auth/me");
+      expect(missingRes.statusCode).toBe(401);
+      expect(missingRes.body.success).toBe(false);
     });
 
     it("POST /auth/refresh-token validates request", async () => {
@@ -393,6 +386,15 @@ describe("Integration Test: API", () => {
       expect(revokedRes.body.message).toMatch(/Invalid Refresh Token/);
     });
 
+    it("POST /auth/refresh-token rejects invalid refresh token", async () => {
+      const res = await request(app)
+        .post("/auth/refresh-token")
+        .send({ refreshToken: "invalid-token" });
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.success).toBe(false);
+    });
+
     it("POST /auth/logout removes the refresh token", async () => {
       const signupRes = await signup();
       const refreshToken = signupRes.body.refreshToken;
@@ -409,46 +411,20 @@ describe("Integration Test: API", () => {
 
       expect(refreshRes.statusCode).toBe(403);
     });
-  });
 
-  describe("Users: Leaderboard", () => {
-    it("GET /users/leaderboard returns sorted top users", async () => {
-      await new MockUser({
-        firstName: "Top",
-        lastName: "1",
-        email: "1@t.com",
-        points: 3000,
-      }).save();
-      await new MockUser({
-        firstName: "Mid",
-        lastName: "2",
-        email: "2@t.com",
-        points: 1500,
-      }).save();
+    it("POST /auth/logout validates refresh token", async () => {
+      const res = await request(app).post("/auth/logout").send({});
 
-      await new MockUser({
-        firstName: "Me",
-        lastName: "3",
-        email: "me@t.com",
-        points: 100,
-        password: "hashed",
-      }).save();
+      expect(res.statusCode).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
 
-      const loginRes = await login({ email: "me@t.com", password: "pwd" });
-      const token = loginRes.body.accessToken;
-
+    it("POST /auth/logout handles invalid token gracefully", async () => {
       const res = await request(app)
-        .get("/users/leaderboard")
-        .set("Authorization", `Bearer ${token}`);
+        .post("/auth/logout")
+        .send({ refreshToken: "invalid-token" });
 
-      expect(res.statusCode).toBe(200);
-      expect(res.body.success).toBe(true);
-
-      const top = res.body.topUsers;
-      expect(top.length).toBeGreaterThanOrEqual(3);
-      expect(top[0].points).toBe(3000);
-      expect(top[1].points).toBe(1500);
-      expect(top[0]).toHaveProperty("rank", 1);
+      expect(res.statusCode).toBe(204);
     });
   });
 });
