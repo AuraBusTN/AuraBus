@@ -71,11 +71,13 @@ class StopTripTime {
   final int stopId;
   final String stopName;
   final String arrivalTimeScheduled;
+  final int delayPredicted;
 
   StopTripTime({
     required this.stopId,
     required this.stopName,
     required this.arrivalTimeScheduled,
+    required this.delayPredicted,
   });
 
   factory StopTripTime.fromJson(Map<String, dynamic> json) {
@@ -83,6 +85,7 @@ class StopTripTime {
       stopId: json['stopId'],
       stopName: json['stopName'],
       arrivalTimeScheduled: json['arrivalTimeScheduled'],
+      delayPredicted: json['delayPredicted'],
     );
   }
 }

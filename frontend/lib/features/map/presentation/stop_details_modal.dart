@@ -85,7 +85,7 @@ class _StopDetailsContent extends ConsumerWidget {
             children: [
               Expanded(
                 child: Text(
-                  "${stopInfo.stopId} - ${stopInfo.stopName}",
+                  stopInfo.stopName,
                   style: Theme.of(context).textTheme.titleLarge,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

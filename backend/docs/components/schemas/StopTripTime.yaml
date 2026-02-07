@@ -14,3 +14,7 @@ components:
           format: time
           example: "14:35:00"
           description: "Scheduled arrival time at the stop"
+        delayPredicted:
+          type: integer
+          nullable: true
+          description: "Predicted delay in minutes. It can be negative if the bus is ahead of schedule. Null if there is no prediction available."

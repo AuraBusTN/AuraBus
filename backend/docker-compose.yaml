@@ -21,6 +21,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       REFRESH_SECRET: ${REFRESH_SECRET}
       GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
+      PREDICTION_URL: ${PREDICTION_URL}
 
   db:
     container_name: aurabus_mongo_db
