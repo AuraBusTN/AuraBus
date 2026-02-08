@@ -4,6 +4,7 @@ import config from "../config/index.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { redisClient } from "../config/redis.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,25 +13,18 @@ const routesData = JSON.parse(fs.readFileSync(routesPath, "utf-8"));
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-let lastReadings = new Map();
+const getTodayDateString = () => {
+  return new Date().toISOString().split("T")[0];
+};
 
 export const runIngestionJob = async () => {
   const now = new Date();
   const currentHour = now.getHours();
 
-  if (currentHour === 3) {
-    if (lastReadings.size > 0) {
-      console.log(`🧹 [${now.toISOString()}] Reset memory daily.`);
-      lastReadings.clear();
-    }
-    return;
-  }
-
+  const todayStr = getTodayDateString();
   if (currentHour >= 1 && currentHour < 5) return;
 
-  console.log(
-    `🎯 [${now.toISOString()}] Ingestion (Cluster + Terminus Fix)...`,
-  );
+  console.log(`🎯 [${now.toISOString()}] Ingestion running...`);
 
   if (!config.tnt.url) return;
 
@@ -92,12 +86,13 @@ export const runIngestionJob = async () => {
         }
 
         for (const stop of stopsToSave) {
-          const uniqueKey = `${trip.tripId}_${stop.stopId}`;
-          const lastRecordedDelay = lastReadings.get(uniqueKey);
+          const uniqueKey = `ingest:${todayStr}:${trip.tripId}:${stop.stopId}`;
+
+          const lastRecordedDelay = await redisClient.get(uniqueKey);
 
           if (
-            lastRecordedDelay !== undefined &&
-            lastRecordedDelay === currentDelay
+            lastRecordedDelay !== null &&
+            parseInt(lastRecordedDelay) === currentDelay
           ) {
             totalSkipped++;
             continue;
@@ -134,7 +129,7 @@ export const runIngestionJob = async () => {
       if (metricsBatch.length > 0) {
         await TripMetric.insertMany(metricsBatch, { ordered: false });
         for (const [key, val] of pendingUpdates) {
-          lastReadings.set(key, val);
+          await redisClient.set(key, String(val), { EX: 86400 });
         }
         totalSaved += metricsBatch.length;
       }

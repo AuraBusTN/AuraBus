@@ -42,6 +42,11 @@ const config = {
   prediction: {
     url: process.env.PREDICTION_URL,
   },
+  redis: {
+    host: process.env.REDIS_HOST || "localhost",
+    port: process.env.REDIS_PORT || 6379,
+    password: process.env.REDIS_PASSWORD,
+  },
 };
 
 const missingTntConfig = [];
@@ -51,6 +56,7 @@ if (!config.tnt.password) missingTntConfig.push("API_PASSWORD");
 if (!config.db.user) missingTntConfig.push("MONGO_USER");
 if (!config.db.pass) missingTntConfig.push("MONGO_PASSWORD");
 if (!config.prediction.url) missingTntConfig.push("PREDICTION_URL");
+if (!config.redis.password) missingTntConfig.push("REDIS_PASSWORD");
 
 if (missingTntConfig.length > 0) {
   throw new Error(

@@ -1,4 +1,5 @@
 import { User } from "../models/User.js";
+import { redisClient } from "../config/redis.js";
 
 export const getLeaderboard = async (req, res, next) => {
   try {
@@ -58,19 +59,27 @@ export const getLeaderboard = async (req, res, next) => {
 export const getFavoriteRoutes = async (req, res, next) => {
   try {
     const userId = req.userId;
+    const cacheKey = `user:${userId}:favorites`;
+
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      return res.status(200).json(JSON.parse(cachedData));
+    }
 
     const user = await User.findById(userId).select("favoriteRoutes");
-
-    if (!user) {
+    if (!user)
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
-    }
 
-    res.status(200).json({
+    const responseData = {
       success: true,
       favoriteRoutes: user.favoriteRoutes || [],
-    });
+    };
+
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(responseData));
+
+    res.status(200).json(responseData);
   } catch (error) {
     next(error);
   }
@@ -117,6 +126,8 @@ export const updateFavoriteRoutes = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "User not found" });
     }
+
+    await redisClient.del(`user:${userId}:favorites`);
 
     res.status(200).json({
       success: true,

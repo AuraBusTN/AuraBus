@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import hpp from "hpp";
 import mongoSanitize from "express-mongo-sanitize";
 import { setupSwagger } from "./swagger.js";
 import stopsRouter from "./routes/stops.routes.js";
@@ -29,6 +30,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(hpp());
 
 app.use(mongoSanitize());
 
