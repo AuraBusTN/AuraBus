@@ -247,4 +247,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youLabel => 'You';
+
+  @override
+  String get searchPlaceholder => 'Search stop...';
 }

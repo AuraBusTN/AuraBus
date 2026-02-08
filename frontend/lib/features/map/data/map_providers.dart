@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
+import 'package:aurabus/features/map/data/models/route_info.dart';
+import 'package:aurabus/features/map/presentation/utils/route_utils.dart';
 import 'map_repository.dart';
 import 'map_marker_loader.dart';
 import 'models/stop_info.dart';
@@ -140,29 +142,7 @@ final sortedUniqueLinesProvider = Provider.family<List<RouteInfo>, int>((
 
   final routes = List<RouteInfo>.from(stop.routes);
 
-  routes.sort((a, b) {
-    final regExp = RegExp(r'^(\d+)(.*)$');
-
-    final matchA = regExp.firstMatch(a.routeShortName);
-    final matchB = regExp.firstMatch(b.routeShortName);
-
-    final numA = matchA != null ? int.parse(matchA.group(1)!) : null;
-    final numB = matchB != null ? int.parse(matchB.group(1)!) : null;
-
-    if (numA != null && numB != null) {
-      final compareNums = numA.compareTo(numB);
-
-      if (compareNums != 0) return compareNums;
-
-      return a.routeShortName.compareTo(b.routeShortName);
-    }
-
-    if (numA != null) return -1;
-
-    if (numB != null) return 1;
-
-    return a.routeShortName.compareTo(b.routeShortName);
-  });
+  routes.sort(RouteUtils.compareRoutes);
 
   return routes;
 });

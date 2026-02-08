@@ -565,6 +565,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You'**
   String get youLabel;
+
+  /// No description provided for @searchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search stop...'**
+  String get searchPlaceholder;
 }
 
 class _AppLocalizationsDelegate

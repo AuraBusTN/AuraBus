@@ -2495,6 +2495,190 @@
             {
                 "areaId": 0,
                 "news": null,
+                "routeColor": "52332A",
+                "routeId": 404,
+                "routeLongName": "Centochiavi Piazza Dante Mattarello",
+                "routeShortName": "8",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "007BC3",
+                "routeId": 539,
+                "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
+                "routeShortName": "4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29005z",
+        "stopDesc": "",
+        "stopId": 77,
+        "stopLat": 46.13858,
+        "stopLevel": 60,
+        "stopLon": 11.109069,
+        "stopName": "Lavis Nazionale",
+        "street": "Via Nazionale",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "52332A",
+                "routeId": 404,
+                "routeLongName": "Centochiavi Piazza Dante Mattarello",
+                "routeShortName": "8",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "007BC3",
+                "routeId": 539,
+                "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
+                "routeShortName": "4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29015x",
+        "stopDesc": "",
+        "stopId": 78,
+        "stopLat": 46.138061,
+        "stopLevel": 60,
+        "stopLon": 11.115898,
+        "stopName": "Lavis Piazza Caduti",
+        "street": "Lavis Piazza Mercato",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "52332A",
+                "routeId": 404,
+                "routeLongName": "Centochiavi Piazza Dante Mattarello",
+                "routeShortName": "8",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "007BC3",
+                "routeId": 539,
+                "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
+                "routeShortName": "4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29020x",
+        "stopDesc": "",
+        "stopId": 79,
+        "stopLat": 46.139289,
+        "stopLevel": 60,
+        "stopLon": 11.112161,
+        "stopName": "Lavis Municipio",
+        "street": "Lavis \"Municipio\"",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "52332A",
+                "routeId": 404,
+                "routeLongName": "Centochiavi Piazza Dante Mattarello",
+                "routeShortName": "8",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "007BC3",
+                "routeId": 539,
+                "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
+                "routeShortName": "4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "19025",
+        "stopDesc": "",
+        "stopId": 80,
+        "stopLat": 46.142225,
+        "stopLevel": 60,
+        "stopLon": 11.108496,
+        "stopName": "Lavis Rosmini Segantini",
+        "street": "Lavis Rosmini Segantini",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
                 "routeColor": "C52720",
                 "routeId": 396,
                 "routeLongName": "Cortesano Gardolo P.Dante Villazzano 3",
@@ -19435,6 +19619,16 @@
             {
                 "areaId": 0,
                 "news": null,
+                "routeColor": "72E006",
+                "routeId": 478,
+                "routeLongName": "Dogana Ftm Interporto Spini Di Gardolo",
+                "routeShortName": "15",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
                 "routeColor": "DB5826",
                 "routeId": 538,
                 "routeLongName": "Piedic. Stazione Osp.S.Chiara Regione Piedic.",
@@ -22663,6 +22857,16 @@
             {
                 "areaId": 0,
                 "news": null,
+                "routeColor": "0A9B86",
+                "routeId": 402,
+                "routeLongName": "Canova Melta Piazza Dante Gocciadoro",
+                "routeShortName": "7",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
                 "routeColor": "582E79",
                 "routeId": 425,
                 "routeLongName": "Dogana Ftm Via Brennero Gardolo Spini",
@@ -24027,6 +24231,1944 @@
             {
                 "areaId": 0,
                 "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 610,
+                "routeLongName": "03 Lavis Stazione Fs",
+                "routeShortName": "L3",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "10002",
+        "stopDesc": "",
+        "stopId": 3014,
+        "stopLat": 46.138664,
+        "stopLevel": 60,
+        "stopLon": 11.108985,
+        "stopName": "Lavis Via Nazionale",
+        "street": "Via Nazionale",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40012z",
+        "stopDesc": "",
+        "stopId": 3016,
+        "stopLat": 46.139472,
+        "stopLevel": 60,
+        "stopLon": 11.111335,
+        "stopName": "Lavis Piazza Grazioli",
+        "street": "Lavis Piazza S.Gallo",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40022z",
+        "stopDesc": "",
+        "stopId": 3017,
+        "stopLat": 46.14184,
+        "stopLevel": 60,
+        "stopLon": 11.11238,
+        "stopName": "Lavis Via Dei Colli",
+        "street": "Lavis Via Dei Colli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40032z",
+        "stopDesc": "",
+        "stopId": 3018,
+        "stopLat": 46.144048,
+        "stopLevel": 60,
+        "stopLon": 11.112649,
+        "stopName": "Lavis Via Cembra",
+        "street": "Lavis Via Cembra",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40042z",
+        "stopDesc": "",
+        "stopId": 3019,
+        "stopLat": 46.146836,
+        "stopLevel": 60,
+        "stopLon": 11.111036,
+        "stopName": "Lavis Bivio Fratte",
+        "street": "Lavis Bivio Fratte",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40042x",
+        "stopDesc": "",
+        "stopId": 3020,
+        "stopLat": 46.146734,
+        "stopLevel": 60,
+        "stopLon": 11.111007,
+        "stopName": "Lavis Bivio Fratte",
+        "street": "Lavis Bivio Fratte",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40062x",
+        "stopDesc": "",
+        "stopId": 3021,
+        "stopLat": 46.145627,
+        "stopLevel": 60,
+        "stopLon": 11.105818,
+        "stopName": "Lavis Strada Fonda",
+        "street": "Via per Pressano",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40062z",
+        "stopDesc": "",
+        "stopId": 3022,
+        "stopLat": 46.145301,
+        "stopLevel": 60,
+        "stopLon": 11.106307,
+        "stopName": "Lavis Strada Fonda",
+        "street": "Via A. Rosmini",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40072x",
+        "stopDesc": "",
+        "stopId": 3023,
+        "stopLat": 46.142197,
+        "stopLevel": 60,
+        "stopLon": 11.108504,
+        "stopName": "Lavis Via Rosmini",
+        "street": "Lavis Rosmini Segantini",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 610,
+                "routeLongName": "03 Lavis Stazione Fs",
+                "routeShortName": "L3",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40082x",
+        "stopDesc": "",
+        "stopId": 3024,
+        "stopLat": 46.139305,
+        "stopLevel": 60,
+        "stopLon": 11.112131,
+        "stopName": "Lavis Municipio",
+        "street": "Lavis \"Municipio\"",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 610,
+                "routeLongName": "03 Lavis Stazione Fs",
+                "routeShortName": "L3",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40202-",
+        "stopDesc": "",
+        "stopId": 3027,
+        "stopLat": 46.147934,
+        "stopLevel": 60,
+        "stopLon": 11.097347,
+        "stopName": "Lavis Stazione Fs",
+        "street": "Lavis \"Stazione\"",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 610,
+                "routeLongName": "03 Lavis Stazione Fs",
+                "routeShortName": "L3",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40212x",
+        "stopDesc": "",
+        "stopId": 3028,
+        "stopLat": 46.145584,
+        "stopLevel": 60,
+        "stopLon": 11.09729,
+        "stopName": "Lavis Via Filos",
+        "street": "Lavis Via Filos",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 610,
+                "routeLongName": "03 Lavis Stazione Fs",
+                "routeShortName": "L3",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40212z",
+        "stopDesc": "",
+        "stopId": 3029,
+        "stopLat": 46.145665,
+        "stopLevel": 60,
+        "stopLon": 11.097523,
+        "stopName": "Lavis Via Filos",
+        "street": "Via F. Filos",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40302x",
+        "stopDesc": "",
+        "stopId": 3030,
+        "stopLat": 46.136413,
+        "stopLevel": 60,
+        "stopLon": 11.086541,
+        "stopName": "Lavis Via di Vittorio 78/84",
+        "street": "Lavis Via di Vittorio 78/84",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40312x",
+        "stopDesc": "",
+        "stopId": 3031,
+        "stopLat": 46.133537,
+        "stopLevel": 60,
+        "stopLon": 11.087634,
+        "stopName": "Lavis Via di Vittorio 64",
+        "street": "Lavis Via di Vittorio 64",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40322x",
+        "stopDesc": "",
+        "stopId": 3032,
+        "stopLat": 46.134301,
+        "stopLevel": 60,
+        "stopLon": 11.093436,
+        "stopName": "Lavis Via di Vittorio 26",
+        "street": "Lavis Via di Vittorio 26",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40332x",
+        "stopDesc": "",
+        "stopId": 3033,
+        "stopLat": 46.136341,
+        "stopLevel": 60,
+        "stopLon": 11.093358,
+        "stopName": "Lavis Via Fermi",
+        "street": "Lavis Via Fermi",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40342x",
+        "stopDesc": "",
+        "stopId": 3034,
+        "stopLat": 46.134621,
+        "stopLevel": 60,
+        "stopLon": 11.097322,
+        "stopName": "Lavis Via di Vittorio 6",
+        "street": "Lavis Via di Vittorio 6",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40352x",
+        "stopDesc": "",
+        "stopId": 3035,
+        "stopLat": 46.138874,
+        "stopLevel": 60,
+        "stopLon": 11.101196,
+        "stopName": "Lavis Via Zandonai",
+        "street": "Lavis Via Zandonai",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41002z",
+        "stopDesc": "",
+        "stopId": 3036,
+        "stopLat": 46.153557,
+        "stopLevel": 60,
+        "stopLon": 11.106927,
+        "stopName": "Pressano Piazza",
+        "street": "Pressano Piazza",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41012-",
+        "stopDesc": "",
+        "stopId": 3037,
+        "stopLat": 46.152127,
+        "stopLevel": 60,
+        "stopLon": 11.106138,
+        "stopName": "Pressano Oratorio",
+        "street": "Pressano \"Oratorio\"",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41022x",
+        "stopDesc": "",
+        "stopId": 3038,
+        "stopLat": 46.157309,
+        "stopLevel": 60,
+        "stopLon": 11.107777,
+        "stopName": "Pressano Via Cl. Augusta",
+        "street": "Pressano Via Cl. Augusta",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41022z",
+        "stopDesc": "",
+        "stopId": 3039,
+        "stopLat": 46.157338,
+        "stopLevel": 60,
+        "stopLon": 11.107839,
+        "stopName": "Pressano Via Cl. Augusta",
+        "street": "Pressano Via Cl. Augusta",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41032z",
+        "stopDesc": "",
+        "stopId": 3040,
+        "stopLat": 46.154093,
+        "stopLevel": 60,
+        "stopLon": 11.109902,
+        "stopName": "Pressano Via Sant'antonio",
+        "street": "Pressano Via Sant'antonio",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41042x",
+        "stopDesc": "",
+        "stopId": 3041,
+        "stopLat": 46.15003,
+        "stopLevel": 60,
+        "stopLon": 11.104334,
+        "stopName": "Pressano Via Pilati",
+        "street": "Via A. Pilati",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42012x",
+        "stopDesc": "",
+        "stopId": 3043,
+        "stopLat": 46.161439,
+        "stopLevel": 60,
+        "stopLon": 11.109306,
+        "stopName": "Nave S.Felice Maso Rover",
+        "street": "Via Claudia Augusta",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42012z",
+        "stopDesc": "",
+        "stopId": 3044,
+        "stopLat": 46.161333,
+        "stopLevel": 60,
+        "stopLon": 11.109326,
+        "stopName": "Nave S.Felice Maso Rover",
+        "street": "Nave S.Felice Maso Rover",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42022z",
+        "stopDesc": "",
+        "stopId": 3045,
+        "stopLat": 46.170412,
+        "stopLevel": 60,
+        "stopLon": 11.118105,
+        "stopName": "Nave S.Felice Zona Stuadri",
+        "street": "Nave S.Felice Zona Stuadri",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42032x",
+        "stopDesc": "",
+        "stopId": 3046,
+        "stopLat": 46.162483,
+        "stopLevel": 60,
+        "stopLon": 11.110392,
+        "stopName": "Nave S.Felice Case Tenaia",
+        "street": "Frazione Nave San Felice",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43002-",
+        "stopDesc": "",
+        "stopId": 3047,
+        "stopLat": 46.172283,
+        "stopLevel": 60,
+        "stopLon": 11.125893,
+        "stopName": "Sorni",
+        "street": "Sorni",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43012x",
+        "stopDesc": "",
+        "stopId": 3048,
+        "stopLat": 46.174864,
+        "stopLevel": 60,
+        "stopLon": 11.122294,
+        "stopName": "Sorni Bivio",
+        "street": "Sorni. Bivio",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43012z",
+        "stopDesc": "",
+        "stopId": 3049,
+        "stopLat": 46.174341,
+        "stopLevel": 60,
+        "stopLon": 11.122074,
+        "stopName": "Sorni Bivio",
+        "street": "Sorni Bivio",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43022z",
+        "stopDesc": "",
+        "stopId": 3050,
+        "stopLat": 46.174616,
+        "stopLevel": 60,
+        "stopLon": 11.123075,
+        "stopName": "Sorni Bivio Via Toresela",
+        "street": "Sorni Bivio Via Toresela",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43032x",
+        "stopDesc": "",
+        "stopId": 3051,
+        "stopLat": 46.174676,
+        "stopLevel": 60,
+        "stopLon": 11.124554,
+        "stopName": "Sorni Via Dalmaso",
+        "street": "Sorni Via Dalmaso",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43032z",
+        "stopDesc": "",
+        "stopId": 3052,
+        "stopLat": 46.174737,
+        "stopLevel": 60,
+        "stopLon": 11.124493,
+        "stopName": "Sorni Via Dalmaso",
+        "street": "Sorni Via Dalmaso",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43042x",
+        "stopDesc": "",
+        "stopId": 3053,
+        "stopLat": 46.175439,
+        "stopLevel": 60,
+        "stopLon": 11.125608,
+        "stopName": "Sorni Bivio Maso Zatelli",
+        "street": "Sorni Bivio Maso Zatelli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43042z",
+        "stopDesc": "",
+        "stopId": 3054,
+        "stopLat": 46.175315,
+        "stopLevel": 60,
+        "stopLon": 11.125547,
+        "stopName": "Sorni Bivio Maso Zatelli",
+        "street": "Sorni Bivio Maso Zatelli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43052x",
+        "stopDesc": "",
+        "stopId": 3055,
+        "stopLat": 46.174042,
+        "stopLevel": 60,
+        "stopLon": 11.12067,
+        "stopName": "Sorni Ss.12",
+        "street": "SS12",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44012x",
+        "stopDesc": "",
+        "stopId": 3056,
+        "stopLat": 46.176495,
+        "stopLevel": 60,
+        "stopLon": 11.125399,
+        "stopName": "Maso Zatelli",
+        "street": "Maso Zatelli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44012z",
+        "stopDesc": "",
+        "stopId": 3057,
+        "stopLat": 46.176515,
+        "stopLevel": 60,
+        "stopLon": 11.125336,
+        "stopName": "Maso Zatelli",
+        "street": "Maso Zatelli",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44022x",
+        "stopDesc": "",
+        "stopId": 3058,
+        "stopLat": 46.177635,
+        "stopLevel": 60,
+        "stopLon": 11.12747,
+        "stopName": "Maso Del Narciso",
+        "street": "Maso Del Narciso",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44022z",
+        "stopDesc": "",
+        "stopId": 3059,
+        "stopLat": 46.177651,
+        "stopLevel": 60,
+        "stopLon": 11.127542,
+        "stopName": "Maso Del Narciso",
+        "street": "Maso Del Narciso",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44032x",
+        "stopDesc": "",
+        "stopId": 3060,
+        "stopLat": 46.175362,
+        "stopLevel": 60,
+        "stopLon": 11.131343,
+        "stopName": "Maso Rosabel",
+        "street": "Maso Rosabel",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44032z",
+        "stopDesc": "",
+        "stopId": 3061,
+        "stopLat": 46.1754,
+        "stopLevel": 60,
+        "stopLon": 11.131366,
+        "stopName": "Maso Rosabel",
+        "street": "Maso Rosabel",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44042x",
+        "stopDesc": "",
+        "stopId": 3062,
+        "stopLat": 46.172498,
+        "stopLevel": 60,
+        "stopLon": 11.128994,
+        "stopName": "Sp.131 Bivio Laste",
+        "street": "Sp.131 Bivio Laste",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44052x",
+        "stopDesc": "",
+        "stopId": 3063,
+        "stopLat": 46.168742,
+        "stopLevel": 60,
+        "stopLon": 11.125581,
+        "stopName": "Maso Panizza di Sopra",
+        "street": "Maso Panizza di Sopra",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44052z",
+        "stopDesc": "",
+        "stopId": 3064,
+        "stopLat": 46.168616,
+        "stopLevel": 60,
+        "stopLon": 11.125299,
+        "stopName": "Maso Panizza di Sopra",
+        "street": "Maso Panizza di Sopra",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44062x",
+        "stopDesc": "",
+        "stopId": 3065,
+        "stopLat": 46.165226,
+        "stopLevel": 60,
+        "stopLon": 11.121665,
+        "stopName": "Maso Zancanar",
+        "street": "Maso Zancanar",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44062z",
+        "stopDesc": "",
+        "stopId": 3066,
+        "stopLat": 46.164958,
+        "stopLevel": 60,
+        "stopLon": 11.121624,
+        "stopName": "Maso Zancanar",
+        "street": "Maso Zancanar",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44072x",
+        "stopDesc": "",
+        "stopId": 3067,
+        "stopLat": 46.16302,
+        "stopLevel": 60,
+        "stopLon": 11.118873,
+        "stopName": "Maso Poli",
+        "street": "Maso Poli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44072z",
+        "stopDesc": "",
+        "stopId": 3068,
+        "stopLat": 46.163013,
+        "stopLevel": 60,
+        "stopLon": 11.119002,
+        "stopName": "Maso Poli",
+        "street": "Maso Poli",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44082x",
+        "stopDesc": "",
+        "stopId": 3069,
+        "stopLat": 46.160608,
+        "stopLevel": 60,
+        "stopLon": 11.116311,
+        "stopName": "Maso Luchin",
+        "street": "Maso Luchin",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44082z",
+        "stopDesc": "",
+        "stopId": 3070,
+        "stopLat": 46.160585,
+        "stopLevel": 60,
+        "stopLon": 11.116362,
+        "stopName": "Maso Luchin",
+        "street": "Maso Luchin",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44092x",
+        "stopDesc": "",
+        "stopId": 3071,
+        "stopLat": 46.159249,
+        "stopLevel": 60,
+        "stopLon": 11.115103,
+        "stopName": "Maso Tratta",
+        "street": "Maso Tratta",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44102-",
+        "stopDesc": "",
+        "stopId": 3072,
+        "stopLat": 46.159065,
+        "stopLevel": 60,
+        "stopLon": 11.119271,
+        "stopName": "Maso Spon",
+        "street": "Via Masi di Pressano",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41062z",
+        "stopDesc": "",
+        "stopId": 3073,
+        "stopLat": 46.153691,
+        "stopLevel": 60,
+        "stopLon": 11.110336,
+        "stopName": "Maso Clinga Via Clinga",
+        "street": "Maso Clinga Via Clinga",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41072z",
+        "stopDesc": "",
+        "stopId": 3074,
+        "stopLat": 46.152243,
+        "stopLevel": 60,
+        "stopLon": 11.11173,
+        "stopName": "Maso Clinga",
+        "street": "Maso Clinga",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41082x",
+        "stopDesc": "",
+        "stopId": 3077,
+        "stopLat": 46.15055,
+        "stopLevel": 60,
+        "stopLon": 11.108069,
+        "stopName": "Maso Clinga Via Furli",
+        "street": "Maso Clinga Via Furli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40052x",
+        "stopDesc": "",
+        "stopId": 3078,
+        "stopLat": 46.148786,
+        "stopLevel": 60,
+        "stopLon": 11.109659,
+        "stopName": "Lavis Maso Furli",
+        "street": "Lavis Maso Furli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40052z",
+        "stopDesc": "",
+        "stopId": 3079,
+        "stopLat": 46.148825,
+        "stopLevel": 60,
+        "stopLon": 11.109738,
+        "stopName": "Lavis Maso Furli",
+        "street": "Lavis Maso Furli",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42002z",
+        "stopDesc": "",
+        "stopId": 3080,
+        "stopLat": 46.164561,
+        "stopLevel": 60,
+        "stopLon": 11.112234,
+        "stopName": "Nave S.Felice",
+        "street": "Nave S.Felice",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44092z",
+        "stopDesc": "",
+        "stopId": 3081,
+        "stopLat": 46.158507,
+        "stopLevel": 60,
+        "stopLon": 11.114959,
+        "stopName": "Maso Tratta",
+        "street": "SP131",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42002x",
+        "stopDesc": "",
+        "stopId": 3082,
+        "stopLat": 46.164589,
+        "stopLevel": 60,
+        "stopLon": 11.112097,
+        "stopName": "Nave S.Felice",
+        "street": "Nave S.Felice",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "41002x",
+        "stopDesc": "",
+        "stopId": 3083,
+        "stopLat": 46.153631,
+        "stopLevel": 60,
+        "stopLon": 11.107061,
+        "stopName": "Pressano Piazza",
+        "street": "Via Claudia Augusta",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42042x",
+        "stopDesc": "",
+        "stopId": 3084,
+        "stopLat": 46.166718,
+        "stopLevel": 60,
+        "stopLon": 11.113208,
+        "stopName": "Nave S.Felice Stazione Ftm",
+        "street": "Nave S.Felice",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 607,
+                "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+                "routeShortName": "L1",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "42032z",
+        "stopDesc": "",
+        "stopId": 3085,
+        "stopLat": 46.162105,
+        "stopLevel": 60,
+        "stopLon": 11.110088,
+        "stopName": "Nave S.Felice Case Tenaia",
+        "street": "Nave S.Felice Case Tenaia",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "44042z",
+        "stopDesc": "",
+        "stopId": 3086,
+        "stopLat": 46.1731,
+        "stopLevel": 60,
+        "stopLon": 11.129881,
+        "stopName": "Sp.131 Bivio Laste",
+        "street": "SP131",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "43022x",
+        "stopDesc": "",
+        "stopId": 3087,
+        "stopLat": 46.174356,
+        "stopLevel": 60,
+        "stopLon": 11.122754,
+        "stopName": "Sorni Bivio Via Toresela",
+        "street": "Via Francesco Dalmaso",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
                 "routeColor": "000000",
                 "routeId": 533,
                 "routeLongName": "Rsa \"S.Bart.\" \"Angeli Custodi\" Laste",
@@ -24046,6 +26188,52 @@
         "town": "Trento",
         "type": "U",
         "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 610,
+                "routeLongName": "03 Lavis Stazione Fs",
+                "routeShortName": "L3",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 612,
+                "routeLongName": "04 Lavis Zona Industriale Lavis",
+                "routeShortName": "L4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 613,
+                "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+                "routeShortName": "L2",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "40112z",
+        "stopDesc": "",
+        "stopId": 3094,
+        "stopLat": 46.141564,
+        "stopLevel": 60,
+        "stopLon": 11.105781,
+        "stopName": "Lavis Cimitero",
+        "street": "Via Nazionale",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 0
     },
     {
         "distance": null,
@@ -24256,6 +26444,306 @@
                 "areaId": 0,
                 "news": null,
                 "routeColor": null,
+                "routeId": 623,
+                "routeLongName": "Stazione Buc M.Baldo Muse Regione",
+                "routeShortName": "19",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "21632x",
+        "stopDesc": "",
+        "stopId": 3109,
+        "stopLat": 46.06269,
+        "stopLevel": 60,
+        "stopLon": 11.113605,
+        "stopName": "Albere Muse",
+        "street": "Albere \"Muse\"",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "23305z",
+        "stopDesc": "",
+        "stopId": 3110,
+        "stopLat": 46.136804,
+        "stopLevel": 60,
+        "stopLon": 11.116591,
+        "stopName": "San Lazzaro Ponte Avisio",
+        "street": "San Lazzaro Ponte Avisio",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "22225z",
+        "stopDesc": "",
+        "stopId": 3111,
+        "stopLat": 46.134686,
+        "stopLevel": 60,
+        "stopLon": 11.111923,
+        "stopName": "Lamar Sponda Trentina",
+        "street": "Lamar Sponda Trentina",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29015z",
+        "stopDesc": "",
+        "stopId": 3112,
+        "stopLat": 46.138012,
+        "stopLevel": 60,
+        "stopLon": 11.114866,
+        "stopName": "Lavis Piazza Caduti",
+        "street": "Lavis Piazza Caduti",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29020z",
+        "stopDesc": "",
+        "stopId": 3113,
+        "stopLat": 46.139535,
+        "stopLevel": 60,
+        "stopLon": 11.11194,
+        "stopName": "Lavis Municipio",
+        "street": "Lavis \"Municipio\"",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29050z",
+        "stopDesc": "",
+        "stopId": 3114,
+        "stopLat": 46.142856,
+        "stopLevel": 60,
+        "stopLon": 11.107967,
+        "stopName": "Lavis Rosmini Segantini",
+        "street": "Via A. Rosmini",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "52332A",
+                "routeId": 404,
+                "routeLongName": "Centochiavi Piazza Dante Mattarello",
+                "routeShortName": "8",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "007BC3",
+                "routeId": 539,
+                "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
+                "routeShortName": "4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29035x",
+        "stopDesc": "",
+        "stopId": 3115,
+        "stopLat": 46.143221,
+        "stopLevel": 60,
+        "stopLon": 11.106588,
+        "stopName": "Lavis Cembra",
+        "street": "Lavis Cembra",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29035z",
+        "stopDesc": "",
+        "stopId": 3116,
+        "stopLat": 46.142828,
+        "stopLevel": 60,
+        "stopLon": 11.10509,
+        "stopName": "Lavis Cembra",
+        "street": "Via Cembra",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "52332A",
+                "routeId": 404,
+                "routeLongName": "Centochiavi Piazza Dante Mattarello",
+                "routeShortName": "8",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "007BC3",
+                "routeId": 539,
+                "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
+                "routeShortName": "4",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29040z",
+        "stopDesc": "",
+        "stopId": 3117,
+        "stopLat": 46.141545,
+        "stopLevel": 60,
+        "stopLon": 11.105815,
+        "stopName": "Lavis Cimitero",
+        "street": "Lavis \"Stazione Ftm\"",
+        "town": "Lavis",
+        "type": "U",
+        "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": "1F9ACF",
+                "routeId": 629,
+                "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+                "routeShortName": "17",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "29045c",
+        "stopDesc": "",
+        "stopId": 3118,
+        "stopLat": 46.140178,
+        "stopLevel": 60,
+        "stopLon": 11.106532,
+        "stopName": "Lavis Stazione Ftm",
+        "street": "Lavis P.Le Stolcis",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
                 "routeId": 570,
                 "routeLongName": "Povo Borino Celva Passo Cimirlo",
                 "routeShortName": "CM",
@@ -24364,14 +26852,158 @@
         "stopCode": "20150c",
         "stopDesc": "",
         "stopId": 3128,
-        "stopLat": 46.074163,
+        "stopLat": 46.073852,
         "stopLevel": 100,
-        "stopLon": 11.120697,
+        "stopLon": 11.120692,
         "stopName": "Dogana Stazione Ftm",
         "street": "Trento Ftm",
         "town": "Trento",
         "type": "U",
         "wheelchairBoarding": 1
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 590,
+                "routeLongName": "03 Peders. Brione Stazione Isera (Lenzima)",
+                "routeShortName": "3",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 601,
+                "routeLongName": "Castellano Molini Villa Lagarina",
+                "routeShortName": "P",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "38631x",
+        "stopDesc": "",
+        "stopId": 3129,
+        "stopLat": 45.930042,
+        "stopLevel": 60,
+        "stopLon": 11.022507,
+        "stopName": "Sp.20 Navert",
+        "street": "Sp.20 Navert",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 590,
+                "routeLongName": "03 Peders. Brione Stazione Isera (Lenzima)",
+                "routeShortName": "3",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 601,
+                "routeLongName": "Castellano Molini Villa Lagarina",
+                "routeShortName": "P",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "38641x",
+        "stopDesc": "",
+        "stopId": 3130,
+        "stopLat": 45.924791,
+        "stopLevel": 60,
+        "stopLon": 11.009407,
+        "stopName": "Castellano Peer",
+        "street": "Castellano Peer",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 590,
+                "routeLongName": "03 Peders. Brione Stazione Isera (Lenzima)",
+                "routeShortName": "3",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 601,
+                "routeLongName": "Castellano Molini Villa Lagarina",
+                "routeShortName": "P",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "38631z",
+        "stopDesc": "",
+        "stopId": 3131,
+        "stopLat": 45.930057,
+        "stopLevel": 60,
+        "stopLon": 11.022375,
+        "stopName": "Sp.20 Navert",
+        "street": "Sp.20 Navert",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 2
+    },
+    {
+        "distance": null,
+        "routes": [
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 590,
+                "routeLongName": "03 Peders. Brione Stazione Isera (Lenzima)",
+                "routeShortName": "3",
+                "routeType": 3,
+                "type": "U"
+            },
+            {
+                "areaId": 0,
+                "news": null,
+                "routeColor": null,
+                "routeId": 601,
+                "routeLongName": "Castellano Molini Villa Lagarina",
+                "routeShortName": "P",
+                "routeType": 3,
+                "type": "U"
+            }
+        ],
+        "stopCode": "38641z",
+        "stopDesc": "",
+        "stopId": 3132,
+        "stopLat": 45.925047,
+        "stopLevel": 60,
+        "stopLon": 11.009975,
+        "stopName": "Castellano Peer",
+        "street": "Castellano Peer",
+        "town": null,
+        "type": "U",
+        "wheelchairBoarding": 2
     },
     {
         "distance": null,
