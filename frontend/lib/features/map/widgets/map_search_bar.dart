@@ -244,9 +244,7 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: ColorUtils.parseHexColor(
-                                  route.routeColor,
-                                ),
+                                color: route.routeColor,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
