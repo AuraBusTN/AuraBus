@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:aurabus/core/utils/color_utils.dart';
-import 'package:aurabus/core/utils/route_utils.dart';
+import 'package:aurabus/features/map/presentation/utils/route_utils.dart';
 import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
@@ -65,6 +65,8 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if (!mounted) return;
 
+      if (!_focusNode.hasFocus) return;
+
       final query = _controller.text.trim().toLowerCase();
 
       final stopsAsync = ref.read(stopsListProvider);
@@ -119,6 +121,8 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
   }
 
   void _onEntrySelected(UnifiedStopEntry entry) {
+    _debounce?.cancel();
+
     _controller.text = entry.stopName;
     _focusNode.unfocus();
     setState(() {

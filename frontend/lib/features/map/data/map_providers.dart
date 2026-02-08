@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 import 'package:aurabus/features/map/data/models/route_info.dart';
-import 'package:aurabus/core/utils/route_utils.dart';
+import 'package:aurabus/features/map/presentation/utils/route_utils.dart';
 import 'map_repository.dart';
 import 'map_marker_loader.dart';
 import 'models/stop_info.dart';
