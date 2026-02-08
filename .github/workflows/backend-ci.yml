@@ -43,6 +43,9 @@ jobs:
           echo "API_USER=${{ secrets.API_USER }}" >> .env
           echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> .env
           echo "PREDICTION_URL=${{ secrets.PREDICTION_URL }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
 
       - name: Run tests with Jest (inside Docker)
         env:
@@ -57,4 +60,7 @@ jobs:
           -e API_USER="${{ secrets.API_USER }}" \
           -e API_PASSWORD="${{ secrets.API_PASSWORD }}" \
           -e PREDICTION_URL="${{ secrets.PREDICTION_URL }}" \
+          -e REDIS_HOST="${{ secrets.REDIS_HOST }}" \
+          -e REDIS_PORT="${{ secrets.REDIS_PORT }}" \
+          -e REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}" \
           api npm test

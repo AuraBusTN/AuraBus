@@ -6,8 +6,6 @@ const redisClient = createClient({
   password: config.redis.password,
 });
 
-console.log("🔍 DEBUG REDIS PASSWORD:", config.redis.password);
-
 redisClient.on("error", (err) => console.error("❌ Redis Client Error", err));
 redisClient.on("connect", () => console.log("✅ Connected to Redis"));
 
