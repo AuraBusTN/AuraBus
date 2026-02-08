@@ -28,8 +28,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
   static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
-  bool termsChecked = false;
-
   @override
   void dispose() {
     firstNameController.dispose();
@@ -41,15 +39,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   }
 
   Future<void> _handleSignup() async {
-    final l10n = AppLocalizations.of(context)!;
     if (_formKey.currentState!.validate()) {
-      if (!termsChecked) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.termsError)));
-        return;
-      }
-
       FocusScope.of(context).unfocus();
 
       final success = await ref
@@ -117,7 +107,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                   child: Column(
                     children: [
                       const SizedBox(height: 80),
-
                       FadeInSlide(
                         delay: 0.1,
                         child: Column(
@@ -141,11 +130,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 30),
-
                       FadeInSlide(
-                        delay: 0.2,
+                        delay: 0.3,
                         child: Column(
                           children: [
                             Row(
@@ -173,7 +160,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                 ),
                               ],
                             ),
-
                             CustomTextField(
                               controller: emailController,
                               label: l10n.emailLabel,
@@ -181,10 +167,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                               keyboardType: TextInputType.emailAddress,
                               validator: (v) =>
                                   (v == null || !_emailRegex.hasMatch(v.trim()))
-                                  ? l10n.invalidEmail
-                                  : null,
+                                      ? l10n.invalidEmail
+                                      : null,
                             ),
-
                             CustomTextField(
                               controller: passwordController,
                               label: l10n.passwordLabel,
@@ -194,7 +179,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                   ? l10n.passwordMinChars
                                   : null,
                             ),
-
                             CustomTextField(
                               controller: confirmPasswordController,
                               label: l10n.confirmPasswordLabel,
@@ -212,38 +196,61 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           ],
                         ),
                       ),
-
                       FadeInSlide(
                         delay: 0.3,
                         child: Column(
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: TermsAndConditions(
-                                isChecked: termsChecked,
-                                onChanged: (val) =>
-                                    setState(() => termsChecked = val ?? false),
+                              child: FormField<bool>(
+                                initialValue: false,
+                                validator: (value) {
+                                  if (value != true) {
+                                    return l10n.termsError;
+                                  }
+                                  return null;
+                                },
+                                builder: (state) {
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TermsAndConditions(
+                                        isChecked: state.value ?? false,
+                                        onChanged: (val) {
+                                          state.didChange(val);
+                                        },
+                                      ),
+                                      if (state.hasError)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 5),
+                                          child: Text(
+                                            state.errorText!,
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
-
                             isLoading
                                 ? const CircularProgressIndicator()
                                 : GenericButton(
                                     textLabel: l10n.signupButton,
                                     onPressed: _handleSignup,
                                   ),
-
                             const SizedBox(height: 25),
-
                             Row(
                               children: [
                                 Expanded(
                                   child: Divider(color: Colors.grey.shade300),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 10),
                                   child: Text(
                                     l10n.orSignUpWith,
                                     style: TextStyle(
@@ -257,13 +264,10 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                 ),
                               ],
                             ),
-
                             const SizedBox(height: 25),
-
                             GoogleButton(
                               onPressed: isLoading ? null : _handleGoogleLogin,
                             ),
-
                             const SizedBox(height: 100),
                           ],
                         ),
@@ -273,7 +277,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                 ),
               ),
             ),
-
             Positioned(
               top: 0,
               left: 0,
@@ -287,7 +290,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                 ),
               ),
             ),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(

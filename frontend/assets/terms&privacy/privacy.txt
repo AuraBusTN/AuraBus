@@ -1,0 +1,37 @@
+Privacy Policy
+
+Last Updated: 08/02/2026
+
+1. Introduction
+This Privacy Policy explains how Aurabus collects, uses, and discloses your information when you use this mobile application .
+
+2. Information We Collect
+We may collect the following types of information:
+- Personal Information: such as name, email address, if you choose to provide it.
+- Usage Data: analytics and diagnostic data automatically collected when you use the App.
+
+3. How We Use Information
+We use collected information to:
+- Provide and maintain the App
+- Improve user experience
+- Analyze usage trends
+
+4. Data Sharing
+We do not sell your personal information. We may share information with:
+- Service providers who help us operate the App
+- Law enforcement if required by law
+
+5. Data Security
+We implement reasonable technical measures to protect your data, but no method is 100% secure.
+
+6. Third-Party Services
+The App may use third-party services that collect data (e.g., analytics). Please refer to those services’ privacy policies for details.
+
+7. Children’s Privacy
+The App is not intended for children under 13. We do not knowingly collect personal data from children under 13.
+
+8. Changes to Privacy Policy
+We may update this Privacy Policy at any time. The updated policy will be posted in the App.
+
+9. Contact
+If you have questions about this Privacy Policy, contact: support@aurabus.  
