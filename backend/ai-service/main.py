@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel
 from typing import List
 import xgboost as xgb
@@ -25,6 +26,7 @@ class TripRequest(BaseModel):
 
 model = xgb.XGBRegressor()
 is_model_loaded = False
+scheduler = BackgroundScheduler()
 
 
 def load_brain():
@@ -37,24 +39,38 @@ def load_brain():
         print('⚠️ WARNING: Brain file not found. Predictions will not work.')
 
 
-load_brain()
+def scheduled_retraining():
+    if retrain_model():
+        load_brain()
 
-scheduler = BackgroundScheduler()
 
-scheduler.add_job(
-    lambda: retrain_model() and load_brain(),
-    'cron',
-    day_of_week='sun',
-    hour=4,
-    minute=0
-)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("🚀 AuraBus AI Service Starting...")
 
-scheduler.start()
-print("⏰ Scheduler started: Training programmed every Sunday at 04:00")
+    scheduler.add_job(
+        scheduled_retraining,
+        'cron',
+        day_of_week='sun',
+        hour=4,
+        minute=0
+    )
 
-retrain_model()
+    scheduler.start()
+    print("⏰ Scheduler started: Training programmed every Sunday at 04:00")
 
-app = FastAPI()
+    if not os.path.exists(MODEL_PATH):
+        print("⚠️ Model not found. Running initial training...")
+        retrain_model()
+
+    load_brain()
+
+    yield
+
+    print("🛑 Shutting down...")
+    scheduler.shutdown()
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get('/')
@@ -65,7 +81,10 @@ def home():
 @app.post('/predict')
 def predict(request: TripRequest):
     if not is_model_loaded:
-        return {'error': 'Model not loaded. Cannot make predictions.'}
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Model not loaded. Cannot make predictions."
+        )
 
     predictions = []
 

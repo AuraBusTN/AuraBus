@@ -85,7 +85,7 @@ class StopTripTime {
       stopId: json['stopId'],
       stopName: json['stopName'],
       arrivalTimeScheduled: json['arrivalTimeScheduled'],
-      delayPredicted: json['delayPredicted'],
+      delayPredicted: (json['delayPredicted'] as int?) ?? 0,
     );
   }
 }

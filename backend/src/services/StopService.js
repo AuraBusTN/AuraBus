@@ -2,7 +2,6 @@ import config from "../config/index.js";
 import { stops, routes } from "../utils/staticData.js";
 import { simulateOccupancy } from "../utils/simulateOccupancy.js";
 import { findBusByIds } from "../repositories/BusRepository.js";
-import { parse } from "path";
 
 const getFetchOptions = () => {
   const authToken = Buffer.from(
@@ -190,7 +189,7 @@ export const getStopDetails = async (stopId) => {
             stopId: st.stopId,
             stopName: stops.get(st.stopId)?.stopName || "Unknown",
             arrivalTimeScheduled: st.arrivalTime,
-            delayPredicted: st.delayPredicted,
+            delayPredicted: st.delayPredicted ?? null,
           })),
         };
       }),
