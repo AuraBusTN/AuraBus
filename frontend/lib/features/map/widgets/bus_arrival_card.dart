@@ -1,3 +1,4 @@
+import 'package:aurabus/common/widgets/bus_rectangle.dart';
 import 'package:flutter/material.dart';
 
 import 'package:aurabus/features/map/data/models/stop_trip_info.dart';
@@ -162,24 +163,7 @@ class _BusCardHeader extends StatelessWidget {
             const SizedBox(width: 8),
           ] else
             const SizedBox(width: 20),
-
-          Container(
-            width: 34,
-            height: 34,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: arrival.routeColor ?? Colors.black,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              arrival.routeShortName,
-              style: const TextStyle(
-                color: AppColors.onPrimary,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
-            ),
-          ),
+          BusRectangle.fromArrival(arrival,2.4),
           const SizedBox(width: 14),
           Expanded(
             child: Column(

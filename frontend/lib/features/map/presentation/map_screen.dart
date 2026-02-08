@@ -47,14 +47,18 @@ class _MapScreenState extends ConsumerState<MapScreen>
     final stopsMap = ref.watch(stopsMapProvider);
     final mapStyle = ref.read(mapStyleProvider).value;
 
+
+
     return markersAsync.when(
       data: (rawMarkers) {
         final markers = rawMarkers.map((marker) {
           return marker.copyWith(
-            onTapParam: () {
+            onTapParam: () async {
               final stopId = int.parse(marker.markerId.value);
               final stopInfo = stopsMap[stopId];
               if (stopInfo != null) {
+                final favoriteRoutes = await ref.read(favoriteRoutesProvider.future);
+                ref.read(selectedLinesProvider.notifier).setAll(favoriteRoutes);
                 mapController.openStopModal(context, stopInfo);
               }
             },

@@ -1,4 +1,5 @@
 import 'package:aurabus/features/map/data/models/route_info.dart';
+import 'package:aurabus/features/map/data/models/stop_trip_info.dart';
 import 'package:aurabus/theme.dart';
 import 'package:flutter/material.dart' hide Route;
 
@@ -14,6 +15,13 @@ class BusRectangle extends StatelessWidget {
     return BusRectangle._(
       shortName: route.routeShortName,
       color: route.routeColor,
+      size: rectsize,
+    );
+  }
+    factory BusRectangle.fromArrival(StopTrip arrival,double rectsize) {
+    return BusRectangle._(
+      shortName: arrival.routeShortName,
+      color: arrival.routeColor ?? Colors.black,
       size: rectsize,
     );
   }

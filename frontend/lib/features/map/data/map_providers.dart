@@ -1,4 +1,7 @@
+import 'package:aurabus/features/favorites/data/favorites_notifier.dart';
+import 'package:aurabus/features/favorites/data/favorites_provider.dart';
 import 'package:aurabus/features/map/data/models/route_info.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -65,6 +68,37 @@ final stopsMapProvider = Provider<Map<int, StopInfo>>((ref) {
   );
 });
 
+final routesMapProvider = Provider<Map<int, RouteInfo>>((ref) {
+  final stopsAsync = ref.watch(stopsListProvider);
+
+  return stopsAsync.maybeWhen(
+    data: (stops) {
+      final map = <int, RouteInfo>{};
+      for (final stop in stops) {
+        for (final route in stop.routes) {
+          map[route.routeId] = route;
+        }
+      }
+      return map;
+    },
+    orElse: () => {},
+  );
+});
+final favoriteRoutesProvider = FutureProvider<Set<RouteInfo>>((ref) async {
+  final favoritesState = ref.watch(favoritesProvider);
+  final favoriteIds = favoritesState.favoriteRoutes;
+
+  debugPrint('[FAVORITES] IDs from storage: $favoriteIds');
+
+  if (favoriteIds.isEmpty) return <RouteInfo>{};
+  
+  final repo = ref.read(favoritesRepositoryProvider);
+  final allRoutes = await repo.fetchRoutes();
+  
+  return allRoutes
+      .where((route) => favoriteIds.contains(route.routeId))
+      .toSet();
+});
 class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
   @override
   Set<RouteInfo> build() => {};
@@ -78,6 +112,10 @@ class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
   }
 
   void clear() => state = {};
+  void setAll(Set<RouteInfo> routes) {
+    state = {...routes};
+  }
+
 }
 
 final selectedLinesProvider =
@@ -91,8 +129,14 @@ final sortedUniqueLinesProvider = Provider.family<List<RouteInfo>, int>((
 ) {
   final stopsMap = ref.watch(stopsMapProvider);
   final stop = stopsMap[stopId];
+  if (stop == null) {
+    debugPrint('[STOP ROUTES] Stop $stopId not found');
+    return const [];
+  }
+  debugPrint('[STOP ROUTES] Routes for stop $stopId: '
+  '${stop.routes.map((r) => '${r.routeId}:${r.routeShortName}').toList()}');
 
-  if (stop == null) return const [];
+
 
   final routes = List<RouteInfo>.from(stop.routes);
 
