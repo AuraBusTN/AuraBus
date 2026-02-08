@@ -247,4 +247,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get youLabel => 'Tu';
+
+  @override
+  String get searchPlaceholder => 'Cerca fermata...';
 }

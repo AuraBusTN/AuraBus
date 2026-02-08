@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:aurabus/core/utils/color_utils.dart';
+
 class StopTrip {
   final int routeId;
   final String routeShortName;
@@ -43,7 +45,7 @@ class StopTrip {
       routeShortName: json['routeShortName'],
       routeLongName: json['routeLongName'],
       routeColor: json['routeColor'] != null
-          ? _parseHexColor(json['routeColor'])
+          ? ColorUtils.parseHexColor(json['routeColor'])
           : null,
       busId: json['busId'],
       busCapacity: json['busCapacity'],
@@ -117,10 +119,4 @@ class OccupancyStatus {
       ),
     );
   }
-}
-
-Color _parseHexColor(String hex) {
-  // "70B442" -> 0xFF70B442
-  final value = int.parse('FF$hex', radix: 16);
-  return Color(value);
 }
