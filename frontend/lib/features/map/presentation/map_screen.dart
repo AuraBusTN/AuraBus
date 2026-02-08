@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'map_controller.dart';
 
@@ -38,37 +37,33 @@ class _MapScreenState extends ConsumerState<MapScreen>
     }
   }
 
+  Future<void> _onMarkerTap(Marker marker) async {
+    final stopId = int.parse(marker.markerId.value);
+    final stopsMap = ref.read(stopsMapProvider);
+    final stopInfo = stopsMap[stopId];
+    if (stopInfo == null) return;
+
+    final favoriteRoutes = await ref.read(favoriteRoutesProvider.future);
+
+    if (!mounted) return;
+
+    ref.read(selectedLinesProvider.notifier).setAll(favoriteRoutes);
+    ref.read(mapControllerProvider).openStopModal(context, stopInfo);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     final mapController = ref.read(mapControllerProvider);
     final markersAsync = ref.watch(markersProvider);
-    final stopsMap = ref.watch(stopsMapProvider);
     final mapStyle = ref.read(mapStyleProvider).value;
 
     return markersAsync.when(
       data: (rawMarkers) {
         final markers = rawMarkers.map((marker) {
           return marker.copyWith(
-            onTapParam: () async {
-              // Salvo il contesto in una variabile locale per sicurezza
-              final currentContext = context;
-
-              final stopId = int.parse(marker.markerId.value);
-              final stopInfo = stopsMap[stopId];
-              if (stopInfo != null) {
-                // Await sicuro
-                final favoriteRoutes =
-                    await ref.read(favoriteRoutesProvider.future);
-
-                // Controllo se il widget è ancora montato
-                if (!mounted) return;
-
-                ref.read(selectedLinesProvider.notifier).setAll(favoriteRoutes);
-                mapController.openStopModal(currentContext, stopInfo);
-              }
-            },
+            onTapParam: () => _onMarkerTap(marker),
           );
         }).toSet();
 
