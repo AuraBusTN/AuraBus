@@ -22,6 +22,7 @@ services:
       REFRESH_SECRET: ${REFRESH_SECRET}
       GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
       PREDICTION_URL: ${PREDICTION_URL}
+      MONGO_URI: ${MONGO_URI}
 
   db:
     container_name: aurabus_mongo_db

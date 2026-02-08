@@ -97,7 +97,7 @@ export const getStopDetails = async (stopId) => {
             } else {
               hour = Math.floor(Number(timeVal) / 3600);
             }
-            const day_of_week = new Date().getDay();
+            const day_of_week = (new Date().getDay() + 6) % 7;
             if (index > currentBusIndex) {
               bodyRequest.push({
                 stop_encoded: parseInt(st.stopId, 10),

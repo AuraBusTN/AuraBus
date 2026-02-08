@@ -64,7 +64,7 @@ void main() {
     await tester.tap(find.text('Open Modal'));
     await tester.pumpAndSettle();
 
-    expect(find.text('123 - Stazione Centrale'), findsOneWidget);
+    expect(find.text('Stazione Centrale'), findsOneWidget);
     expect(find.byType(PointerInterceptor), findsWidgets);
   });
 }

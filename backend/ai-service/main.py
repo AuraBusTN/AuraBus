@@ -4,6 +4,8 @@ from typing import List
 import xgboost as xgb
 import pandas as pd
 import os
+from apscheduler.schedulers.background import BackgroundScheduler
+from trainer import retrain_model
 
 MODEL_PATH = 'aurabus_brain_v1.json'
 
@@ -24,12 +26,33 @@ class TripRequest(BaseModel):
 model = xgb.XGBRegressor()
 is_model_loaded = False
 
-if os.path.exists(MODEL_PATH):
-    model.load_model(MODEL_PATH)
-    is_model_loaded = True
-    print('✅ Brain loaded! I\'m ready to predict.')
-else:
-    print('⚠️ WARNING: Brain file not found. Predictions will not work.')
+
+def load_brain():
+    global model, is_model_loaded
+    if os.path.exists(MODEL_PATH):
+        model.load_model(MODEL_PATH)
+        is_model_loaded = True
+        print('✅ Brain loaded! I\'m ready to predict.')
+    else:
+        print('⚠️ WARNING: Brain file not found. Predictions will not work.')
+
+
+load_brain()
+
+scheduler = BackgroundScheduler()
+
+scheduler.add_job(
+    lambda: retrain_model() and load_brain(),
+    'cron',
+    day_of_week='sun',
+    hour=4,
+    minute=0
+)
+
+scheduler.start()
+print("⏰ Scheduler started: Training programmed every Sunday at 04:00")
+
+retrain_model()
 
 app = FastAPI()
 
@@ -52,7 +75,6 @@ def predict(request: TripRequest):
         feature_names = ['route_encoded', 'stop_encoded',
                          'directionId', 'hour', 'day_of_week', 'delay']
 
-        # 2. Creiamo il DataFrame
         input_data = pd.DataFrame([[
             request.route_encoded,
             stop.stop_encoded,
