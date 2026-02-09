@@ -7,7 +7,7 @@ class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
 
   Future<String> loadTerms() async {
-    return await rootBundle.loadString('assets/terms&privacy/terms.txt');
+    return await rootBundle.loadString('assets/termsandprivacy/terms.txt');
   }
 
   @override
@@ -20,7 +20,7 @@ class TermsPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.pop(context); 
+            context.pop(); 
           },
         ),
       ),

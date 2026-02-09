@@ -7,7 +7,7 @@ class PrivacyPage extends StatelessWidget {
   const PrivacyPage({super.key});
 
   Future<String> loadPrivacy() async {
-    return await rootBundle.loadString('assets/terms&privacy/privacy.txt');
+    return await rootBundle.loadString('assets/termsandprivacy/privacy.txt');
   }
 
   @override
@@ -20,7 +20,7 @@ class PrivacyPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.pop(context); 
+            context.pop(); 
           },
         ),
       ),
