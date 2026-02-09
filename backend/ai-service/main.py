@@ -105,7 +105,7 @@ def predict(request: TripRequest):
 
         prediction = model.predict(input_data, validate_features=False)
 
-        predicted_delay = int(prediction[0])
+        predicted_delay = int(round(prediction[0]))
 
         predictions.append({
             'stop_encoded': stop.stop_encoded,

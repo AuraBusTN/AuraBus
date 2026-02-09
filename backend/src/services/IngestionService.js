@@ -4,6 +4,7 @@ import config from "../config/index.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { redisClient } from "../config/redis.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,25 +13,18 @@ const routesData = JSON.parse(fs.readFileSync(routesPath, "utf-8"));
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-let lastReadings = new Map();
+const getTodayDateString = () => {
+  return new Date().toISOString().split("T")[0];
+};
 
 export const runIngestionJob = async () => {
   const now = new Date();
   const currentHour = now.getHours();
 
-  if (currentHour === 3) {
-    if (lastReadings.size > 0) {
-      console.log(`🧹 [${now.toISOString()}] Reset memory daily.`);
-      lastReadings.clear();
-    }
-    return;
-  }
-
+  const todayStr = getTodayDateString();
   if (currentHour >= 1 && currentHour < 5) return;
 
-  console.log(
-    `🎯 [${now.toISOString()}] Ingestion (Cluster + Terminus Fix)...`,
-  );
+  console.log(`🎯 [${now.toISOString()}] Ingestion running...`);
 
   if (!config.tnt.url) return;
 
@@ -50,7 +44,9 @@ export const runIngestionJob = async () => {
       if (!Array.isArray(trips) || trips.length === 0) continue;
 
       const metricsBatch = [];
-      const pendingUpdates = new Map();
+      const pendingUpdates = [];
+      const processingQueue = [];
+      const redisKeysToFetch = [];
 
       for (const trip of trips) {
         if (!trip.stopTimes || trip.stopTimes.length === 0) continue;
@@ -92,51 +88,84 @@ export const runIngestionJob = async () => {
         }
 
         for (const stop of stopsToSave) {
-          const uniqueKey = `${trip.tripId}_${stop.stopId}`;
-          const lastRecordedDelay = lastReadings.get(uniqueKey);
-
-          if (
-            lastRecordedDelay !== undefined &&
-            lastRecordedDelay === currentDelay
-          ) {
-            totalSkipped++;
-            continue;
-          }
-
-          pendingUpdates.set(uniqueKey, currentDelay);
-
-          const [hStr, mStr] = stop.arrivalTime.split(":");
-          const h = parseInt(hStr, 10);
-          const m = parseInt(mStr, 10);
-
-          let arrivalDate = new Date(now);
-          arrivalDate.setHours(h, m, 0, 0);
-
-          if (currentHour > 20 && h < 4) {
-            arrivalDate.setDate(arrivalDate.getDate() + 1);
-          }
-
-          metricsBatch.push({
-            timestamp: arrivalDate,
-            metadata: {
-              tripId: trip.tripId,
-              routeId: String(trip.routeId),
-              directionId: trip.directionId,
-              stopId: stop.stopId,
-              type: trip.type,
-            },
-            delay: currentDelay,
-            ingestedAt: now,
+          const uniqueKey = `ingest:${todayStr}:${trip.tripId}:${stop.stopId}`;
+          redisKeysToFetch.push(uniqueKey);
+          processingQueue.push({
+            uniqueKey,
+            trip,
+            stop,
+            currentDelay,
           });
         }
       }
 
+      let cachedValues = [];
+      if (redisKeysToFetch.length > 0) {
+        try {
+          cachedValues = await redisClient.mGet(redisKeysToFetch);
+        } catch (err) {
+          console.warn(`⚠️ Redis batch read failed, proceeding as new data.`);
+          cachedValues = new Array(redisKeysToFetch.length).fill(null);
+        }
+      }
+
+      for (let i = 0; i < processingQueue.length; i++) {
+        const item = processingQueue[i];
+        const lastRecordedDelay = cachedValues[i];
+
+        if (
+          lastRecordedDelay !== null &&
+          parseInt(lastRecordedDelay) === item.currentDelay
+        ) {
+          totalSkipped++;
+          continue;
+        }
+
+        pendingUpdates.push({
+          key: item.uniqueKey,
+          val: String(item.currentDelay),
+        });
+
+        const [hStr, mStr] = item.stop.arrivalTime.split(":");
+        const h = parseInt(hStr, 10);
+        const m = parseInt(mStr, 10);
+
+        let arrivalDate = new Date(now);
+        arrivalDate.setHours(h, m, 0, 0);
+
+        if (currentHour > 20 && h < 4) {
+          arrivalDate.setDate(arrivalDate.getDate() + 1);
+        }
+
+        metricsBatch.push({
+          timestamp: arrivalDate,
+          metadata: {
+            tripId: item.trip.tripId,
+            routeId: String(item.trip.routeId),
+            directionId: item.trip.directionId,
+            stopId: item.stop.stopId,
+            type: item.trip.type,
+          },
+          delay: item.currentDelay,
+          ingestedAt: now,
+        });
+      }
+
       if (metricsBatch.length > 0) {
         await TripMetric.insertMany(metricsBatch, { ordered: false });
-        for (const [key, val] of pendingUpdates) {
-          lastReadings.set(key, val);
-        }
         totalSaved += metricsBatch.length;
+
+        try {
+          const pipeline = redisClient.multi();
+          pendingUpdates.forEach((item) => {
+            pipeline.set(item.key, item.val, { EX: 86400 });
+          });
+          await pipeline.exec();
+        } catch (redisErr) {
+          console.error(
+            `⚠️ Data saved to DB but Redis update failed: ${redisErr.message}`,
+          );
+        }
       }
 
       await sleep(200);

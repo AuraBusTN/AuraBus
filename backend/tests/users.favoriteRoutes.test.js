@@ -114,6 +114,21 @@ jest.unstable_mockModule("google-auth-library", () => ({
   },
 }));
 
+const mockRedisClient = {
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+  get: jest.fn().mockResolvedValue(null),
+  setEx: jest.fn().mockResolvedValue("OK"),
+  del: jest.fn().mockResolvedValue(1),
+  sendCommand: jest.fn().mockResolvedValue("OK"),
+};
+
+jest.unstable_mockModule("../src/config/redis.js", () => ({
+  redisClient: mockRedisClient,
+  initRedis: jest.fn(),
+}));
+
 const { app } = await import("../src/app.js");
 
 describe("User Favorite Routes API", () => {

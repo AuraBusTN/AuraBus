@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import hpp from "hpp";
 import mongoSanitize from "express-mongo-sanitize";
 import { setupSwagger } from "./swagger.js";
 import stopsRouter from "./routes/stops.routes.js";
@@ -11,6 +12,8 @@ import usersRouter from "./routes/users.routes.js";
 import { apiLimiter, authLimiter } from "./middlewares/rateLimiter.js";
 
 export const app = express();
+
+app.set("trust proxy", 1);
 
 setupSwagger(app);
 app.use(helmet());
@@ -29,6 +32,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(hpp());
 
 app.use(mongoSanitize());
 
