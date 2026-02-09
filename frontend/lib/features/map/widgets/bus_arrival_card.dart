@@ -292,7 +292,7 @@ class _TripTimelineState extends State<TripTimeline> {
 
           return _TimelineStop(
             stop: stop,
-            delay: widget.delay,
+            delay: stop.delayPredicted,
             isThisStop: isThisStop,
             isPastOrCurrent: isPastOrCurrent,
             isFirst: index == 0,

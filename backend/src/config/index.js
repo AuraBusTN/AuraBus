@@ -39,6 +39,9 @@ const config = {
     username: process.env.API_USER,
     password: process.env.API_PASSWORD,
   },
+  prediction: {
+    url: process.env.PREDICTION_URL,
+  },
 };
 
 const missingTntConfig = [];
@@ -47,6 +50,7 @@ if (!config.tnt.username) missingTntConfig.push("API_USER");
 if (!config.tnt.password) missingTntConfig.push("API_PASSWORD");
 if (!config.db.user) missingTntConfig.push("MONGO_USER");
 if (!config.db.pass) missingTntConfig.push("MONGO_PASSWORD");
+if (!config.prediction.url) missingTntConfig.push("PREDICTION_URL");
 
 if (missingTntConfig.length > 0) {
   throw new Error(

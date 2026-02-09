@@ -60,6 +60,6 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('123 - Stazione Centrale'), findsOneWidget);
+    expect(find.text('Stazione Centrale'), findsOneWidget);
   });
 }

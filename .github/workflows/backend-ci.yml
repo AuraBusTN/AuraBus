@@ -42,6 +42,7 @@ jobs:
           echo "API_URL=${{ secrets.API_URL }}" >> .env
           echo "API_USER=${{ secrets.API_USER }}" >> .env
           echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> .env
+          echo "PREDICTION_URL=${{ secrets.PREDICTION_URL }}" >> .env
 
       - name: Run tests with Jest (inside Docker)
         env:
@@ -55,4 +56,5 @@ jobs:
           -e API_URL="${{ secrets.API_URL }}" \
           -e API_USER="${{ secrets.API_USER }}" \
           -e API_PASSWORD="${{ secrets.API_PASSWORD }}" \
+          -e PREDICTION_URL="${{ secrets.PREDICTION_URL }}" \
           api npm test

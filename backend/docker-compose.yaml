@@ -21,6 +21,8 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       REFRESH_SECRET: ${REFRESH_SECRET}
       GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
+      PREDICTION_URL: ${PREDICTION_URL}
+      MONGO_URI: ${MONGO_URI}
 
   db:
     container_name: aurabus_mongo_db
@@ -33,6 +35,18 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
       - mongo-data:/data/db
+  
+  ai-service:
+    build: ./ai-service
+    container_name: aurabus-ai
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ai-service:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
 
 volumes:
   mongo-data:

@@ -31,6 +31,9 @@ TripMetricSchema.index({ "metadata.routeId": 1, timestamp: 1 });
 
 TripMetricSchema.index({ "metadata.tripId": 1, timestamp: 1 });
 
-TripMetricSchema.index({ timestamp: 1 }, { expireAfterSeconds: 15778463 });
+TripMetricSchema.index(
+  { timestamp: 1 },
+  { expireAfterSeconds: 60 * 60 * 24 * 30 * 2 },
+);
 
 export const TripMetric = mongoose.model("TripMetric", TripMetricSchema);
