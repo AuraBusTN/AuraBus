@@ -45,6 +45,8 @@ export const runIngestionJob = async () => {
 
       const metricsBatch = [];
       const pendingUpdates = [];
+      const processingQueue = [];
+      const redisKeysToFetch = [];
 
       for (const trip of trips) {
         if (!trip.stopTimes || trip.stopTimes.length === 0) continue;
@@ -87,50 +89,66 @@ export const runIngestionJob = async () => {
 
         for (const stop of stopsToSave) {
           const uniqueKey = `ingest:${todayStr}:${trip.tripId}:${stop.stopId}`;
-          let lastRecordedDelay = null;
-
-          try {
-            lastRecordedDelay = await redisClient.get(uniqueKey);
-          } catch (err) {
-            console.warn(
-              `⚠️ Redis read skip for ${uniqueKey}, proceeding as new.`,
-            );
-          }
-
-          if (
-            lastRecordedDelay !== null &&
-            parseInt(lastRecordedDelay) === currentDelay
-          ) {
-            totalSkipped++;
-            continue;
-          }
-
-          pendingUpdates.push({ key: uniqueKey, val: String(currentDelay) });
-
-          const [hStr, mStr] = stop.arrivalTime.split(":");
-          const h = parseInt(hStr, 10);
-          const m = parseInt(mStr, 10);
-
-          let arrivalDate = new Date(now);
-          arrivalDate.setHours(h, m, 0, 0);
-
-          if (currentHour > 20 && h < 4) {
-            arrivalDate.setDate(arrivalDate.getDate() + 1);
-          }
-
-          metricsBatch.push({
-            timestamp: arrivalDate,
-            metadata: {
-              tripId: trip.tripId,
-              routeId: String(trip.routeId),
-              directionId: trip.directionId,
-              stopId: stop.stopId,
-              type: trip.type,
-            },
-            delay: currentDelay,
-            ingestedAt: now,
+          redisKeysToFetch.push(uniqueKey);
+          processingQueue.push({
+            uniqueKey,
+            trip,
+            stop,
+            currentDelay,
           });
         }
+      }
+
+      let cachedValues = [];
+      if (redisKeysToFetch.length > 0) {
+        try {
+          cachedValues = await redisClient.mGet(redisKeysToFetch);
+        } catch (err) {
+          console.warn(`⚠️ Redis batch read failed, proceeding as new data.`);
+          cachedValues = new Array(redisKeysToFetch.length).fill(null);
+        }
+      }
+
+      for (let i = 0; i < processingQueue.length; i++) {
+        const item = processingQueue[i];
+        const lastRecordedDelay = cachedValues[i];
+
+        if (
+          lastRecordedDelay !== null &&
+          parseInt(lastRecordedDelay) === item.currentDelay
+        ) {
+          totalSkipped++;
+          continue;
+        }
+
+        pendingUpdates.push({
+          key: item.uniqueKey,
+          val: String(item.currentDelay),
+        });
+
+        const [hStr, mStr] = item.stop.arrivalTime.split(":");
+        const h = parseInt(hStr, 10);
+        const m = parseInt(mStr, 10);
+
+        let arrivalDate = new Date(now);
+        arrivalDate.setHours(h, m, 0, 0);
+
+        if (currentHour > 20 && h < 4) {
+          arrivalDate.setDate(arrivalDate.getDate() + 1);
+        }
+
+        metricsBatch.push({
+          timestamp: arrivalDate,
+          metadata: {
+            tripId: item.trip.tripId,
+            routeId: String(item.trip.routeId),
+            directionId: item.trip.directionId,
+            stopId: item.stop.stopId,
+            type: item.trip.type,
+          },
+          delay: item.currentDelay,
+          ingestedAt: now,
+        });
       }
 
       if (metricsBatch.length > 0) {
@@ -138,10 +156,11 @@ export const runIngestionJob = async () => {
         totalSaved += metricsBatch.length;
 
         try {
-          const redisPromises = pendingUpdates.map((item) =>
-            redisClient.set(item.key, item.val, { EX: 86400 }),
-          );
-          await Promise.all(redisPromises);
+          const pipeline = redisClient.multi();
+          pendingUpdates.forEach((item) => {
+            pipeline.set(item.key, item.val, { EX: 86400 });
+          });
+          await pipeline.exec();
         } catch (redisErr) {
           console.error(
             `⚠️ Data saved to DB but Redis update failed: ${redisErr.message}`,

@@ -2,7 +2,6 @@ import config from "../config/index.js";
 import { stops, routes } from "../utils/staticData.js";
 import { simulateOccupancy } from "../utils/simulateOccupancy.js";
 import { findBusByIds } from "../repositories/BusRepository.js";
-import { redisClient } from "../config/redis.js";
 
 const getFetchOptions = () => {
   const authToken = Buffer.from(
@@ -18,17 +17,6 @@ const getFetchOptions = () => {
 };
 
 export const getStopDetails = async (stopId) => {
-  const cacheKey = `aurabus_cache:/stops/${stopId}`;
-
-  try {
-    const cachedData = await redisClient.get(cacheKey);
-    if (cachedData) {
-      return JSON.parse(cachedData);
-    }
-  } catch (err) {
-    console.error("Redis error (read):", err);
-  }
-
   const abortController = new AbortController();
   const TIMEOUT_MS = 5000;
   const timeout = setTimeout(() => abortController.abort(), TIMEOUT_MS);
@@ -109,7 +97,8 @@ export const getStopDetails = async (stopId) => {
               hour = Math.floor(Number(timeVal) / 3600);
             }
             const day_of_week = (new Date().getDay() + 6) % 7;
-            if (index > currentBusIndex) {
+
+            if (index > actualCurrentIndex) {
               bodyRequest.push({
                 stop_encoded: parseInt(st.stopId, 10),
                 hour: parseInt(hour, 10),
@@ -146,7 +135,9 @@ export const getStopDetails = async (stopId) => {
                 );
                 return {
                   ...st,
-                  delayPredicted: prediction ? prediction.predicted_delay : 0,
+                  delayPredicted: prediction
+                    ? prediction.predicted_delay
+                    : null,
                 };
               });
             }
@@ -212,12 +203,6 @@ export const getStopDetails = async (stopId) => {
     validTrips.sort((a, b) =>
       a.arrivalTimeEstimated.localeCompare(b.arrivalTimeEstimated),
     );
-
-    try {
-      await redisClient.setEx(cacheKey, 60, JSON.stringify(validTrips));
-    } catch (err) {
-      console.error("Redis error (write):", err);
-    }
 
     return validTrips;
   } catch (error) {
