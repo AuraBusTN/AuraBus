@@ -5,20 +5,29 @@ import { redisClient } from "../config/redis.js";
 const isTest = process.env.NODE_ENV === "test";
 
 const safeSendCommand = async (...args) => {
-  if (redisClient.isOpen) {
-    return redisClient.sendCommand(args);
+  if (!redisClient.isOpen) {
+    return "0000000000000000000000000000000000000000";
   }
-  return "0000000000000000000000000000000000000000";
+  return redisClient.sendCommand(args);
 };
 
-export const apiLimiter = rateLimit({
+const createRedisLimiter = (options) =>
+  rateLimit({
+    windowMs: options.windowMs,
+    max: options.max,
+    standardHeaders: true,
+    legacyHeaders: false,
+    passOnStoreError: true,
+    store: new RedisStore({
+      sendCommand: safeSendCommand,
+    }),
+    message: options.message,
+    skip: options.skip,
+  });
+
+export const apiLimiter = createRedisLimiter({
   windowMs: 15 * 60 * 1000,
   max: 300,
-  standardHeaders: true,
-  legacyHeaders: false,
-  store: new RedisStore({
-    sendCommand: safeSendCommand,
-  }),
   message: {
     success: false,
     message: "Too many requests from this IP, please try again later.",
@@ -26,14 +35,9 @@ export const apiLimiter = rateLimit({
   skip: (req) => isTest || req.method === "OPTIONS",
 });
 
-export const authLimiter = rateLimit({
+export const authLimiter = createRedisLimiter({
   windowMs: 15 * 60 * 1000,
   max: 20,
-  standardHeaders: true,
-  legacyHeaders: false,
-  store: new RedisStore({
-    sendCommand: safeSendCommand,
-  }),
   message: {
     success: false,
     message: "Too many login attempts, account temporarily locked.",

@@ -18,7 +18,7 @@ const getFetchOptions = () => {
 };
 
 export const getStopDetails = async (stopId) => {
-  const cacheKey = `stop_details:${stopId}`;
+  const cacheKey = `aurabus_cache:/stops/${stopId}`;
 
   try {
     const cachedData = await redisClient.get(cacheKey);

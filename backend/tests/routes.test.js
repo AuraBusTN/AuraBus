@@ -25,6 +25,21 @@ jest.unstable_mockModule("google-auth-library", () => ({
   },
 }));
 
+const mockRedisClient = {
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+  get: jest.fn().mockResolvedValue(null),
+  setEx: jest.fn().mockResolvedValue("OK"),
+  del: jest.fn().mockResolvedValue(1),
+  sendCommand: jest.fn().mockResolvedValue("OK"),
+};
+
+jest.unstable_mockModule("../src/config/redis.js", () => ({
+  redisClient: mockRedisClient,
+  initRedis: jest.fn(),
+}));
+
 const { app } = await import("../src/app.js");
 
 describe("Routes API", () => {
@@ -99,6 +114,148 @@ describe("Routes API", () => {
         status: "OK",
         message: "AuraBus API is alive!",
       });
+    });
+
+    it("should return JSON content type", async () => {
+      const res = await request(app).get("/");
+
+      expect(res.headers["content-type"]).toMatch(/json/);
+    });
+  });
+
+  describe("GET /routes - Cache Behavior", () => {
+    beforeEach(() => {
+      mockRedisClient.get.mockResolvedValue(null);
+    });
+
+    it("should serve from cache when Redis returns cached data", async () => {
+      const cachedRoutes = [
+        {
+          routeId: 1,
+          routeShortName: "1",
+          routeLongName: "Route 1",
+          routeColor: "FF0000",
+        },
+      ];
+
+      mockRedisClient.get.mockResolvedValueOnce(JSON.stringify(cachedRoutes));
+
+      const res = await request(app).get("/routes");
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toEqual(cachedRoutes);
+      expect(mockRedisClient.get).toHaveBeenCalledWith(
+        expect.stringContaining("aurabus_cache:/routes"),
+      );
+    });
+
+    it("should handle Redis cache errors gracefully", async () => {
+      mockRedisClient.get.mockRejectedValueOnce(
+        new Error("Redis connection error"),
+      );
+
+      const res = await request(app).get("/routes");
+
+      expect(res.statusCode).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
+      expect(res.body.length).toBeGreaterThan(0);
+    });
+
+    it("should cache response after successful fetch", async () => {
+      mockRedisClient.get.mockResolvedValueOnce(null);
+
+      const res = await request(app).get("/routes");
+
+      expect(res.statusCode).toBe(200);
+      expect(mockRedisClient.setEx).toHaveBeenCalled();
+    });
+  });
+
+  describe("GET /routes - Data Validation", () => {
+    let routes;
+
+    beforeAll(async () => {
+      const res = await request(app).get("/routes");
+      routes = res.body;
+    });
+
+    it("should have unique route IDs", () => {
+      const routeIds = routes.map((r) => r.routeId);
+      const uniqueIds = new Set(routeIds);
+      expect(routeIds.length).toBe(uniqueIds.size);
+    });
+
+    it("should have all routes with positive IDs", () => {
+      routes.forEach((route) => {
+        expect(route.routeId).toBeGreaterThan(0);
+      });
+    });
+
+    it("should have consistent data types", () => {
+      routes.forEach((route) => {
+        expect(typeof route.routeId).toBe("number");
+        expect(typeof route.routeShortName).toBe("string");
+        expect(typeof route.routeLongName).toBe("string");
+        if (route.routeColor) {
+          expect(typeof route.routeColor).toBe("string");
+        }
+      });
+    });
+
+    it("should not contain password or sensitive data", () => {
+      routes.forEach((route) => {
+        expect(route).not.toHaveProperty("password");
+        expect(route).not.toHaveProperty("secret");
+        expect(route).not.toHaveProperty("token");
+      });
+    });
+
+    it("should have route short names that are not empty", () => {
+      routes.forEach((route) => {
+        expect(route.routeShortName.length).toBeGreaterThan(0);
+        expect(route.routeShortName.trim()).toBe(route.routeShortName);
+      });
+    });
+
+    it("should have route long names that are not empty", () => {
+      routes.forEach((route) => {
+        expect(route.routeLongName.length).toBeGreaterThan(0);
+        expect(route.routeLongName.trim()).toBe(route.routeLongName);
+      });
+    });
+  });
+
+  describe("Error Handling", () => {
+    it("should return 404 for non-existent routes", async () => {
+      const res = await request(app).get("/non-existent-route");
+
+      expect(res.statusCode).toBe(404);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain("Not Found");
+    });
+
+    it("should handle errors with proper structure", async () => {
+      const res = await request(app).get("/invalid/path/that/does/not/exist");
+
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toHaveProperty("success");
+      expect(res.body).toHaveProperty("message");
+      expect(res.body.success).toBe(false);
+    });
+  });
+
+  describe("Security Headers", () => {
+    it("should include security headers", async () => {
+      const res = await request(app).get("/routes");
+
+      expect(res.headers).toHaveProperty("x-content-type-options");
+      expect(res.headers["x-content-type-options"]).toBe("nosniff");
+    });
+
+    it("should allow CORS", async () => {
+      const res = await request(app).get("/routes");
+
+      expect(res.headers).toHaveProperty("access-control-allow-origin");
     });
   });
 });

@@ -61,9 +61,13 @@ export const getFavoriteRoutes = async (req, res, next) => {
     const userId = req.userId;
     const cacheKey = `user:${userId}:favorites`;
 
-    const cachedData = await redisClient.get(cacheKey);
-    if (cachedData) {
-      return res.status(200).json(JSON.parse(cachedData));
+    try {
+      const cachedData = await redisClient.get(cacheKey);
+      if (cachedData) {
+        return res.status(200).json(JSON.parse(cachedData));
+      }
+    } catch (err) {
+      console.warn("Redis read failed, falling back to DB");
     }
 
     const user = await User.findById(userId).select("favoriteRoutes");
@@ -77,7 +81,9 @@ export const getFavoriteRoutes = async (req, res, next) => {
       favoriteRoutes: user.favoriteRoutes || [],
     };
 
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(responseData));
+    redisClient
+      .setEx(cacheKey, 3600, JSON.stringify(responseData))
+      .catch((err) => console.warn("Redis write failed"));
 
     res.status(200).json(responseData);
   } catch (error) {
@@ -127,7 +133,9 @@ export const updateFavoriteRoutes = async (req, res, next) => {
         .json({ success: false, message: "User not found" });
     }
 
-    await redisClient.del(`user:${userId}:favorites`);
+    redisClient
+      .del(`user:${userId}:favorites`)
+      .catch((err) => console.warn("Redis delete failed"));
 
     res.status(200).json({
       success: true,

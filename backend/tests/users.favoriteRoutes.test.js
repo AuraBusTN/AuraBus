@@ -119,8 +119,8 @@ const mockRedisClient = {
   connect: jest.fn(),
   isOpen: true,
   get: jest.fn().mockResolvedValue(null),
-  setEx: jest.fn(),
-  del: jest.fn(),
+  setEx: jest.fn().mockResolvedValue("OK"),
+  del: jest.fn().mockResolvedValue(1),
   sendCommand: jest.fn().mockResolvedValue("OK"),
 };
 

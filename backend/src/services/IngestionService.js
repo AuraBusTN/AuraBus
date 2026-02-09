@@ -44,7 +44,7 @@ export const runIngestionJob = async () => {
       if (!Array.isArray(trips) || trips.length === 0) continue;
 
       const metricsBatch = [];
-      const pendingUpdates = new Map();
+      const pendingUpdates = [];
 
       for (const trip of trips) {
         if (!trip.stopTimes || trip.stopTimes.length === 0) continue;
@@ -87,8 +87,15 @@ export const runIngestionJob = async () => {
 
         for (const stop of stopsToSave) {
           const uniqueKey = `ingest:${todayStr}:${trip.tripId}:${stop.stopId}`;
+          let lastRecordedDelay = null;
 
-          const lastRecordedDelay = await redisClient.get(uniqueKey);
+          try {
+            lastRecordedDelay = await redisClient.get(uniqueKey);
+          } catch (err) {
+            console.warn(
+              `⚠️ Redis read skip for ${uniqueKey}, proceeding as new.`,
+            );
+          }
 
           if (
             lastRecordedDelay !== null &&
@@ -98,7 +105,7 @@ export const runIngestionJob = async () => {
             continue;
           }
 
-          pendingUpdates.set(uniqueKey, currentDelay);
+          pendingUpdates.push({ key: uniqueKey, val: String(currentDelay) });
 
           const [hStr, mStr] = stop.arrivalTime.split(":");
           const h = parseInt(hStr, 10);
@@ -128,10 +135,18 @@ export const runIngestionJob = async () => {
 
       if (metricsBatch.length > 0) {
         await TripMetric.insertMany(metricsBatch, { ordered: false });
-        for (const [key, val] of pendingUpdates) {
-          await redisClient.set(key, String(val), { EX: 86400 });
-        }
         totalSaved += metricsBatch.length;
+
+        try {
+          const redisPromises = pendingUpdates.map((item) =>
+            redisClient.set(item.key, item.val, { EX: 86400 }),
+          );
+          await Promise.all(redisPromises);
+        } catch (redisErr) {
+          console.error(
+            `⚠️ Data saved to DB but Redis update failed: ${redisErr.message}`,
+          );
+        }
       }
 
       await sleep(200);
