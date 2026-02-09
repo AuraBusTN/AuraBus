@@ -249,20 +249,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String get youLabel => 'Tu';
 
   @override
+  String get favoritesTitle => 'Favorites';
+
+  @override
+  String get favoritesSection => 'Favorites';
+
+  @override
+  String get privacyLoadError => 'Error loading Privacy Policy';
+
+  @override
+  String get termsLoadError => 'Error loading Terms & Conditions';
+
+  @override
+  String get userPlaceholder => 'User';
+
+  @override
   String get searchPlaceholder => 'Cerca fermata...';
-  
-  @override
-  String get favoritesSection => 'Preferiti';
-  
-  @override
-  String get privacyLoadError => 'Errore caricamento Privacy Policy';
-  
-  @override
-  String get termsLoadError => 'Errore caricamento Termini e Condizioni';
-  
-  @override
-  String get userPlaceholder => 'Utente';
-  
-  @override
-  String get favoritesTitle => 'Preferiti';
 }

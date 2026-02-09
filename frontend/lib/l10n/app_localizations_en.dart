@@ -249,20 +249,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youLabel => 'You';
 
   @override
-  String get searchPlaceholder => 'Search stop...';
-  
+  String get favoritesTitle => 'Favorites';
+
   @override
   String get favoritesSection => 'Favorites';
-  
+
   @override
   String get privacyLoadError => 'Error loading Privacy Policy';
-  
+
   @override
-  String get termsLoadError => 'Error loading Terms and Conditions';
-  
+  String get termsLoadError => 'Error loading Terms & Conditions';
+
   @override
   String get userPlaceholder => 'User';
-  
+
   @override
-  String get favoritesTitle => 'Favorites';
+  String get searchPlaceholder => 'Search stop...';
 }
