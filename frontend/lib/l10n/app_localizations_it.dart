@@ -250,4 +250,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get searchPlaceholder => 'Cerca fermata...';
+  
+  @override
+  String get favoritesSection => 'Preferiti';
+  
+  @override
+  String get privacyLoadError => 'Errore caricamento Privacy Policy';
+  
+  @override
+  String get termsLoadError => 'Errore caricamento Termini e Condizioni';
+  
+  @override
+  String get userPlaceholder => 'Utente';
+  
+  @override
+  String get favoritesTitle => 'Preferiti';
 }

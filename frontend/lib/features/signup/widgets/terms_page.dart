@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:aurabus/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
@@ -10,13 +12,15 @@ class TermsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Terms & Conditions"),
+        title: Text(l10n.termsLink),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); 
+            context.pop(context); 
           },
         ),
       ),
@@ -27,7 +31,7 @@ class TermsPage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return const Center(child: Text("Errore nel caricamento dei Terms"));
+            return Center(child: Text(l10n.termsLoadError));
           }
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),

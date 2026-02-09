@@ -65,12 +65,6 @@ class _StopDetailsContent extends ConsumerWidget {
 
     final selectedLines = ref.watch(selectedLinesProvider);
 
-    debugPrint('[UI] Unique lines: '
-      '${uniqueLines.map((r) => r.routeId).toList()}');
-
-    debugPrint('[UI] Selected lines: '
-      '${selectedLines.map((r) => r.routeId).toList()}');
-  
     final filteredArrivals = selectedLines.isEmpty
         ? arrivals
         : arrivals

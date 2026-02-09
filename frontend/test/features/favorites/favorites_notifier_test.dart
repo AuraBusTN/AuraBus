@@ -1,7 +1,7 @@
 import 'package:aurabus/features/favorites/data/favorites_notifier.dart';
 import 'package:aurabus/features/favorites/data/favorites_provider.dart';
-import 'package:aurabus/features/favorites/data/favorites_repository.dart';
 import 'package:aurabus/features/favorites/data/models/favorite_routes_model.dart';
+import 'package:aurabus/features/favorites/data/models/favorites_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

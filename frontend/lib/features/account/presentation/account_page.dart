@@ -9,7 +9,7 @@ import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart'
 import 'package:aurabus/routing/router.dart';
 import 'package:go_router/go_router.dart';
 
-enum AccountSectionType { info, subscription, contact, ranking , favorites}
+enum AccountSectionType { info, subscription, contact, ranking, favorites}
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -52,7 +52,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 isExpanded: expandedSections.contains(AccountSectionType.info),
                 onTap: () => toggleSection(AccountSectionType.info),
                 child: AccountInfoBody(
-                  firstName: user?.firstName ?? "Utente",
+                  firstName: user?.firstName ?? l10n.userPlaceholder,
                   lastName: user?.lastName ?? "",
                   email: user?.email ?? "",
                   profilePictureUrl: user?.picture,
@@ -84,10 +84,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
 
               const SizedBox(height: 12),
               AccountSection(
-                title: "Preferiti",
-                isExpanded: expandedSections.contains(
-                  AccountSectionType.favorites,
-                ),
+                title: l10n.favoritesSection,
+                isExpanded: false,
                 onTap: () => context.push(AppRoute.favorites),
               ),
               const SizedBox(height: 12),

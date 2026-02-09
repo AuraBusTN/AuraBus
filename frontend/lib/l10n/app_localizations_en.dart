@@ -250,4 +250,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchPlaceholder => 'Search stop...';
+  
+  @override
+  String get favoritesSection => 'Favorites';
+  
+  @override
+  String get privacyLoadError => 'Error loading Privacy Policy';
+  
+  @override
+  String get termsLoadError => 'Error loading Terms and Conditions';
+  
+  @override
+  String get userPlaceholder => 'User';
+  
+  @override
+  String get favoritesTitle => 'Favorites';
 }

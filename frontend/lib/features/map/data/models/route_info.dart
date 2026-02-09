@@ -1,5 +1,8 @@
 import 'dart:ui';
 
+import 'package:aurabus/core/utils/color_utils.dart';
+
+
 class RouteInfo {
   final int areaId;
   final Object? news;
@@ -25,7 +28,7 @@ class RouteInfo {
     return RouteInfo(
       areaId: json['areaId'] is int ? json['areaId'] as int : 0,
       news: json['news'],
-      routeColor: parseHexColor(
+      routeColor: ColorUtils.parseHexColor(
         (json['routeColor'] as String?)?.replaceAll('#', '') ?? '000000',
       ),
       routeId: json['routeId'] is int ? json['routeId'] as int : -1,
@@ -45,17 +48,3 @@ class RouteInfo {
   int get hashCode => routeId.hashCode;
 }
 
-
-Color parseHexColor(String hex) {
-  final sanitized = hex.trim().replaceAll('#', '');
-  if (sanitized.length != 6) {
-    return const Color(0xFF000000);
-  }
-  final value = int.tryParse('FF$sanitized', radix: 16);
-  if (value == null) {
-    return const Color(0xFF000000);
-  } 
-  else {
-    return Color(value);
-  }
-}

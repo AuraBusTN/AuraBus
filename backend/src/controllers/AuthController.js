@@ -22,33 +22,45 @@ const sendValidationErrorIfAny = (req, res) => {
 
 const getGoogleAudiences = () => {
   const fromList = process.env.GOOGLE_AUTH_CLIENT_IDS;
-  if (fromList) return fromList.split(",").map(s => s.trim()).filter(Boolean);
+  if (fromList) {
+    return fromList
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+
   const single = process.env.GOOGLE_AUTH_CLIENT_ID;
   return single ? [single] : [];
 };
 
-const generateAccessToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+const generateAccessToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
 
-const generateRefreshToken = (id) =>
-  jwt.sign({ id }, process.env.REFRESH_SECRET, {
-    expiresIn: process.env.REFRESH_EXPIRES_IN || "7d",
+const generateRefreshToken = (id) => {
+  return jwt.sign({ id }, process.env.REFRESH_SECRET, {
+    expiresIn: "7d",
     jwtid: crypto.randomUUID(),
   });
+};
 
-// --- Signup ---
 export const signup = async (req, res, next) => {
   try {
-    if (sendValidationErrorIfAny(req, res)) return;
+    const validationResponse = sendValidationErrorIfAny(req, res);
+    if (validationResponse) return;
 
-    const { firstName, lastName, password, email: rawEmail } = req.body;
-    const email = rawEmail.toLowerCase();
+    const { firstName, lastName, password } = req.body;
+    const email = req.body.email.toLowerCase();
 
-    if (await User.findOne({ email })) {
-      return res.status(400).json({ success: false, message: "Email already in use" });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already in use" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
       firstName,
@@ -56,7 +68,6 @@ export const signup = async (req, res, next) => {
       email,
       password: hashedPassword,
       authProvider: "local",
-      refreshToken: [],
     });
 
     const accessToken = generateAccessToken(newUser.id);
@@ -83,38 +94,51 @@ export const signup = async (req, res, next) => {
   }
 };
 
-// --- Login ---
 export const login = async (req, res, next) => {
   try {
-    if (sendValidationErrorIfAny(req, res)) return;
+    const validationResponse = sendValidationErrorIfAny(req, res);
+    if (validationResponse) return;
 
-    const { email: rawEmail, password } = req.body;
-    const email = rawEmail.toLowerCase();
+    const { password } = req.body;
+    const email = req.body.email.toLowerCase();
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
 
-    if (!user.password) return res.status(401).json({
-      success: false,
-      message: "This account does not support password login",
-    });
+    if (!user.password) {
+      return res.status(401).json({
+        success: false,
+        message: "This account does not support password login",
+      });
+    }
 
-    if (!await bcrypt.compare(password, user.password)) {
-      return res.status(401).json({ success: false, message: "Wrong password" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Wrong password" });
     }
 
     const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+    const newRefreshToken = generateRefreshToken(user.id);
 
-    user.refreshToken = user.refreshToken || [];
-    if (user.refreshToken.length >= 5) user.refreshToken.shift(); // mantieni massimo 5
-    user.refreshToken.push(refreshToken);
+    let oldTokens = user.refreshToken || [];
+
+    if (oldTokens.length >= 5) {
+      oldTokens.shift();
+    }
+
+    user.refreshToken = [...oldTokens, newRefreshToken];
     await user.save();
 
     res.status(200).json({
       success: true,
       accessToken,
-      refreshToken,
+      refreshToken: newRefreshToken,
       user: {
         id: user.id,
         firstName: user.firstName,
@@ -131,10 +155,13 @@ export const login = async (req, res, next) => {
 
 export const googleLogin = async (req, res, next) => {
   try {
-    if (sendValidationErrorIfAny(req, res)) return;
+    const validationResponse = sendValidationErrorIfAny(req, res);
+    if (validationResponse) return;
 
     const { idToken } = req.body;
+
     const audiences = getGoogleAudiences();
+
     const allowMissingAudienceCheck =
       process.env.NODE_ENV === "test" ||
       process.env.GOOGLE_AUTH_ALLOW_MISSING_AUDIENCE === "true";
@@ -142,7 +169,8 @@ export const googleLogin = async (req, res, next) => {
     if (audiences.length === 0 && !allowMissingAudienceCheck) {
       return res.status(500).json({
         success: false,
-        message: "Google login not configured. Set GOOGLE_AUTH_CLIENT_ID.",
+        message:
+          "Google login is not configured (missing GOOGLE_AUTH_CLIENT_ID). Set it or use GOOGLE_AUTH_ALLOW_MISSING_AUDIENCE=true to bypass.",
       });
     }
 
@@ -150,23 +178,36 @@ export const googleLogin = async (req, res, next) => {
       idToken,
       audience: audiences.length > 0 ? audiences : undefined,
     });
-
     const payload = ticket.getPayload();
-    if (!payload?.email) return res.status(400).json({ success: false, message: "Google token missing email" });
-    if (payload.email_verified === false) return res.status(401).json({ success: false, message: "Google email not verified" });
+
+    if (!payload?.email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Google token missing email" });
+    }
+    if (payload.email_verified === false) {
+      return res.status(401).json({
+        success: false,
+        message: "Google email is not verified",
+      });
+    }
 
     const email = payload.email.toLowerCase();
     const googleSub = payload.sub;
-    let firstName = payload.given_name || "Google";
-    let lastName = payload.family_name || "User";
 
-    if ((!payload.given_name || !payload.family_name) && payload.name) {
+    let firstName = payload.given_name;
+    let lastName = payload.family_name;
+    if ((!firstName || !lastName) && payload.name) {
       const parts = payload.name.split(" ").filter(Boolean);
-      firstName = firstName || parts[0];
-      lastName = lastName || parts.slice(1).join(" ");
+      firstName = firstName || parts[0] || "";
+      lastName = lastName || parts.slice(1).join(" ") || "";
     }
 
+    if (!firstName) firstName = "Google";
+    if (!lastName) lastName = "User";
+
     let user = await User.findOne({ email });
+
     if (!user) {
       user = new User({
         firstName,
@@ -176,11 +217,13 @@ export const googleLogin = async (req, res, next) => {
         googleSub,
         picture: payload.picture,
         password: null,
-        refreshToken: [],
       });
     } else {
       if (user.googleSub && user.googleSub !== googleSub) {
-        return res.status(403).json({ success: false, message: "Google account mismatch" });
+        return res.status(403).json({
+          success: false,
+          message: "Google account mismatch for this email",
+        });
       }
       user.googleSub = user.googleSub || googleSub;
       user.authProvider = user.authProvider || "google";
@@ -188,17 +231,17 @@ export const googleLogin = async (req, res, next) => {
     }
 
     const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+    const newRefreshToken = generateRefreshToken(user.id);
 
-    user.refreshToken = user.refreshToken || [];
-    if (user.refreshToken.length >= 5) user.refreshToken.shift();
-    user.refreshToken.push(refreshToken);
+    let oldTokens = user.refreshToken || [];
+    if (oldTokens.length >= 5) oldTokens.shift();
+    user.refreshToken = [...oldTokens, newRefreshToken];
     await user.save();
 
     res.status(200).json({
       success: true,
       accessToken,
-      refreshToken,
+      refreshToken: newRefreshToken,
       user: {
         id: user.id,
         firstName: user.firstName,
@@ -214,19 +257,28 @@ export const googleLogin = async (req, res, next) => {
 };
 
 export const refreshToken = async (req, res, next) => {
+  const validationResponse = sendValidationErrorIfAny(req, res);
+  if (validationResponse) return;
+
   const { refreshToken } = req.body;
-  if (!refreshToken) return res.status(400).json({ success: false, message: "Refresh Token Required for Logout" });
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) return res.status(403).json({ success: false, message: "User not found" });
 
-    if (!user.refreshToken.includes(refreshToken)) {
-      return res.status(403).json({ success: false, message: "Invalid Refresh Token" });
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res
+        .status(403)
+        .json({ success: false, message: "User not found" });
     }
 
-    user.refreshToken = user.refreshToken.filter(t => t !== refreshToken);
+    if (!user.refreshToken.includes(refreshToken)) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Invalid Refresh Token (Revoked)" });
+    }
+
+    user.refreshToken = user.refreshToken.filter((t) => t !== refreshToken);
 
     const newAccessToken = generateAccessToken(user.id);
     const newRefreshToken = generateRefreshToken(user.id);
@@ -234,22 +286,40 @@ export const refreshToken = async (req, res, next) => {
     user.refreshToken.push(newRefreshToken);
     await user.save();
 
-    res.json({ success: true, accessToken: newAccessToken, refreshToken: newRefreshToken });
+    res.json({
+      success: true,
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
   } catch (error) {
-    res.status(403).json({ success: false, message: "Invalid or expired Refresh Token" });
+    return res
+      .status(403)
+      .json({ success: false, message: "Invalid or Expired Refresh Token" });
   }
 };
 
 export const logout = async (req, res, next) => {
+  const validationResponse = sendValidationErrorIfAny(req, res);
+  if (validationResponse) return;
+
   const { refreshToken } = req.body;
-  if (!refreshToken) return res.status(400).json({ success: false, message: "Refresh Token required" });
+
+  if (!refreshToken) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Refresh Token Required for Logout" });
+  }
 
   try {
-    const user = await User.findOne({ refreshToken });
+    const user = await User.findOne({ refreshToken: refreshToken });
+
     if (user) {
-      user.refreshToken = user.refreshToken.filter(t => t !== refreshToken);
+      user.refreshToken = user.refreshToken.filter(
+        (token) => token !== refreshToken,
+      );
       await user.save();
     }
+
     res.sendStatus(204);
   } catch (error) {
     next(error);
@@ -258,9 +328,14 @@ export const logout = async (req, res, next) => {
 
 export const getMe = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userId).select("-password -refreshToken");
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
-    res.status(200).json({ success: true, user });
+    const user = await User.findById(req.userId).select(
+      "-password -refreshToken",
+    );
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    res.status(200).json({ success: true, user: user });
   } catch (error) {
     next(error);
   }

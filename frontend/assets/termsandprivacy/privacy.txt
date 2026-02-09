@@ -3,7 +3,7 @@ Privacy Policy
 Last Updated: 08/02/2026
 
 1. Introduction
-This Privacy Policy explains how Aurabus collects, uses, and discloses your information when you use this mobile application .
+This Privacy Policy explains how Aurabus collects, uses, and discloses your information when you use this mobile application.
 
 2. Information We Collect
 We may collect the following types of information:
@@ -34,4 +34,4 @@ The App is not intended for children under 13. We do not knowingly collect perso
 We may update this Privacy Policy at any time. The updated policy will be posted in the App.
 
 9. Contact
-If you have questions about this Privacy Policy, contact: support@aurabus.  
+If you have questions about this Privacy Policy, contact: support@aurabus.com 

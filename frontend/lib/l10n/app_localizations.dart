@@ -571,6 +571,16 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search stop...'**
   String get searchPlaceholder;
+
+  String get userPlaceholder;
+
+  String get favoritesSection;
+
+  String get privacyLoadError;
+
+  String get termsLoadError;
+
+  String get favoritesTitle;
 }
 
 class _AppLocalizationsDelegate

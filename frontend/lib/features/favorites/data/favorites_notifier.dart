@@ -1,6 +1,6 @@
+import 'package:aurabus/features/favorites/data/models/favorites_repository.dart';
 import 'package:aurabus/features/favorites/favorites_state.dart';
 import 'package:aurabus/features/favorites/data/favorites_provider.dart';
-import 'package:aurabus/features/favorites/data/favorites_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 

@@ -8,4 +8,4 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: 'assets/env/.env', isOptional: true);
   runApp(const ProviderScope(child: MyApp()));
-} 
+}

@@ -77,5 +77,10 @@
     "reward10Rides": "10 Corse Gratis",
     "reward2Rides": "2 Corse Gratis",
     "youLabel": "Tu",
+    "favoritesTitle": "Favorites",
+    "favoritesSection": "Favorites",
+    "privacyLoadError": "Error loading Privacy Policy",
+    "termsLoadError": "Error loading Terms & Conditions",
+    "userPlaceholder": "User",
     "searchPlaceholder": "Cerca fermata..."
 }
