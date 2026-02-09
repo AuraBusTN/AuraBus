@@ -1,7 +1,6 @@
 import 'package:aurabus/features/favorites/data/favorites_notifier.dart';
 import 'package:aurabus/features/favorites/data/favorites_provider.dart';
 import 'package:aurabus/features/map/data/models/route_info.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -128,7 +127,6 @@ final sortedUniqueLinesProvider = Provider.family<List<RouteInfo>, int>((
   final stopsMap = ref.watch(stopsMapProvider);
   final stop = stopsMap[stopId];
   if (stop == null) {
-    debugPrint('[STOP ROUTES] Stop $stopId not found');
     return const [];
   }
 

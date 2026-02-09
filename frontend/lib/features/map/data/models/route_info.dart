@@ -47,6 +47,15 @@ class RouteInfo {
 
 
 Color parseHexColor(String hex) {
-  final value = int.parse('FF$hex', radix: 16);
-  return Color(value);
+  final sanitized = hex.trim().replaceAll('#', '');
+  if (sanitized.length != 6) {
+    return const Color(0xFF000000);
+  }
+  final value = int.tryParse('FF$sanitized', radix: 16);
+  if (value == null) {
+    return const Color(0xFF000000);
+  } 
+  else {
+    return Color(value);
+  }
 }

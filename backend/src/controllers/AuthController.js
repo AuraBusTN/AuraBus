@@ -215,7 +215,7 @@ export const googleLogin = async (req, res, next) => {
 
 export const refreshToken = async (req, res, next) => {
   const { refreshToken } = req.body;
-  if (!refreshToken) return res.status(400).json({ success: false, message: "Refresh Token required" });
+  if (!refreshToken) return res.status(400).json({ success: false, message: "Refresh Token Required for Logout" });
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);

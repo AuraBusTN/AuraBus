@@ -23,7 +23,6 @@ class MapRepository {
 
   Future<List<StopTrip>> fetchStopTrips(int stopId) async {
     try {
-      debugPrint('[STOP FETCH] Fetching trips for stop $stopId');
       final res = await _dioClient.dio.get("/stops/$stopId");
 
       final jsonList = res.data as List<dynamic>;
@@ -36,9 +35,5 @@ class MapRepository {
     }
   }
 
-  
-  Future<List<StopInfo>> loadLocaStops() async {
-    final jsonStr = await rootBundle.loadString('assets/data/stops.json');
-    return compute(_parseStops, jsonStr);
-  }
+
 }

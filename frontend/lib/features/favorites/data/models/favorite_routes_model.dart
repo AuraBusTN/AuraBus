@@ -6,7 +6,10 @@ class FavoriteRoutes {
   factory FavoriteRoutes.fromJson(Map<String, dynamic> json) {
     final list = json['favoriteRoutes'] as List?;
     return FavoriteRoutes(
-      routes: list?.map((e) => int.tryParse(e.toString()) ?? 0).toList() ?? [],
+      routes: list
+              ?.map((e) => int.tryParse(e.toString()))
+              .whereType<int>()
+              .toList() ?? [],
     );
   }
 }

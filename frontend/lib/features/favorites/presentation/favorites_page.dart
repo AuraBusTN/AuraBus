@@ -35,7 +35,6 @@ class FavoritesPage extends ConsumerWidget {
             child: Text("errore"),
           ),
           data: (routes) {
-            final sortedRoutes = [...routes]..sort(compareRouteShortNames);
 
             return SingleChildScrollView(
               child: Center(
@@ -43,7 +42,7 @@ class FavoritesPage extends ConsumerWidget {
                   spacing: 8,
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
-                  children: sortedRoutes.map((route) {
+                  children: routes.map((route) {
                     final isFavorite = favoritesState.favoriteRoutes
                         .contains(route.routeId);
 

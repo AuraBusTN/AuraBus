@@ -16,7 +16,7 @@ class PrivacyPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Torna indietro al signup
+            Navigator.pop(context); 
           },
         ),
       ),
