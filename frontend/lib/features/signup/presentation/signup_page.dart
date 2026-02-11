@@ -23,8 +23,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  bool termsChecked = false; // stato del checkbox
 
   static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
@@ -39,28 +40,33 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   }
 
   Future<void> _handleSignup() async {
-    if (_formKey.currentState!.validate()) {
-      FocusScope.of(context).unfocus();
+    if (!_formKey.currentState!.validate()) return;
+    if (!termsChecked) {
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.termsError), backgroundColor: Colors.red),
+      );
+      return;
+    }
 
-      final success = await ref
-          .read(authProvider.notifier)
-          .signup(
-            firstNameController.text.trim(),
-            lastNameController.text.trim(),
-            emailController.text.trim(),
-            passwordController.text,
-          );
+    FocusScope.of(context).unfocus();
 
-      if (mounted) {
-        if (success) {
-          context.go(AppRoute.account);
-        } else {
-          final error = ref.read(authProvider).error ?? "Registration failed";
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error), backgroundColor: Colors.red),
-          );
-        }
-      }
+    final success = await ref.read(authProvider.notifier).signup(
+      firstNameController.text.trim(),
+      lastNameController.text.trim(),
+      emailController.text.trim(),
+      passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      context.go(AppRoute.account);
+    } else {
+      final error = ref.read(authProvider).error ?? "Registration failed";
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error), backgroundColor: Colors.red),
+      );
     }
   }
 
@@ -202,37 +208,12 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: FormField<bool>(
-                                initialValue: false,
-                                validator: (value) {
-                                  if (value != true) {
-                                    return l10n.termsError;
-                                  }
-                                  return null;
-                                },
-                                builder: (state) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      TermsAndConditions(
-                                        isChecked: state.value ?? false,
-                                        onChanged: (val) {
-                                          state.didChange(val);
-                                        },
-                                      ),
-                                      if (state.hasError)
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 5),
-                                          child: Text(
-                                            state.errorText!,
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  );
+                              child: TermsAndConditions(
+                                isChecked: termsChecked,
+                                onChanged: (val) {
+                                  setState(() {
+                                    termsChecked = val!;
+                                  });
                                 },
                               ),
                             ),

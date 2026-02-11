@@ -6,8 +6,11 @@ import 'package:go_router/go_router.dart';
 class PrivacyPage extends StatelessWidget {
   const PrivacyPage({super.key});
 
-  Future<String> loadPrivacy() async {
-    return await rootBundle.loadString('assets/termsandprivacy/privacy.txt');
+
+  Future<String> loadPrivacy(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    return await rootBundle.loadString(l10n.privacydirectory);
   }
 
   @override
@@ -25,7 +28,7 @@ class PrivacyPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<String>(
-        future: loadPrivacy(),
+        future: loadPrivacy(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

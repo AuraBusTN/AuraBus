@@ -97,5 +97,7 @@
     "privacyLoadError": "Error loading Privacy Policy",
     "termsLoadError": "Error loading Terms & Conditions",
     "userPlaceholder": "User",
-    "searchPlaceholder": "Search stop..."
+    "searchPlaceholder": "Search stop...",
+    "termsdirectory": "assets/termsandprivacy/termsEN.txt",
+    "privacydirectory": "assets/termsandprivacy/privacyEN.txt"
 }

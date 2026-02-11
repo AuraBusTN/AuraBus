@@ -1,3 +1,4 @@
+import 'package:aurabus/features/map/widgets/map_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -38,17 +39,24 @@ class _MapScreenState extends ConsumerState<MapScreen>
   }
 
   Future<void> _onMarkerTap(Marker marker) async {
-    final stopId = int.parse(marker.markerId.value);
-    final stopsMap = ref.read(stopsMapProvider);
-    final stopInfo = stopsMap[stopId];
-    if (stopInfo == null) return;
+    try {
+      final idValue = marker.markerId.value;
+      final stopId = int.tryParse(idValue);
+      if (stopId == null) return;
 
-    final favoriteRoutes = await ref.read(favoriteRoutesProvider.future);
+      final stopsMap = ref.read(stopsMapProvider);
+      final stopInfo = stopsMap[stopId];
+      if (stopInfo == null) return;
 
-    if (!mounted) return;
+      final favoriteRoutes = await ref.read(favoriteRoutesProvider.future);
 
-    ref.read(selectedLinesProvider.notifier).setAll(favoriteRoutes);
-    ref.read(mapControllerProvider).openStopModal(context, stopInfo);
+      if (!mounted) return;
+
+      ref.read(selectedLinesProvider.notifier).setAll(favoriteRoutes);
+      ref.read(mapControllerProvider).openStopModal(context, stopInfo);
+    } catch (e) {
+      debugPrint('Error in _onMarkerTap: $e');
+    }
   }
 
   @override
@@ -67,21 +75,42 @@ class _MapScreenState extends ConsumerState<MapScreen>
           );
         }).toSet();
 
-        return ValueListenableBuilder<bool>(
-          valueListenable: mapController.showLocation,
-          builder: (context, showBlueDot, child) {
-            return GoogleMap(
-              key: const Key('google_map'),
-              initialCameraPosition: CameraPosition(target: _center, zoom: 13),
-              onMapCreated: mapController.onMapCreated,
-              style: mapStyle,
-              markers: markers,
-              zoomControlsEnabled: true,
-              mapType: MapType.normal,
-              myLocationEnabled: showBlueDot,
-              myLocationButtonEnabled: showBlueDot,
-            );
-          },
+        return Stack(
+          children: [
+            ValueListenableBuilder<bool>(
+              valueListenable: mapController.showLocation,
+              builder: (context, showBlueDot, child) {
+                return GoogleMap(
+                  key: const Key('google_map'),
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 13,
+                  ),
+                  onMapCreated: mapController.onMapCreated,
+                  style: mapStyle,
+                  markers: markers,
+                  zoomControlsEnabled: true,
+                  mapType: MapType.normal,
+                  myLocationEnabled: showBlueDot,
+                  myLocationButtonEnabled: showBlueDot,
+                );
+              },
+            ),
+            const Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: MapSearchBar(),
+                ),
+              ),
+            ),
+          ],
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),

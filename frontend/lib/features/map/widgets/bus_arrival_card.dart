@@ -163,7 +163,7 @@ class _BusCardHeader extends StatelessWidget {
             const SizedBox(width: 8),
           ] else
             const SizedBox(width: 20),
-          BusRectangle.fromArrival(arrival,2.4),
+          BusRectangle.fromArrival(arrival,33.6),
           const SizedBox(width: 14),
           Expanded(
             child: Column(

@@ -7,348 +7,127 @@ import '../../utils/test_app_wrapper.dart';
 
 void main() {
   group('Terms Acceptance FormField<bool> Validator', () {
-    testWidgets(
-      'Validator blocks signup when terms checkbox is unchecked',
-      (tester) async {
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.resetPhysicalSize);
+    Future<void> fillSignupForm(
+      WidgetTester tester, {
+      String firstName = 'John',
+      String lastName = 'Doe',
+      String email = 'john.doe@example.com',
+      String password = 'password123',
+      String confirmPassword = 'password123',
+    }) async {
+      await tester.enterText(find.byKey(const Key('firstNameField')), firstName);
+      await tester.enterText(find.byKey(const Key('lastNameField')), lastName);
+      await tester.enterText(find.byKey(const Key('emailField')), email);
+      await tester.enterText(find.byKey(const Key('passwordField')), password);
+      await tester.enterText(find.byKey(const Key('confirmPasswordField')), confirmPassword);
+    }
 
-        await tester.pumpWidget(createTestApp(child: const SignupPage()));
-        await tester.pumpAndSettle();
+    Future<void> tapTermsCheckbox(WidgetTester tester) async {
+      final termsWidget = find.byType(TermsAndConditions);
+      expect(termsWidget, findsOneWidget);
+      await tester.tap(termsWidget);
+      await tester.pump();
+    }
 
-        // Fill all required fields
-        await tester.enterText(
-          findTextFormFieldByLabel('First Name'),
-          'John',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Last Name'),
-          'Doe',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Email Address'),
-          'john.doe@example.com',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Password'),
-          'password123',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Confirm Password'),
-          'password123',
-        );
+    Future<void> tapSignUpButton(WidgetTester tester) async {
+      final button = find.widgetWithText(GenericButton, 'Sign Up');
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pump();
+    }
 
-        // Verify terms checkbox is initially unchecked
-        final termsWidget = find.byType(TermsAndConditions);
-        expect(termsWidget, findsOneWidget);
+    Future<void> prepareTester(WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+    }
 
-        // Attempt to submit form without accepting terms
-        final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
-        await tester.ensureVisible(signUpButton);
-        await tester.tap(signUpButton);
-        await tester.pump();
+    testWidgets('Blocks signup when terms checkbox is unchecked', (tester) async {
+      await prepareTester(tester);
+      await tester.pumpWidget(createTestApp(child: const SignupPage()));
+      await tester.pumpAndSettle();
 
-        // Verify error message is displayed
-        expect(
-          find.text('Please accept terms and conditions'),
-          findsOneWidget,
-          reason:
-              'Error message should appear when terms are not accepted during form submission',
-        );
-      },
-    );
+      await fillSignupForm(tester);
+      await tapSignUpButton(tester);
 
-    testWidgets(
-      'Error text is shown when form is validated with unchecked terms',
-      (tester) async {
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.resetPhysicalSize);
+      expect(find.text('Please accept terms and conditions'), findsOneWidget);
+    });
 
-        await tester.pumpWidget(createTestApp(child: const SignupPage()));
-        await tester.pumpAndSettle();
+    testWidgets('Error text is shown with unchecked terms', (tester) async {
+      await prepareTester(tester);
+      await tester.pumpWidget(createTestApp(child: const SignupPage()));
+      await tester.pumpAndSettle();
 
-        // Fill all required fields
-        await tester.enterText(
-          findTextFormFieldByLabel('First Name'),
-          'Jane',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Last Name'),
-          'Smith',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Email Address'),
-          'jane.smith@example.com',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Password'),
-          'securepass123',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Confirm Password'),
-          'securepass123',
-        );
+      await fillSignupForm(tester,
+          firstName: 'Jane',
+          lastName: 'Smith',
+          email: 'jane.smith@example.com',
+          password: 'securepass123',
+          confirmPassword: 'securepass123');
 
-        // Find and tap sign up button without accepting terms
-        final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
-        await tester.ensureVisible(signUpButton);
-        await tester.tap(signUpButton);
-        await tester.pump();
+      await tapSignUpButton(tester);
 
-        // Verify error text appears
-        final errorText = find.text('Please accept terms and conditions');
-        expect(errorText, findsOneWidget);
+      final errorText = find.text('Please accept terms and conditions');
+      expect(errorText, findsOneWidget);
 
-        // Verify error text styling (red color)
-        final errorWidget = tester.widget<Text>(
-          find.ancestor(
-            of: errorText,
-            matching: find.byType(Text),
-          ),
-        );
-        expect(errorWidget.style?.color, Colors.red);
-      },
-    );
+      final textWidget = tester.widget<Text>(errorText);
+      expect(textWidget.style?.color, Colors.red);
+    });
 
-    testWidgets(
-      'Error text is cleared when terms checkbox is checked',
-      (tester) async {
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.resetPhysicalSize);
+    testWidgets('Error disappears when terms checkbox is checked', (tester) async {
+      await prepareTester(tester);
+      await tester.pumpWidget(createTestApp(child: const SignupPage()));
+      await tester.pumpAndSettle();
 
-        await tester.pumpWidget(createTestApp(child: const SignupPage()));
-        await tester.pumpAndSettle();
+      await fillSignupForm(tester);
+      await tapSignUpButton(tester);
+      expect(find.text('Please accept terms and conditions'), findsOneWidget);
 
-        // Fill all required fields
-        await tester.enterText(
-          findTextFormFieldByLabel('First Name'),
-          'Alice',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Last Name'),
-          'Johnson',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Email Address'),
-          'alice.johnson@example.com',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Password'),
-          'mypass123',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Confirm Password'),
-          'mypass123',
-        );
+      await tapTermsCheckbox(tester);
+      expect(find.text('Please accept terms and conditions'), findsNothing);
+    });
 
-        // Submit form without accepting terms to trigger error
-        final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
-        await tester.ensureVisible(signUpButton);
-        await tester.tap(signUpButton);
-        await tester.pump();
+    testWidgets('Error reappears if terms checkbox is unchecked after being checked', (tester) async {
+      await prepareTester(tester);
+      await tester.pumpWidget(createTestApp(child: const SignupPage()));
+      await tester.pumpAndSettle();
 
-        // Verify error is displayed
-        expect(
-          find.text('Please accept terms and conditions'),
-          findsOneWidget,
-        );
+      await fillSignupForm(tester);
+      await tapTermsCheckbox(tester);
+      expect(find.text('Please accept terms and conditions'), findsNothing);
 
-        // Now check the terms checkbox
-        final termsWidget = find.byType(TermsAndConditions);
-        await tester.tap(termsWidget);
-        await tester.pump();
+      await tapTermsCheckbox(tester);
+      await tapSignUpButton(tester);
 
-        // Verify error text is cleared
-        expect(
-          find.text('Please accept terms and conditions'),
-          findsNothing,
-          reason:
-              'Error message should disappear after accepting terms',
-        );
-      },
-    );
+      expect(find.text('Please accept terms and conditions'), findsOneWidget);
+    });
 
-    testWidgets(
-      'Error text is shown again when terms checkbox is unchecked after being checked',
-      (tester) async {
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.resetPhysicalSize);
+    testWidgets('Form validates successfully when terms accepted', (tester) async {
+      await prepareTester(tester);
+      await tester.pumpWidget(createTestApp(child: const SignupPage()));
+      await tester.pumpAndSettle();
 
-        await tester.pumpWidget(createTestApp(child: const SignupPage()));
-        await tester.pumpAndSettle();
+      await fillSignupForm(tester);
+      await tapTermsCheckbox(tester);
+      await tapSignUpButton(tester);
 
-        // Fill all required fields
-        await tester.enterText(
-          findTextFormFieldByLabel('First Name'),
-          'Bob',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Last Name'),
-          'Wilson',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Email Address'),
-          'bob.wilson@example.com',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Password'),
-          'bobpass123',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Confirm Password'),
-          'bobpass123',
-        );
+      expect(find.text('Please accept terms and conditions'), findsNothing);
+      expect(find.widgetWithText(GenericButton, 'Sign Up'), findsOneWidget);
+    });
 
-        // Check the terms checkbox
-        final termsWidget = find.byType(TermsAndConditions);
-        await tester.tap(termsWidget);
-        await tester.pump();
+    testWidgets('FormField maintains state consistency', (tester) async {
+      await prepareTester(tester);
+      await tester.pumpWidget(createTestApp(child: const SignupPage()));
+      await tester.pumpAndSettle();
 
-        // Verify no error message is shown
-        expect(
-          find.text('Please accept terms and conditions'),
-          findsNothing,
-        );
+      await fillSignupForm(tester);
+      await tapTermsCheckbox(tester);
+      await tapTermsCheckbox(tester);
+      await tapTermsCheckbox(tester);
 
-        // Uncheck the terms checkbox
-        await tester.tap(termsWidget);
-        await tester.pump();
+      await tapSignUpButton(tester);
 
-        // Submit form to trigger validation
-        final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
-        await tester.ensureVisible(signUpButton);
-        await tester.tap(signUpButton);
-        await tester.pump();
-
-        // Verify error is displayed again
-        expect(
-          find.text('Please accept terms and conditions'),
-          findsOneWidget,
-          reason:
-              'Error should reappear after unchecking terms',
-        );
-      },
-    );
-
-    testWidgets(
-      'Validator correctly validates when terms are accepted',
-      (tester) async {
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.resetPhysicalSize);
-
-        await tester.pumpWidget(createTestApp(child: const SignupPage()));
-        await tester.pumpAndSettle();
-
-        // Fill all required fields
-        await tester.enterText(
-          findTextFormFieldByLabel('First Name'),
-          'Charlie',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Last Name'),
-          'Brown',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Email Address'),
-          'charlie.brown@example.com',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Password'),
-          'charlie123',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Confirm Password'),
-          'charlie123',
-        );
-
-        // Check the terms checkbox
-        final termsWidget = find.byType(TermsAndConditions);
-        await tester.tap(termsWidget);
-        await tester.pump();
-
-        // Submit form with terms accepted
-        final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
-        await tester.ensureVisible(signUpButton);
-        await tester.tap(signUpButton);
-        await tester.pumpAndSettle();
-
-        // Verify no error message for terms
-        expect(
-          find.text('Please accept terms and conditions'),
-          findsNothing,
-          reason:
-              'No error should appear when terms are accepted',
-        );
-      },
-    );
-
-    testWidgets(
-      'FormField maintains state consistency during interactions',
-      (tester) async {
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.resetPhysicalSize);
-
-        await tester.pumpWidget(createTestApp(child: const SignupPage()));
-        await tester.pumpAndSettle();
-
-        final termsWidget = find.byType(TermsAndConditions);
-
-        // Initial state: unchecked, no error (until form submission)
-        expect(termsWidget, findsOneWidget);
-
-        // Check terms
-        await tester.tap(termsWidget);
-        await tester.pump();
-
-        // Uncheck terms
-        await tester.tap(termsWidget);
-        await tester.pump();
-
-        // Check terms again for good measure
-        await tester.tap(termsWidget);
-        await tester.pump();
-
-        // Fill all fields
-        await tester.enterText(
-          findTextFormFieldByLabel('First Name'),
-          'Diana',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Last Name'),
-          'Prince',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Email Address'),
-          'diana.prince@example.com',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Password'),
-          'diana123',
-        );
-        await tester.enterText(
-          findTextFormFieldByLabel('Confirm Password'),
-          'diana123',
-        );
-
-        // After multiple toggles, terms should still be checked and no error shown
-        final signUpButton = find.widgetWithText(GenericButton, 'Sign Up');
-        await tester.ensureVisible(signUpButton);
-        await tester.tap(signUpButton);
-        await tester.pump();
-
-        expect(
-          find.text('Please accept terms and conditions'),
-          findsNothing,
-          reason:
-              'Terms should remain in checked state after multiple interactions',
-        );
-      },
-    );
+      expect(find.text('Please accept terms and conditions'), findsNothing);
+    });
   });
 }

@@ -82,5 +82,7 @@
     "privacyLoadError": "Errore nel caricamento della Privacy Policy",
     "termsLoadError": "Errore nel caricamento di Terms and Conditions",
     "userPlaceholder": "Utente",
-    "searchPlaceholder": "Cerca fermata..."
+    "searchPlaceholder": "Cerca fermata...",
+    "termsdirectory": "assets/termsandprivacy/termsIT.txt",
+    "privacydirectory": "assets/termsandprivacy/privacyIT.txt"
 }

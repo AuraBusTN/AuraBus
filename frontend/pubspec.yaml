@@ -75,7 +75,7 @@ flutter:
         - assets/data/
         - assets/images/
         - assets/env/.env
-        - assets/terms&privacy/
+        - assets/termsandprivacy/
 
     #   - images/a_dot_burr.jpeg
     #   - images/a_dot_ham.jpeg

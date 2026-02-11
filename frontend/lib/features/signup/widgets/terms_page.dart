@@ -6,8 +6,9 @@ import 'package:go_router/go_router.dart';
 class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
 
-  Future<String> loadTerms() async {
-    return await rootBundle.loadString('assets/termsandprivacy/terms.txt');
+  Future<String> loadTerms(BuildContext context) async {
+      final l10n = AppLocalizations.of(context)!;
+      return await rootBundle.loadString(l10n.termsdirectory);
   }
 
   @override
@@ -25,7 +26,7 @@ class TermsPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<String>(
-        future: loadTerms(),
+        future: loadTerms(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

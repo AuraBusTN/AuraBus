@@ -265,4 +265,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchPlaceholder => 'Search stop...';
+
+  @override
+  String get termsdirectory => 'assets/termsandprivacy/termsEN.txt';
+
+  @override
+  String get privacydirectory => 'assets/termsandprivacy/privacyEN.txt';
 }

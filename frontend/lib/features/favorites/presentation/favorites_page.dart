@@ -7,11 +7,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
-class FavoritesPage extends ConsumerWidget {
+class FavoritesPage extends ConsumerStatefulWidget {
   const FavoritesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FavoritesPage> createState() => _FavoritesPageState();
+}
+
+class _FavoritesPageState extends ConsumerState<FavoritesPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     final routesAsync = ref.watch(routesProvider);
@@ -36,7 +46,6 @@ class FavoritesPage extends ConsumerWidget {
             child: Text(l10n.errorMessage(e.toString())),
           ),
           data: (routes) {
-
             return SingleChildScrollView(
               child: Center(
                 child: Wrap(
@@ -44,28 +53,28 @@ class FavoritesPage extends ConsumerWidget {
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
                   children: routes.map((route) {
-                    final isFavorite = favoritesState.favoriteRoutes
-                        .contains(route.routeId);
+                    final favoriteIds = favoritesState.value ?? [];
+                    final isFavorite = favoriteIds.contains(route.routeId);
 
                     return SelectableBusRectangle(
                       route: route,
-                      size: 2.5,
+                      size: 35,
                       isSelected: isFavorite,
                       onToggle: () {
-                          final notifier =
-                              ref.read(favoritesProvider.notifier);
+                        final notifier =
+                            ref.read(favoritesProvider.notifier);
 
-                          final updated = [...favoritesState.favoriteRoutes];
+                        final updated = [...favoriteIds];
 
-                          if (isFavorite) {
-                            updated.remove(route.routeId);
-                          } else {
-                            updated.add(route.routeId);
-                          }
+                        if (isFavorite) {
+                          updated.remove(route.routeId);
+                        } else {
+                          updated.add(route.routeId);
+                        }
 
-                          notifier.updateFavorites(updated);
-                        },
-                      );
+                        notifier.updateFavorites(updated);
+                      },
+                    );
                   }).toList(),
                 ),
               ),

@@ -1,57 +1,32 @@
-import 'package:aurabus/features/favorites/data/models/favorites_repository.dart';
-import 'package:aurabus/features/favorites/favorites_state.dart';
-import 'package:aurabus/features/favorites/data/favorites_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aurabus/features/favorites/data/models/favorites_repository.dart';
+import 'package:aurabus/features/favorites/data/favorites_provider.dart';
 
+class FavoritesNotifier extends AsyncNotifier<List<int>> {
+  FavoritesRepository get _repo => ref.read(favoritesRepositoryProvider);
 
-class FavoritesNotifier extends Notifier<FavoritesState> {
   @override
-FavoritesState build() {
-  Future.microtask(() => loadFavorites());
-  return const FavoritesState();
-}
-
-  FavoritesRepository get _repo =>
-      ref.read(favoritesRepositoryProvider);
-
-  Future<void> loadFavorites() async {
-    state = state.copyWith(isLoading: true);
-    try {
-      final favorites = await _repo.getFavoriteRoutes();
-      state = state.copyWith(
-        isLoading: false,
-        favoriteRoutes: favorites.routes,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
-    }
+  Future<List<int>> build() async {
+    // fetch iniziale, AsyncNotifier gestisce loading/error/data
+    final favorites = await _repo.getFavoriteRoutes();
+    return favorites.routes;
   }
 
   Future<void> updateFavorites(List<int> routes) async {
-    state = state.copyWith(isLoading: true);
+    // set loading durante l'aggiornamento
+    state = const AsyncValue.loading();
     try {
       final updated = await _repo.updateFavoriteRoutes(routes);
-      state = state.copyWith(
-        isLoading: false,
-        favoriteRoutes: updated,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = AsyncValue.data(updated);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
     }
   }
 
   bool isFavorite(int routeId) {
-    return state.favoriteRoutes.contains(routeId);
+    return state.value?.contains(routeId) ?? false;
   }
 }
 
 final favoritesProvider =
-    NotifierProvider<FavoritesNotifier, FavoritesState>(
-  FavoritesNotifier.new,
-);
+    AsyncNotifierProvider<FavoritesNotifier, List<int>>(FavoritesNotifier.new);

@@ -23,7 +23,7 @@ void main() {
       expect(result.routes, [1, 5, 10]);
     });
 
-    test('fromJson: handles mixed valid and invalid string numbers', () {
+    test('fromJson: handles numeric strings and filters invalid ones', () {
       final json = {
         'favoriteRoutes': ['1', '5', 'abc', '10', 'xyz'],
       };
@@ -71,7 +71,7 @@ void main() {
       expect(result.routes, [1, 5, 10]);
     });
 
-    test('fromJson: does not map invalid entries to 0', () {
+    test('fromJson: does not map invalid entries to zero', () {
       final json = {
         'favoriteRoutes': [1, 'invalid', 5],
       };
@@ -82,14 +82,24 @@ void main() {
       expect(result.routes.contains(0), isFalse);
     });
 
-    test('fromJson: handles zero as valid route ID', () {
+    test('fromJson: rejects zero as invalid route ID', () {
       final json = {
         'favoriteRoutes': [0, 1, 5],
       };
 
       final result = FavoriteRoutes.fromJson(json);
 
-      expect(result.routes, [0, 1, 5]);
+      expect(result.routes, [1, 5]);
+    });
+
+    test('fromJson: rejects negative route IDs', () {
+      final json = {
+        'favoriteRoutes': [-1, 5, -10, 10],
+      };
+
+      final result = FavoriteRoutes.fromJson(json);
+
+      expect(result.routes, [5, 10]);
     });
 
     test('fromJson: handles large route ID values', () {
@@ -102,18 +112,7 @@ void main() {
       expect(result.routes, [999999, 1000000, 9999999]);
     });
 
-    test('fromJson: handles negative values (which should be filtered if invalid)',
-        () {
-      final json = {
-        'favoriteRoutes': [-1, 5, -10, 10],
-      };
-
-      final result = FavoriteRoutes.fromJson(json);
-
-      expect(result.routes, [-1, 5, -10, 10]);
-    });
-
-    test('fromJson: handles duplicates', () {
+    test('fromJson: preserves duplicates', () {
       final json = {
         'favoriteRoutes': [1, 5, 5, 10, 5],
       };

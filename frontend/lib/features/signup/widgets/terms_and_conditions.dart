@@ -49,7 +49,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
     final tertiary = Theme.of(context).colorScheme.tertiary;
     final l10n = AppLocalizations.of(context)!;
 
-    return GestureDetector(
+    return InkWell (
       onTap: () {
         HapticFeedback.lightImpact();
         widget.onChanged(!widget.isChecked);

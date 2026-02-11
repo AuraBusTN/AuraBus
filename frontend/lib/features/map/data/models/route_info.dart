@@ -47,4 +47,3 @@ class RouteInfo {
   @override
   int get hashCode => routeId.hashCode;
 }
-

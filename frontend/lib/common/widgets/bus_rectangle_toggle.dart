@@ -21,14 +21,14 @@ class SelectableBusRectangle extends StatelessWidget {
   Widget build(BuildContext context) {
     final bus = BusRectangle.fromRoute(route, size);
 
-    return GestureDetector(
+    return InkWell(
       onTap: onToggle,
       child: Container(
         decoration: BoxDecoration(
           border: isSelected
               ? Border.all(color: AppColors.primary, width: 3)
-              : null,
-          borderRadius: BorderRadius.circular(size * 6),
+              : Border.all(color: Colors.transparent, width: 3),
+          borderRadius: BorderRadius.circular(size/2),
         ),
         child: bus,
       ),

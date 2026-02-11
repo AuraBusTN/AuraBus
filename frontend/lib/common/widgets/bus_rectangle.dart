@@ -30,19 +30,19 @@ class BusRectangle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size*14,
-      height: size*14,
+      width: size,
+      height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(size*4),
+        borderRadius: BorderRadius.circular(size/4),
       ),
       child: Text(
         shortName,
         style: TextStyle(
           color: AppColors.onPrimary,
           fontWeight: FontWeight.w700,
-          fontSize: size*6,
+          fontSize: size/2,
         ),
       ),
     );

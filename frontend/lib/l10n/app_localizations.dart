@@ -601,6 +601,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search stop...'**
   String get searchPlaceholder;
+
+  /// No description provided for @termsdirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'assets/termsandprivacy/termsEN.txt'**
+  String get termsdirectory;
+
+  /// No description provided for @privacydirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'assets/termsandprivacy/privacyEN.txt'**
+  String get privacydirectory;
 }
 
 class _AppLocalizationsDelegate

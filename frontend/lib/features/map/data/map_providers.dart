@@ -83,7 +83,7 @@ final routesMapProvider = Provider<Map<int, RouteInfo>>((ref) {
 
 final favoriteRoutesProvider = FutureProvider<Set<RouteInfo>>((ref) async {
   final favoritesState = ref.watch(favoritesProvider);
-  final favoriteIds = favoritesState.favoriteRoutes;
+  final favoriteIds = favoritesState.value ?? [];
 
 
   if (favoriteIds.isEmpty) return <RouteInfo>{};
