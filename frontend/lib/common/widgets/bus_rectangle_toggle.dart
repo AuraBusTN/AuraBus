@@ -28,7 +28,7 @@ class SelectableBusRectangle extends StatelessWidget {
           border: isSelected
               ? Border.all(color: AppColors.primary, width: 3)
               : Border.all(color: Colors.transparent, width: 3),
-          borderRadius: BorderRadius.circular(size/2),
+          borderRadius: BorderRadius.circular(size/3),
         ),
         child: bus,
       ),
