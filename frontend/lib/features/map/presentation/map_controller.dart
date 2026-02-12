@@ -72,7 +72,7 @@ class MapController {
         CameraUpdate.newLatLng(LatLng(position.latitude, position.longitude)),
       );
     } catch (e) {
-      // Handle potential errors, e.g., timeout or location services disabled
+      showLocation.value = false;
     }
   }
 
@@ -124,7 +124,10 @@ class MapController {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: PointerInterceptor(
-                    child: StopDetailsModal(stopInfo: stopInfo),
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: StopDetailsModal(stopInfo: stopInfo),
+                    ),
                   ),
                 ),
               ],

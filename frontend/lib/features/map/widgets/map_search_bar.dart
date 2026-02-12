@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/foundation.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import 'package:aurabus/core/utils/color_utils.dart';
 import 'package:aurabus/features/map/presentation/utils/route_utils.dart';
@@ -54,9 +56,19 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
   }
 
   void _onFocusChanged() {
-    setState(() {
-      _showResults = _focusNode.hasFocus && _controller.text.isNotEmpty;
-    });
+    if (!_focusNode.hasFocus) {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted) {
+          setState(() {
+            _showResults = false;
+          });
+        }
+      });
+    } else {
+      setState(() {
+        _showResults = _controller.text.isNotEmpty;
+      });
+    }
   }
 
   void _onSearchChanged() {
@@ -131,9 +143,15 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
 
     final mapController = ref.read(mapControllerProvider);
 
-    mapController.controller?.animateCamera(
-      CameraUpdate.newLatLngZoom(entry.location, 17.0),
-    );
+    if (kIsWeb) {
+      mapController.controller!.moveCamera(
+        CameraUpdate.newLatLngZoom(entry.location, 17.0),
+      );
+    } else {
+      mapController.controller!.animateCamera(
+        CameraUpdate.newLatLngZoom(entry.location, 17.0),
+      );
+    }
   }
 
   @override
@@ -142,133 +160,135 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
 
     ref.watch(stopsListProvider);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+    return PointerInterceptor(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: TextField(
+              controller: _controller,
+              focusNode: _focusNode,
+              decoration: InputDecoration(
+                hintText: l10n.searchPlaceholder,
+                hintStyle: const TextStyle(color: AppColors.textSecondary),
+                prefixIcon: const Icon(Icons.search, color: AppColors.primary),
+                suffixIcon: _controller.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.close, color: Colors.grey),
+                        onPressed: () {
+                          _controller.clear();
+                          setState(() {
+                            _filteredEntries = [];
+                            _showResults = false;
+                          });
+                        },
+                      )
+                    : null,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
               ),
-            ],
-          ),
-          child: TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            decoration: InputDecoration(
-              hintText: l10n.searchPlaceholder,
-              hintStyle: const TextStyle(color: AppColors.textSecondary),
-              prefixIcon: const Icon(Icons.search, color: AppColors.primary),
-              suffixIcon: _controller.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.close, color: Colors.grey),
-                      onPressed: () {
-                        _controller.clear();
-                        setState(() {
-                          _filteredEntries = [];
-                          _showResults = false;
-                        });
-                      },
-                    )
-                  : null,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            style: const TextStyle(
-              fontSize: 16,
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
           ),
-        ),
 
-        if (_showResults && _filteredEntries.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Container(
-              constraints: const BoxConstraints(maxHeight: 350),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+          if (_showResults && _filteredEntries.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Container(
+                constraints: const BoxConstraints(maxHeight: 350),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    itemCount: _filteredEntries.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 1, color: AppColors.divider),
+                    itemBuilder: (context, index) {
+                      final entry = _filteredEntries[index];
+
+                      final sortedRoutes = entry.allRoutes.toList()
+                        ..sort(RouteUtils.compareRoutes);
+
+                      return ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        title: Text(
+                          entry.stopName,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 6.0),
+                          child: Wrap(
+                            spacing: 4,
+                            runSpacing: 4,
+                            children: sortedRoutes.map((route) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: ColorUtils.parseHexColor(
+                                    route.routeColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  route.routeShortName,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        onTap: () => _onEntrySelected(entry),
+                      );
+                    },
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  itemCount: _filteredEntries.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1, color: AppColors.divider),
-                  itemBuilder: (context, index) {
-                    final entry = _filteredEntries[index];
-
-                    final sortedRoutes = entry.allRoutes.toList()
-                      ..sort(RouteUtils.compareRoutes);
-
-                    return ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      title: Text(
-                        entry.stopName,
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 6.0),
-                        child: Wrap(
-                          spacing: 4,
-                          runSpacing: 4,
-                          children: sortedRoutes.map((route) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: ColorUtils.parseHexColor(
-                                  route.routeColor,
-                                ),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                route.routeShortName,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      onTap: () => _onEntrySelected(entry),
-                    );
-                  },
                 ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

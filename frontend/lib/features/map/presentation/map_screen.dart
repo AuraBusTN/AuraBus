@@ -52,6 +52,8 @@ class _MapScreenState extends ConsumerState<MapScreen>
       data: (rawMarkers) {
         final markers = rawMarkers.map((marker) {
           return marker.copyWith(
+            infoWindowParam: const InfoWindow(title: null, snippet: null),
+            consumeTapEventsParam: true,
             onTapParam: () {
               final stopId = int.parse(marker.markerId.value);
               final stopInfo = stopsMap[stopId];
