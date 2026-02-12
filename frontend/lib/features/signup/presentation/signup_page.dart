@@ -136,6 +136,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                               children: [
                                 Expanded(
                                   child: CustomTextField(
+                                    key: const Key('firstNameField'),
                                     controller: firstNameController,
                                     label: l10n.firstNameLabel,
                                     icon: Icons.person_outline,
@@ -147,6 +148,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                 const SizedBox(width: 15),
                                 Expanded(
                                   child: CustomTextField(
+                                    key: const Key('lastNameField'),
                                     controller: lastNameController,
                                     label: l10n.lastNameLabel,
                                     icon: Icons.person_outline,
@@ -158,6 +160,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                               ],
                             ),
                             CustomTextField(
+                              key: const Key('emailField'),
                               controller: emailController,
                               label: l10n.emailLabel,
                               icon: Icons.email_outlined,
@@ -168,6 +171,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                       : null,
                             ),
                             CustomTextField(
+                              key: const Key('passwordField'),
                               controller: passwordController,
                               label: l10n.passwordLabel,
                               icon: Icons.lock_outline,
@@ -177,6 +181,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                   : null,
                             ),
                             CustomTextField(
+                              key: const Key('confirmPasswordField'),
                               controller: confirmPasswordController,
                               label: l10n.confirmPasswordLabel,
                               icon: Icons.lock_outline,
@@ -215,6 +220,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                         isChecked: state.value ?? false,
                                         onChanged: (val) {
                                           state.didChange(val);
+                                          state.validate();
                                         },
                                       ),
                                       if (state.hasError)
