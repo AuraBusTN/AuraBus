@@ -77,5 +77,12 @@
     "reward10Rides": "10 Corse Gratis",
     "reward2Rides": "2 Corse Gratis",
     "youLabel": "Tu",
-    "searchPlaceholder": "Cerca fermata..."
+    "favoritesTitle": "Preferiti",
+    "favoritesSection": "Preferiti",
+    "privacyLoadError": "Errore nel caricamento della Privacy Policy",
+    "termsLoadError": "Errore nel caricamento di Terms and Conditions",
+    "userPlaceholder": "Utente",
+    "searchPlaceholder": "Cerca fermata...",
+    "termsdirectory": "assets/termsandprivacy/termsIT.txt",
+    "privacydirectory": "assets/termsandprivacy/privacyIT.txt"
 }

@@ -23,12 +23,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-
-  bool termsChecked = false;
 
   @override
   void dispose() {
@@ -41,36 +38,26 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   }
 
   Future<void> _handleSignup() async {
-    final l10n = AppLocalizations.of(context)!;
-    if (_formKey.currentState!.validate()) {
-      if (!termsChecked) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.termsError)));
-        return;
-      }
+    if (!_formKey.currentState!.validate()) return;
 
-      FocusScope.of(context).unfocus();
+    FocusScope.of(context).unfocus();
 
-      final success = await ref
-          .read(authProvider.notifier)
-          .signup(
-            firstNameController.text.trim(),
-            lastNameController.text.trim(),
-            emailController.text.trim(),
-            passwordController.text,
-          );
+    final success = await ref.read(authProvider.notifier).signup(
+      firstNameController.text.trim(),
+      lastNameController.text.trim(),
+      emailController.text.trim(),
+      passwordController.text,
+    );
 
-      if (mounted) {
-        if (success) {
-          context.go(AppRoute.account);
-        } else {
-          final error = ref.read(authProvider).error ?? "Registration failed";
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error), backgroundColor: Colors.red),
-          );
-        }
-      }
+    if (!mounted) return;
+
+    if (success) {
+      context.go(AppRoute.account);
+    } else {
+      final error = ref.read(authProvider).error ?? "Registration failed";
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error), backgroundColor: Colors.red),
+      );
     }
   }
 
@@ -117,7 +104,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                   child: Column(
                     children: [
                       const SizedBox(height: 80),
-
                       FadeInSlide(
                         delay: 0.1,
                         child: Column(
@@ -141,17 +127,16 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 30),
-
                       FadeInSlide(
-                        delay: 0.2,
+                        delay: 0.3,
                         child: Column(
                           children: [
                             Row(
                               children: [
                                 Expanded(
                                   child: CustomTextField(
+                                    key: const Key('firstNameField'),
                                     controller: firstNameController,
                                     label: l10n.firstNameLabel,
                                     icon: Icons.person_outline,
@@ -163,6 +148,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                 const SizedBox(width: 15),
                                 Expanded(
                                   child: CustomTextField(
+                                    key: const Key('lastNameField'),
                                     controller: lastNameController,
                                     label: l10n.lastNameLabel,
                                     icon: Icons.person_outline,
@@ -173,19 +159,19 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                 ),
                               ],
                             ),
-
                             CustomTextField(
+                              key: const Key('emailField'),
                               controller: emailController,
                               label: l10n.emailLabel,
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
                               validator: (v) =>
                                   (v == null || !_emailRegex.hasMatch(v.trim()))
-                                  ? l10n.invalidEmail
-                                  : null,
+                                      ? l10n.invalidEmail
+                                      : null,
                             ),
-
                             CustomTextField(
+                              key: const Key('passwordField'),
                               controller: passwordController,
                               label: l10n.passwordLabel,
                               icon: Icons.lock_outline,
@@ -194,8 +180,8 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                   ? l10n.passwordMinChars
                                   : null,
                             ),
-
                             CustomTextField(
+                              key: const Key('confirmPasswordField'),
                               controller: confirmPasswordController,
                               label: l10n.confirmPasswordLabel,
                               icon: Icons.lock_outline,
@@ -212,17 +198,45 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           ],
                         ),
                       ),
-
                       FadeInSlide(
                         delay: 0.3,
                         child: Column(
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: TermsAndConditions(
-                                isChecked: termsChecked,
-                                onChanged: (val) =>
-                                    setState(() => termsChecked = val ?? false),
+                              child: FormField<bool>(
+                                initialValue: false,
+                                validator: (value) {
+                                  if (value != true) {
+                                    return l10n.termsError;
+                                  }
+                                  return null;
+                                },
+                                builder: (state) {
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TermsAndConditions(
+                                        isChecked: state.value ?? false,
+                                        onChanged: (val) {
+                                          state.didChange(val);
+                                          state.validate();
+                                        },
+                                      ),
+                                      if (state.hasError)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 6, left: 4),
+                                          child: Text(
+                                            state.errorText!,
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
 
@@ -232,18 +246,15 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                     textLabel: l10n.signupButton,
                                     onPressed: _handleSignup,
                                   ),
-
                             const SizedBox(height: 25),
-
                             Row(
                               children: [
                                 Expanded(
                                   child: Divider(color: Colors.grey.shade300),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 10),
                                   child: Text(
                                     l10n.orSignUpWith,
                                     style: TextStyle(
@@ -257,13 +268,10 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                 ),
                               ],
                             ),
-
                             const SizedBox(height: 25),
-
                             GoogleButton(
                               onPressed: isLoading ? null : _handleGoogleLogin,
                             ),
-
                             const SizedBox(height: 100),
                           ],
                         ),
@@ -273,7 +281,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                 ),
               ),
             ),
-
             Positioned(
               top: 0,
               left: 0,
@@ -287,7 +294,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                 ),
               ),
             ),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(

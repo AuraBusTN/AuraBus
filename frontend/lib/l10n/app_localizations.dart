@@ -566,11 +566,53 @@ abstract class AppLocalizations {
   /// **'You'**
   String get youLabel;
 
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoritesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favoritesSection;
+
+  /// No description provided for @privacyLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading Privacy Policy'**
+  String get privacyLoadError;
+
+  /// No description provided for @termsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading Terms & Conditions'**
+  String get termsLoadError;
+
+  /// No description provided for @userPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get userPlaceholder;
+
   /// No description provided for @searchPlaceholder.
   ///
   /// In en, this message translates to:
   /// **'Search stop...'**
   String get searchPlaceholder;
+
+  /// No description provided for @termsdirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'assets/termsandprivacy/termsEN.txt'**
+  String get termsdirectory;
+
+  /// No description provided for @privacydirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'assets/termsandprivacy/privacyEN.txt'**
+  String get privacydirectory;
 }
 
 class _AppLocalizationsDelegate

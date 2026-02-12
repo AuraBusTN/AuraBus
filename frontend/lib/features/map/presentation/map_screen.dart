@@ -1,9 +1,8 @@
+import 'package:aurabus/features/map/widgets/map_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:aurabus/features/map/data/map_providers.dart';
-import 'package:aurabus/features/map/widgets/map_search_bar.dart';
 import 'map_controller.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
@@ -39,26 +38,40 @@ class _MapScreenState extends ConsumerState<MapScreen>
     }
   }
 
+  Future<void> _onMarkerTap(Marker marker) async {
+    try {
+      final idValue = marker.markerId.value;
+      final stopId = int.tryParse(idValue);
+      if (stopId == null) return;
+
+      final stopsMap = ref.read(stopsMapProvider);
+      final stopInfo = stopsMap[stopId];
+      if (stopInfo == null) return;
+
+      final favoriteRoutes = await ref.read(favoriteRoutesProvider.future);
+
+      if (!mounted) return;
+
+      ref.read(selectedLinesProvider.notifier).setAll(favoriteRoutes);
+      ref.read(mapControllerProvider).openStopModal(context, stopInfo);
+    } catch (e) {
+      debugPrint('Error in _onMarkerTap: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     final mapController = ref.read(mapControllerProvider);
     final markersAsync = ref.watch(markersProvider);
-    final stopsMap = ref.watch(stopsMapProvider);
     final mapStyle = ref.read(mapStyleProvider).value;
 
     return markersAsync.when(
       data: (rawMarkers) {
         final markers = rawMarkers.map((marker) {
           return marker.copyWith(
-            onTapParam: () {
-              final stopId = int.parse(marker.markerId.value);
-              final stopInfo = stopsMap[stopId];
-              if (stopInfo != null) {
-                mapController.openStopModal(context, stopInfo);
-              }
-            },
+            onTapParam: () => _onMarkerTap(marker),
           );
         }).toSet();
 

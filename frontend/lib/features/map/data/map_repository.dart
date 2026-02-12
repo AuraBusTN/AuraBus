@@ -1,37 +1,49 @@
-import 'dart:convert';
+import 'package:aurabus/core/network/dio_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:aurabus/core/network/dio_client.dart';
+import 'dart:convert';
 
 import 'models/stop_info.dart';
 import 'models/stop_trip_info.dart';
-
+  List<StopInfo> parseStops(String jsonString) {
+  final jsonData = jsonDecode(jsonString) as List<dynamic>;
+  return jsonData
+      .map((e) => StopInfo.fromJson(e as Map<String, dynamic>))
+      .toList();
+  }
 class MapRepository {
   final DioClient _dioClient;
 
   MapRepository(this._dioClient);
 
-  Future<List<StopInfo>> loadLocalStops() async {
-    final jsonStr = await rootBundle.loadString('assets/data/stops.json');
-    return compute(_parseStops, jsonStr);
-  }
 
-  static List<StopInfo> _parseStops(String jsonStr) {
-    final jsonList = jsonDecode(jsonStr) as List<dynamic>;
-    return jsonList.map((e) => StopInfo.fromJson(e)).toList();
+  Future<List<StopInfo>> loadLocalStops() async {
+  try {
+    final jsonString =
+        await rootBundle.loadString('assets/data/stops.json');
+
+    return compute(parseStops, jsonString);
+  } catch (e) {
+    throw Exception('Failed to load stops data: $e');
   }
+}
+  
 
   Future<List<StopTrip>> fetchStopTrips(int stopId) async {
     try {
       final res = await _dioClient.dio.get("/stops/$stopId");
 
-      final jsonList = res.data as List<dynamic>;
+      final data = res.data;
+      if (data == null) return <StopTrip>[];
+      if (data is! List) {
+        throw Exception("Unexpected response format for stop $stopId: ${data.runtimeType}");
+      }
 
-      return jsonList
-          .map((e) => StopTrip.fromJson(e as Map<String, dynamic>))
-          .toList();
+      final jsonList = (data).cast<Map<String, dynamic>>();
+      return jsonList.map((e) => StopTrip.fromJson(e)).toList();
     } catch (e) {
       throw Exception("Failed to fetch stop details for $stopId: $e");
     }
   }
+
 }

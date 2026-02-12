@@ -12,7 +12,7 @@ class RouteFilterCard extends StatelessWidget {
     super.key,
     required this.line,
     required this.isSelected,
-    required this.onTap,
+    required this.onTap
   });
 
   @override

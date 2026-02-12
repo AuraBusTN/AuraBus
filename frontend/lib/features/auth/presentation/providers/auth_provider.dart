@@ -222,6 +222,4 @@ final authRepositoryProvider = Provider((ref) {
   return AuthRepository(dioClient, storage);
 });
 
-final authProvider = NotifierProvider<AuthNotifier, AuthState>(
-  AuthNotifier.new,
-);
+final authProvider = NotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);

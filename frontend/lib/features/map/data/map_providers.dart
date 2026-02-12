@@ -1,10 +1,9 @@
+import 'package:aurabus/features/favorites/data/favorites_notifier.dart';
+import 'package:aurabus/features/map/data/models/route_info.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
-import 'package:aurabus/features/map/data/models/route_info.dart';
-import 'package:aurabus/features/map/presentation/utils/route_utils.dart';
 import 'map_repository.dart';
 import 'map_marker_loader.dart';
 import 'models/stop_info.dart';
@@ -66,6 +65,38 @@ final stopsMapProvider = Provider<Map<int, StopInfo>>((ref) {
   );
 });
 
+final routesMapProvider = Provider<Map<int, RouteInfo>>((ref) {
+  final stopsAsync = ref.watch(stopsListProvider);
+  return stopsAsync.maybeWhen(
+    data: (stops) {
+      final routesMap = <int, RouteInfo>{};
+      for (final stop in stops) {
+        for (final route in stop.routes) {
+          routesMap[route.routeId] = route;
+        }
+      }
+      return routesMap;
+    },
+    orElse: () => {},
+  );
+});
+
+final favoriteRoutesProvider = FutureProvider<Set<RouteInfo>>((ref) async {
+  final favoritesState = ref.watch(favoritesProvider);
+  final favoriteIds = favoritesState.value ?? [];
+
+
+  if (favoriteIds.isEmpty) return <RouteInfo>{};
+  final routesMap = ref.watch(routesMapProvider);
+
+  return favoriteIds
+        .map((routeId) => routesMap[routeId])
+        .whereType<RouteInfo>()
+        .toSet();
+});
+
+
+
 class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
   @override
   Set<RouteInfo> build() => {};
@@ -79,6 +110,10 @@ class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
   }
 
   void clear() => state = {};
+  void setAll(Set<RouteInfo> routes) {
+    state = {...routes};
+  }
+
 }
 
 final selectedLinesProvider =
@@ -92,12 +127,36 @@ final sortedUniqueLinesProvider = Provider.family<List<RouteInfo>, int>((
 ) {
   final stopsMap = ref.watch(stopsMapProvider);
   final stop = stopsMap[stopId];
+  if (stop == null) {
+    return const [];
+  }
 
-  if (stop == null) return const [];
 
   final routes = List<RouteInfo>.from(stop.routes);
 
-  routes.sort(RouteUtils.compareRoutes);
+  routes.sort((a, b) {
+    final regExp = RegExp(r'^(\d+)(.*)$');
+
+    final matchA = regExp.firstMatch(a.routeShortName);
+    final matchB = regExp.firstMatch(b.routeShortName);
+
+    final numA = matchA != null ? int.parse(matchA.group(1)!) : null;
+    final numB = matchB != null ? int.parse(matchB.group(1)!) : null;
+
+    if (numA != null && numB != null) {
+      final compareNums = numA.compareTo(numB);
+
+      if (compareNums != 0) return compareNums;
+
+      return a.routeShortName.compareTo(b.routeShortName);
+    }
+
+    if (numA != null) return -1;
+
+    if (numB != null) return 1;
+
+    return a.routeShortName.compareTo(b.routeShortName);
+  });
 
   return routes;
 });
