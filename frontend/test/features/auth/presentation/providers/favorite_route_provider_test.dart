@@ -7,7 +7,7 @@ import 'package:aurabus/features/auth/data/models/user_model.dart';
 import 'package:aurabus/features/ranking/data/models/leaderboard_data.dart';
 
 class _FakeAuthRepository implements AuthRepository {
-  List<int> _favorites = [1, 2, 3];
+  final List<int> _favorites = [1, 2, 3];
   List<int>? updatedFavorites;
   bool shouldThrowOnSave = false;
 

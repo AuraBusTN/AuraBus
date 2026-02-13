@@ -78,7 +78,7 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final sub = container.listen(leaderboardProvider, (_, __) {});
+      final sub = container.listen(leaderboardProvider, (_, _) {});
 
       await Future.delayed(Duration.zero);
 
