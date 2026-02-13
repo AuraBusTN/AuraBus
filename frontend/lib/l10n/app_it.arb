@@ -168,5 +168,7 @@
     "ppContactBody": "Per domande o dubbi su questa Informativa sulla Privacy, o per esercitare i tuoi diritti sui dati, contatta il nostro Responsabile della Protezione dei Dati:\n\nEmail: privacy@aurabus.it\nIndirizzo: AuraBus, Trento, Italia",
 
     "ppDpoTitle": "12. Responsabile della Protezione dei Dati",
-    "ppDpoBody": "Abbiamo nominato un Responsabile della Protezione dei Dati (DPO) per supervisionare la conformità alle normative sulla protezione dei dati. Puoi contattare il DPO all'indirizzo privacy@aurabus.it per qualsiasi richiesta relativa alla protezione dei dati."
+    "ppDpoBody": "Abbiamo nominato un Responsabile della Protezione dei Dati (DPO) per supervisionare la conformità alle normative sulla protezione dei dati. Puoi contattare il DPO all'indirizzo privacy@aurabus.it per qualsiasi richiesta relativa alla protezione dei dati.",
+    "expandAllLabel": "Espandi",
+    "collapseAllLabel": "Riduci"
 }

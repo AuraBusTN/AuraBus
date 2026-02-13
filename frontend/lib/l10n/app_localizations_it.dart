@@ -459,4 +459,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get ppDpoBody =>
       'Abbiamo nominato un Responsabile della Protezione dei Dati (DPO) per supervisionare la conformità alle normative sulla protezione dei dati. Puoi contattare il DPO all\'indirizzo privacy@aurabus.it per qualsiasi richiesta relativa alla protezione dei dati.';
+
+  @override
+  String get expandAllLabel => 'Espandi';
+
+  @override
+  String get collapseAllLabel => 'Riduci';
 }

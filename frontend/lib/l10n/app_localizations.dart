@@ -931,6 +931,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We have appointed a Data Protection Officer (DPO) to oversee compliance with data protection regulations. You may contact the DPO at privacy@aurabus.it for any data protection inquiries.'**
   String get ppDpoBody;
+
+  /// No description provided for @expandAllLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand'**
+  String get expandAllLabel;
+
+  /// No description provided for @collapseAllLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse'**
+  String get collapseAllLabel;
 }
 
 class _AppLocalizationsDelegate

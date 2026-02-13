@@ -459,4 +459,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get ppDpoBody =>
       'We have appointed a Data Protection Officer (DPO) to oversee compliance with data protection regulations. You may contact the DPO at privacy@aurabus.it for any data protection inquiries.';
+
+  @override
+  String get expandAllLabel => 'Expand';
+
+  @override
+  String get collapseAllLabel => 'Collapse';
 }

@@ -188,5 +188,7 @@
     "ppContactBody": "If you have questions or concerns about this Privacy Policy, or wish to exercise your data rights, please contact our Data Protection Officer at:\n\nEmail: privacy@aurabus.it\nAddress: AuraBus, Trento, Italy",
 
     "ppDpoTitle": "12. Data Protection Officer",
-    "ppDpoBody": "We have appointed a Data Protection Officer (DPO) to oversee compliance with data protection regulations. You may contact the DPO at privacy@aurabus.it for any data protection inquiries."
+    "ppDpoBody": "We have appointed a Data Protection Officer (DPO) to oversee compliance with data protection regulations. You may contact the DPO at privacy@aurabus.it for any data protection inquiries.",
+    "expandAllLabel": "Expand",
+    "collapseAllLabel": "Collapse"
 }

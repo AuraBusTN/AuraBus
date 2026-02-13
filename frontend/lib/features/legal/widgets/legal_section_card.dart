@@ -5,14 +5,12 @@ class LegalSectionCard extends StatelessWidget {
   final LegalSection section;
   final bool isExpanded;
   final VoidCallback onTap;
-  final int index;
 
   const LegalSectionCard({
     super.key,
     required this.section,
     required this.isExpanded,
     required this.onTap,
-    required this.index,
   });
 
   @override

@@ -15,16 +15,15 @@ void main() {
     VoidCallback? onTap,
     int index = 0,
   }) {
+    bool expanded = isExpanded;
     return MaterialApp(
       home: Scaffold(
         body: StatefulBuilder(
           builder: (context, setState) {
-            bool expanded = isExpanded;
             return LegalSectionCard(
               section: section,
               isExpanded: expanded,
               onTap: onTap ?? () => setState(() => expanded = !expanded),
-              index: index,
             );
           },
         ),

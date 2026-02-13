@@ -85,7 +85,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
               size: 18,
             ),
             label: Text(
-              allExpanded ? 'Collapse' : 'Expand',
+              allExpanded ? l10n.collapseAllLabel : l10n.expandAllLabel,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -112,7 +112,6 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
                     section: sections[index],
                     isExpanded: _expandedSections.contains(index),
                     onTap: () => _toggleSection(index),
-                    index: index,
                   ),
                 );
               }),
