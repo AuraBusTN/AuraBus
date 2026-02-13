@@ -120,7 +120,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
 
     await tester.tap(find.text('Piazza Fiera'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.byType(ListTile), findsNothing);
     expect(find.text('Piazza Fiera'), findsOneWidget);

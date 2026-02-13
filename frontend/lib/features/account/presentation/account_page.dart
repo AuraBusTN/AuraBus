@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/account/widgets/account_info_body.dart';
 import 'package:aurabus/features/account/widgets/account_section.dart';
 import 'package:aurabus/features/account/widgets/favorite_management_body.dart';
-import 'package:aurabus/features/auth/presentation/providers/favorite_route_provider.dart';
 import 'package:aurabus/features/account/widgets/subscription_body.dart';
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 import 'package:aurabus/routing/router.dart';
-import 'package:go_router/go_router.dart';
 
 enum AccountSectionType { info, subscription, favorites, ranking }
 
