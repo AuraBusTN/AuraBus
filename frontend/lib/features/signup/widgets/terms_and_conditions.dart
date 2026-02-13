@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
+import 'package:aurabus/routing/router.dart';
 
 class TermsAndConditions extends StatelessWidget {
   final bool isChecked;
@@ -92,7 +94,7 @@ class TermsAndConditions extends StatelessWidget {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          // TODO: Open Terms and Conditions link
+                          context.push(AppRoute.termsOfService);
                         },
                     ),
                     TextSpan(text: l10n.andText),
@@ -105,7 +107,7 @@ class TermsAndConditions extends StatelessWidget {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          // TODO: Open Privacy Policy link
+                          context.push(AppRoute.privacyPolicy);
                         },
                     ),
                   ],

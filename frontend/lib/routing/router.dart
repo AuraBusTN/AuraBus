@@ -10,6 +10,8 @@ import 'package:aurabus/features/map/presentation/map_screen.dart';
 import 'package:aurabus/features/account/presentation/account_page.dart';
 import 'package:aurabus/features/login/presentation/login_page.dart';
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
+import 'package:aurabus/features/legal/presentation/terms_of_service_page.dart';
+import 'package:aurabus/features/legal/presentation/privacy_policy_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
@@ -20,6 +22,8 @@ class AppRoute {
   static const String login = '/login';
   static const String signup = '/signup';
   static const String ranking = '/ranking';
+  static const String termsOfService = '/terms-of-service';
+  static const String privacyPolicy = '/privacy-policy';
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -58,6 +62,28 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoute.ranking,
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const RankingPage(),
+      ),
+      GoRoute(
+        path: AppRoute.termsOfService,
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const TermsOfServicePage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.privacyPolicy,
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const PrivacyPolicyPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
       ),
 
       StatefulShellRoute.indexedStack(

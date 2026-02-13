@@ -607,6 +607,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Favorites saved successfully!'**
   String get favoritesSaved;
+
+  /// No description provided for @legalSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get legalSection;
+
+  /// No description provided for @termsOfServiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfServiceTitle;
+
+  /// No description provided for @privacyPolicyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyTitle;
+
+  /// No description provided for @lastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: {date}'**
+  String lastUpdated(String date);
+
+  /// No description provided for @tosIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Introduction'**
+  String get tosIntroTitle;
+
+  /// No description provided for @tosIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to AuraBus (\"the App\"). These Terms of Service (\"Terms\") govern your access to and use of the AuraBus mobile application, operated by AuraBus (\"we\", \"us\", or \"our\"). By downloading, installing, or using the App, you agree to be bound by these Terms. If you do not agree, please do not use the App.'**
+  String get tosIntroBody;
+
+  /// No description provided for @tosEligibilityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Eligibility'**
+  String get tosEligibilityTitle;
+
+  /// No description provided for @tosEligibilityBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be at least 16 years of age to use the App. By using AuraBus, you represent and warrant that you meet this age requirement and have the legal capacity to enter into these Terms.'**
+  String get tosEligibilityBody;
+
+  /// No description provided for @tosAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3. User Account'**
+  String get tosAccountTitle;
+
+  /// No description provided for @tosAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To access certain features, you must create an account by providing accurate and complete information. You are responsible for maintaining the confidentiality of your credentials and for all activities that occur under your account. Notify us immediately of any unauthorized use.'**
+  String get tosAccountBody;
+
+  /// No description provided for @tosServiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Service Description'**
+  String get tosServiceTitle;
+
+  /// No description provided for @tosServiceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'AuraBus provides real-time public transportation information for the city of Trento, including bus routes, stop locations, arrival times, ticketing, and gamification features. The information is provided for convenience and may not always reflect real-time conditions.'**
+  String get tosServiceBody;
+
+  /// No description provided for @tosUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Acceptable Use'**
+  String get tosUseTitle;
+
+  /// No description provided for @tosUseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You agree not to: (a) use the App for any unlawful purpose; (b) attempt to gain unauthorized access to our systems; (c) interfere with the proper functioning of the App; (d) reverse engineer, decompile, or disassemble any part of the App; (e) use automated means to access the App without our permission.'**
+  String get tosUseBody;
+
+  /// No description provided for @tosIpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'6. Intellectual Property'**
+  String get tosIpTitle;
+
+  /// No description provided for @tosIpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'All content, features, and functionality of the App — including but not limited to text, graphics, logos, icons, and software — are the exclusive property of AuraBus and are protected by applicable intellectual property laws. You are granted a limited, non-exclusive, non-transferable license to use the App for personal, non-commercial purposes.'**
+  String get tosIpBody;
+
+  /// No description provided for @tosTicketsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'7. Tickets & Payments'**
+  String get tosTicketsTitle;
+
+  /// No description provided for @tosTicketsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital tickets purchased through the App are subject to the terms and conditions of the local transport operator. AuraBus acts as a digital interface and is not responsible for service disruptions, route changes, or ticket validity disputes with the transport provider.'**
+  String get tosTicketsBody;
+
+  /// No description provided for @tosDisclaimerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'8. Disclaimer of Warranties'**
+  String get tosDisclaimerTitle;
+
+  /// No description provided for @tosDisclaimerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The App is provided \"as is\" and \"as available\" without warranties of any kind, either express or implied. We do not guarantee that the App will be uninterrupted, error-free, or that real-time data will be accurate. Use of the App is at your own risk.'**
+  String get tosDisclaimerBody;
+
+  /// No description provided for @tosLiabilityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'9. Limitation of Liability'**
+  String get tosLiabilityTitle;
+
+  /// No description provided for @tosLiabilityBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To the fullest extent permitted by law, AuraBus shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the App, including but not limited to missed buses, incorrect schedule information, or data loss.'**
+  String get tosLiabilityBody;
+
+  /// No description provided for @tosTerminationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'10. Termination'**
+  String get tosTerminationTitle;
+
+  /// No description provided for @tosTerminationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We reserve the right to suspend or terminate your account at any time, without prior notice, if you violate these Terms or engage in conduct that we determine to be harmful to other users or the App.'**
+  String get tosTerminationBody;
+
+  /// No description provided for @tosChangesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'11. Changes to Terms'**
+  String get tosChangesTitle;
+
+  /// No description provided for @tosChangesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We may update these Terms from time to time. We will notify you of material changes through the App or via email. Your continued use of the App after such changes constitutes acceptance of the updated Terms.'**
+  String get tosChangesBody;
+
+  /// No description provided for @tosGoverningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'12. Governing Law'**
+  String get tosGoverningTitle;
+
+  /// No description provided for @tosGoverningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'These Terms shall be governed by and construed in accordance with the laws of Italy. Any disputes arising under these Terms shall be subject to the exclusive jurisdiction of the courts of Trento, Italy.'**
+  String get tosGoverningBody;
+
+  /// No description provided for @tosContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'13. Contact Us'**
+  String get tosContactTitle;
+
+  /// No description provided for @tosContactBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you have questions about these Terms, please contact us at: support@aurabus.it'**
+  String get tosContactBody;
+
+  /// No description provided for @ppIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Introduction'**
+  String get ppIntroTitle;
+
+  /// No description provided for @ppIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'AuraBus (\"we\", \"us\", or \"our\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use the AuraBus mobile application (\"the App\"). Please read this policy carefully. By using the App, you consent to the practices described herein.'**
+  String get ppIntroBody;
+
+  /// No description provided for @ppDataCollectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Information We Collect'**
+  String get ppDataCollectedTitle;
+
+  /// No description provided for @ppDataCollectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We collect the following categories of information:\n\n• Personal Information: name, email address, and profile picture when you create an account or sign in with Google.\n• Location Data: your device\'s geographic location to provide nearby stops and real-time transit information (only when you grant permission).\n• Usage Data: information about how you interact with the App, including pages viewed, features used, and session duration.\n• Device Information: device type, operating system, unique device identifiers, and network information.'**
+  String get ppDataCollectedBody;
+
+  /// No description provided for @ppHowWeUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3. How We Use Your Information'**
+  String get ppHowWeUseTitle;
+
+  /// No description provided for @ppHowWeUseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We use the collected information to:\n\n• Provide, maintain, and improve the App\'s functionality.\n• Display real-time bus information and nearby stops.\n• Manage your account, subscriptions, and ticket purchases.\n• Operate the gamification and ranking system.\n• Send service-related notifications (e.g., bus approaching alerts).\n• Analyze usage patterns to improve user experience.\n• Ensure security and prevent fraud.'**
+  String get ppHowWeUseBody;
+
+  /// No description provided for @ppDataSharingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Data Sharing & Disclosure'**
+  String get ppDataSharingTitle;
+
+  /// No description provided for @ppDataSharingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We do not sell your personal information. We may share your data with:\n\n• Service Providers: third-party vendors who assist in operating the App (e.g., cloud hosting, analytics).\n• Legal Obligations: when required by law, regulation, or legal process.\n• Safety: to protect the rights, property, or safety of AuraBus, our users, or the public.\n• Business Transfers: in connection with a merger, acquisition, or sale of assets.'**
+  String get ppDataSharingBody;
+
+  /// No description provided for @ppDataStorageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Data Storage & Security'**
+  String get ppDataStorageTitle;
+
+  /// No description provided for @ppDataStorageBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is stored on secure servers within the European Union. We implement industry-standard security measures including encryption, access controls, and regular security audits. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.'**
+  String get ppDataStorageBody;
+
+  /// No description provided for @ppRetentionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'6. Data Retention'**
+  String get ppRetentionTitle;
+
+  /// No description provided for @ppRetentionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We retain your personal data for as long as your account is active or as needed to provide our services. Upon account deletion, we will remove your personal data within 30 days, except where retention is required by law.'**
+  String get ppRetentionBody;
+
+  /// No description provided for @ppRightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'7. Your Rights (GDPR)'**
+  String get ppRightsTitle;
+
+  /// No description provided for @ppRightsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Under the General Data Protection Regulation (GDPR), you have the right to:\n\n• Access: request a copy of the personal data we hold about you.\n• Rectification: request correction of inaccurate data.\n• Erasure: request deletion of your personal data (\"right to be forgotten\").\n• Restriction: request restriction of processing of your data.\n• Portability: receive your data in a structured, machine-readable format.\n• Objection: object to the processing of your personal data.\n• Withdraw Consent: withdraw consent at any time without affecting prior processing.\n\nTo exercise these rights, contact us at: privacy@aurabus.it'**
+  String get ppRightsBody;
+
+  /// No description provided for @ppChildrenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'8. Children\'s Privacy'**
+  String get ppChildrenTitle;
+
+  /// No description provided for @ppChildrenBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The App is not intended for children under 16 years of age. We do not knowingly collect personal information from children under 16. If we discover such data has been collected, we will promptly delete it.'**
+  String get ppChildrenBody;
+
+  /// No description provided for @ppCookiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'9. Cookies & Tracking'**
+  String get ppCookiesTitle;
+
+  /// No description provided for @ppCookiesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The App may use local storage and analytics tools to improve performance and user experience. These do not track you across other applications or websites. You can manage your preferences through your device settings.'**
+  String get ppCookiesBody;
+
+  /// No description provided for @ppChangesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'10. Changes to This Policy'**
+  String get ppChangesTitle;
+
+  /// No description provided for @ppChangesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We may update this Privacy Policy periodically. We will notify you of significant changes through the App or via email. The \"Last Updated\" date at the top of this page indicates when the policy was last revised.'**
+  String get ppChangesBody;
+
+  /// No description provided for @ppContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'11. Contact Us'**
+  String get ppContactTitle;
+
+  /// No description provided for @ppContactBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you have questions or concerns about this Privacy Policy, or wish to exercise your data rights, please contact our Data Protection Officer at:\n\nEmail: privacy@aurabus.it\nAddress: AuraBus, Trento, Italy'**
+  String get ppContactBody;
+
+  /// No description provided for @ppDpoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'12. Data Protection Officer'**
+  String get ppDpoTitle;
+
+  /// No description provided for @ppDpoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We have appointed a Data Protection Officer (DPO) to oversee compliance with data protection regulations. You may contact the DPO at privacy@aurabus.it for any data protection inquiries.'**
+  String get ppDpoBody;
 }
 
 class _AppLocalizationsDelegate
