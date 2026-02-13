@@ -130,4 +130,29 @@ class AuthRepository {
       throw AuthException('Unexpected error loading leaderboard: $e');
     }
   }
+
+  Future<List<int>> getFavoriteRoutes() async {
+    try {
+      final response = await _dioClient.dio.get('/users/favorite-routes');
+      final data = response.data;
+
+      if (data['favoriteRoutes'] != null) {
+        return (data['favoriteRoutes'] as List).map((e) => e as int).toList();
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<void> updateFavoriteRoutes(List<int> routeIds) async {
+    try {
+      await _dioClient.dio.post(
+        '/users/favorite-routes',
+        data: {'favoriteRoutes': routeIds},
+      );
+    } catch (e) {
+      throw Exception("Failed to update favorite routes: $e");
+    }
+  }
 }

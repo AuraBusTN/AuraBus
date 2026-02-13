@@ -33,12 +33,8 @@ class AccountInfoBody extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 28,
-              backgroundColor:
-                  Colors.grey.shade200,
+              backgroundColor: Colors.grey.shade200,
               backgroundImage: imageProvider,
-              onBackgroundImageError: (exception, stackTrace) {
-                // Handle image loading error if necessary
-              },
             ),
             const SizedBox(width: 12),
             Column(

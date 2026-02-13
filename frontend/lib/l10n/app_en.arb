@@ -92,5 +92,16 @@
     "reward10Rides": "10 Free Rides",
     "reward2Rides": "2 Free Rides",
     "youLabel": "You",
-    "searchPlaceholder": "Search stop..."
+    "searchPlaceholder": "Search stop...",
+    "favoritesManagementSection": "Manage Favorites",
+    "favoriteLinesSubtitle": "Favorite Lines",
+    "noLinesAvailable": "No lines available.",
+    "errorLoadingLines": "Error loading lines: {error}",
+    "@errorLoadingLines": {
+        "placeholders": {
+            "error": { "type": "String" }
+        }
+    },
+    "saveButton": "Save Changes",
+    "favoritesSaved": "Favorites saved successfully!"
 }

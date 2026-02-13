@@ -77,5 +77,11 @@
     "reward10Rides": "10 Corse Gratis",
     "reward2Rides": "2 Corse Gratis",
     "youLabel": "Tu",
-    "searchPlaceholder": "Cerca fermata..."
+    "searchPlaceholder": "Cerca fermata...",
+    "favoritesManagementSection": "Gestione Preferiti",
+    "favoriteLinesSubtitle": "Linee Preferite",
+    "noLinesAvailable": "Nessuna linea disponibile.",
+    "errorLoadingLines": "Errore caricamento linee: {error}",
+    "saveButton": "Salva Modifiche",
+    "favoritesSaved": "Preferiti salvati con successo!"
 }

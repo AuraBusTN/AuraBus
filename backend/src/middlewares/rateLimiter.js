@@ -37,7 +37,7 @@ export const apiLimiter = createRedisLimiter({
 
 export const authLimiter = createRedisLimiter({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: 40,
   message: {
     success: false,
     message: "Too many login attempts, account temporarily locked.",

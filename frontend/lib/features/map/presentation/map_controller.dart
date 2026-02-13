@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
+import 'package:aurabus/features/auth/presentation/providers/favorite_route_provider.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
 import 'package:aurabus/features/map/data/models/stop_info.dart';
 import 'stop_details_modal.dart';
@@ -94,6 +95,19 @@ class MapController {
 
   void openStopModal(BuildContext context, StopInfo stopInfo) {
     final _ = ref.refresh(stopDetailsProvider(stopInfo.stopId));
+
+    final notifier = ref.read(selectedLinesProvider.notifier);
+    notifier.clear();
+
+    final favoriteIds = ref.read(favoriteRoutesProvider);
+
+    final favoriteRoutesAtThisStop = stopInfo.routes
+        .where((route) => favoriteIds.contains(route.routeId))
+        .toSet();
+
+    if (favoriteRoutesAtThisStop.isNotEmpty) {
+      notifier.setRoutes(favoriteRoutesAtThisStop);
+    }
 
     if (!context.mounted) return;
 
