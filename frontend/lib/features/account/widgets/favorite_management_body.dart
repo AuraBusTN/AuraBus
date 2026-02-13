@@ -49,7 +49,9 @@ class _FavoritesManagementBodyState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final allRoutesAsync = ref.watch(allRoutesProvider);
-    final favoriteIds = ref.watch(favoriteRoutesProvider);
+
+    final favoriteIdsAsync = ref.watch(favoriteRoutesProvider);
+    final favoriteIds = favoriteIdsAsync.value ?? {};
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

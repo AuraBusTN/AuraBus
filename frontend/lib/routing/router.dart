@@ -74,7 +74,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 redirect: (context, state) {
                   final authState = ref.read(authProvider);
                   if (!authState.isAuthenticated) {
-                    return AppRoute.account;
+                    return AppRoute.login;
                   }
                   return null;
                 },

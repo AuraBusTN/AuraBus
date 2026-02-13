@@ -1,49 +1,55 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 
-class FavoriteRoutesNotifier extends Notifier<Set<int>> {
+class FavoriteRoutesNotifier extends AsyncNotifier<Set<int>> {
   @override
-  Set<int> build() {
+  Future<Set<int>> build() async {
     final authState = ref.watch(authProvider);
 
     if (authState.isAuthenticated) {
-      _loadFavorites();
+      return await _loadFavorites();
     }
 
     return {};
   }
 
-  Future<void> _loadFavorites() async {
+  Future<Set<int>> _loadFavorites() async {
     try {
       final repo = ref.read(authRepositoryProvider);
       final favs = await repo.getFavoriteRoutes();
-      state = favs.toSet();
+      return favs.toSet();
     } catch (e) {
-      state = {};
+      return {};
     }
   }
 
   void toggleRoute(int routeId) {
-    if (state.contains(routeId)) {
-      state = {...state}..remove(routeId);
+    final currentFavs = state.value ?? {};
+    if (currentFavs.contains(routeId)) {
+      state = AsyncData({...currentFavs}..remove(routeId));
     } else {
-      state = {...state, routeId};
+      state = AsyncData({...currentFavs, routeId});
     }
   }
 
-  bool isFavorite(int routeId) => state.contains(routeId);
+  bool isFavorite(int routeId) {
+    return state.value?.contains(routeId) ?? false;
+  }
 
   Future<void> saveFavorites() async {
     try {
       final repo = ref.read(authRepositoryProvider);
-      await repo.updateFavoriteRoutes(state.toList());
+      final currentFavs = state.value ?? {};
+      await repo.updateFavoriteRoutes(currentFavs.toList());
     } catch (e) {
       throw Exception("Failed to save: $e");
     }
   }
 }
 
+// Nota: Ora è un AsyncNotifierProvider
 final favoriteRoutesProvider =
-    NotifierProvider<FavoriteRoutesNotifier, Set<int>>(
+    AsyncNotifierProvider<FavoriteRoutesNotifier, Set<int>>(
       FavoriteRoutesNotifier.new,
     );

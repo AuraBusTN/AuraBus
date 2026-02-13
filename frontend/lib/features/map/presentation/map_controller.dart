@@ -99,7 +99,7 @@ class MapController {
     final notifier = ref.read(selectedLinesProvider.notifier);
     notifier.clear();
 
-    final favoriteIds = ref.read(favoriteRoutesProvider);
+    final favoriteIds = ref.read(favoriteRoutesProvider).value ?? {};
 
     final favoriteRoutesAtThisStop = stopInfo.routes
         .where((route) => favoriteIds.contains(route.routeId))

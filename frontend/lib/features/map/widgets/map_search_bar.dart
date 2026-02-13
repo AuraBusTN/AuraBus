@@ -144,11 +144,11 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
     final mapController = ref.read(mapControllerProvider);
 
     if (kIsWeb) {
-      mapController.controller!.moveCamera(
+      mapController.controller?.moveCamera(
         CameraUpdate.newLatLngZoom(entry.location, 17.0),
       );
     } else {
-      mapController.controller!.animateCamera(
+      mapController.controller?.animateCamera(
         CameraUpdate.newLatLngZoom(entry.location, 17.0),
       );
     }
