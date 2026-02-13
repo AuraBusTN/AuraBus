@@ -52,6 +52,16 @@ class _FakeAuthRepository implements AuthRepository {
   Future<LeaderboardData> getLeaderboard() async {
     return LeaderboardData(topUsers: [], me: null);
   }
+
+  @override
+  Future<List<int>> getFavoriteRoutes() {
+    return Future.value([]);
+  }
+
+  @override
+  Future<void> updateFavoriteRoutes(List<int> routeIds) {
+    return Future.value();
+  }
 }
 
 void main() {

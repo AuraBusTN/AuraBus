@@ -49,18 +49,18 @@ const config = {
   },
 };
 
-const missingTntConfig = [];
-if (!config.tnt.url) missingTntConfig.push("API_URL");
-if (!config.tnt.username) missingTntConfig.push("API_USER");
-if (!config.tnt.password) missingTntConfig.push("API_PASSWORD");
-if (!config.db.user) missingTntConfig.push("MONGO_USER");
-if (!config.db.pass) missingTntConfig.push("MONGO_PASSWORD");
-if (!config.prediction.url) missingTntConfig.push("PREDICTION_URL");
-if (!config.redis.password) missingTntConfig.push("REDIS_PASSWORD");
+const missingEnvConfig = [];
+if (!config.tnt.url) missingEnvConfig.push("API_URL");
+if (!config.tnt.username) missingEnvConfig.push("API_USER");
+if (!config.tnt.password) missingEnvConfig.push("API_PASSWORD");
+if (!config.db.user) missingEnvConfig.push("MONGO_USER");
+if (!config.db.pass) missingEnvConfig.push("MONGO_PASSWORD");
+if (!config.prediction.url) missingEnvConfig.push("PREDICTION_URL");
+if (!config.redis.password) missingEnvConfig.push("REDIS_PASSWORD");
 
-if (missingTntConfig.length > 0) {
+if (missingEnvConfig.length > 0) {
   throw new Error(
-    `❌ CRITICAL ERROR: Missing required TNT API configuration: ${missingTntConfig.join(
+    `❌ CRITICAL ERROR: Missing required environment configuration: ${missingEnvConfig.join(
       ", ",
     )}`,
   );

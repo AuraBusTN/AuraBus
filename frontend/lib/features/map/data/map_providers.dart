@@ -50,6 +50,11 @@ final markersProvider = FutureProvider<Set<Marker>>((ref) async {
   }).toSet();
 });
 
+final allRoutesProvider = FutureProvider<List<RouteInfo>>((ref) async {
+  final repo = ref.read(mapRepositoryProvider);
+  return repo.fetchAllRoutes();
+});
+
 final stopDetailsProvider = FutureProvider.family<List<StopTrip>, int>((
   ref,
   stopId,
@@ -76,6 +81,10 @@ class SelectedLinesNotifier extends Notifier<Set<RouteInfo>> {
     } else {
       state = {...state, route};
     }
+  }
+
+  void setRoutes(Set<RouteInfo> routes) {
+    state = routes;
   }
 
   void clear() => state = {};

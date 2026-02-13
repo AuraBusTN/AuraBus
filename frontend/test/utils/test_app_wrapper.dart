@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 
-Widget createTestApp({required Widget child, GoRouter? router}) {
+Widget createTestApp({
+  required Widget child,
+  GoRouter? router,
+  List<Override> overrides = const [],
+}) {
   return ProviderScope(
+    overrides: overrides,
     child: MaterialApp.router(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,

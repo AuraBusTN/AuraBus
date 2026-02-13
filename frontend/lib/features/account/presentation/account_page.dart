@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/account/widgets/account_info_body.dart';
 import 'package:aurabus/features/account/widgets/account_section.dart';
-import 'package:aurabus/features/account/widgets/contact_us_body.dart';
+import 'package:aurabus/features/account/widgets/favorite_management_body.dart';
 import 'package:aurabus/features/account/widgets/subscription_body.dart';
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 import 'package:aurabus/routing/router.dart';
-import 'package:go_router/go_router.dart';
 
-enum AccountSectionType { info, subscription, contact, ranking }
+enum AccountSectionType { info, subscription, favorites, ranking }
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -74,12 +74,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
               const SizedBox(height: 12),
 
               AccountSection(
-                title: l10n.contactUsSection,
+                title: l10n.favoritesManagementSection,
                 isExpanded: expandedSections.contains(
-                  AccountSectionType.contact,
+                  AccountSectionType.favorites,
                 ),
-                onTap: () => toggleSection(AccountSectionType.contact),
-                child: const ContactUsBody(),
+                onTap: () => toggleSection(AccountSectionType.favorites),
+                child: const FavoritesManagementBody(),
               ),
               const SizedBox(height: 12),
 
@@ -97,6 +97,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 isExpanded: false,
                 onTap: () async {
                   await ref.read(authProvider.notifier).logout();
+
                   if (context.mounted) {
                     context.go(AppRoute.map);
                     context.push(AppRoute.login);

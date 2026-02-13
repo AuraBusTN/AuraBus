@@ -250,4 +250,24 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get searchPlaceholder => 'Cerca fermata...';
+
+  @override
+  String get favoritesManagementSection => 'Gestione Preferiti';
+
+  @override
+  String get favoriteLinesSubtitle => 'Linee Preferite';
+
+  @override
+  String get noLinesAvailable => 'Nessuna linea disponibile.';
+
+  @override
+  String errorLoadingLines(String error) {
+    return 'Errore caricamento linee: $error';
+  }
+
+  @override
+  String get saveButton => 'Salva Modifiche';
+
+  @override
+  String get favoritesSaved => 'Preferiti salvati con successo!';
 }

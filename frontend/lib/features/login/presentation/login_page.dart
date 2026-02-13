@@ -75,6 +75,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final primaryColor = Theme.of(context).primaryColor;
     final l10n = AppLocalizations.of(context)!;
     final isLoading = ref.watch(authProvider).isLoading;
+    ref.listen(authProvider, (previous, next) {
+      if (!next.isLoading && next.error == null && next.isAuthenticated) {
+        context.go('/account');
+      }
+    });
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

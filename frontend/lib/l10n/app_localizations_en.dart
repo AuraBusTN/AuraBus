@@ -250,4 +250,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchPlaceholder => 'Search stop...';
+
+  @override
+  String get favoritesManagementSection => 'Manage Favorites';
+
+  @override
+  String get favoriteLinesSubtitle => 'Favorite Lines';
+
+  @override
+  String get noLinesAvailable => 'No lines available.';
+
+  @override
+  String errorLoadingLines(String error) {
+    return 'Error loading lines: $error';
+  }
+
+  @override
+  String get saveButton => 'Save Changes';
+
+  @override
+  String get favoritesSaved => 'Favorites saved successfully!';
 }

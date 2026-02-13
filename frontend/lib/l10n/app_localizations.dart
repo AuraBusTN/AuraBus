@@ -571,6 +571,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search stop...'**
   String get searchPlaceholder;
+
+  /// No description provided for @favoritesManagementSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Favorites'**
+  String get favoritesManagementSection;
+
+  /// No description provided for @favoriteLinesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Lines'**
+  String get favoriteLinesSubtitle;
+
+  /// No description provided for @noLinesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No lines available.'**
+  String get noLinesAvailable;
+
+  /// No description provided for @errorLoadingLines.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading lines: {error}'**
+  String errorLoadingLines(String error);
+
+  /// No description provided for @saveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveButton;
+
+  /// No description provided for @favoritesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites saved successfully!'**
+  String get favoritesSaved;
 }
 
 class _AppLocalizationsDelegate
