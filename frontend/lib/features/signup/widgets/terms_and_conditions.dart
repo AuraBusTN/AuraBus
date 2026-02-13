@@ -1,11 +1,9 @@
-import 'package:aurabus/routing/router.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 
-class TermsAndConditions extends StatefulWidget {
+class TermsAndConditions extends StatelessWidget {
   final bool isChecked;
   final ValueChanged<bool?> onChanged;
 
@@ -16,43 +14,15 @@ class TermsAndConditions extends StatefulWidget {
   });
 
   @override
-  State<TermsAndConditions> createState() => _TermsAndConditionsState();
-}
-
-class _TermsAndConditionsState extends State<TermsAndConditions> {
-  late TapGestureRecognizer _termsRecognizer;
-  late TapGestureRecognizer _privacyRecognizer;
-
-  @override
-  void initState() {
-    super.initState();
-    _termsRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        context.push(AppRoute.terms);
-      };
-    _privacyRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        context.push(AppRoute.privacy);
-      };
-  }
-
-  @override
-  void dispose() {
-    _termsRecognizer.dispose();
-    _privacyRecognizer.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final tertiary = Theme.of(context).colorScheme.tertiary;
     final l10n = AppLocalizations.of(context)!;
 
-    return InkWell (
+    return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        widget.onChanged(!widget.isChecked);
+        onChanged(!isChecked);
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
@@ -60,16 +30,18 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: widget.isChecked ? primaryColor.withValues(alpha: 0.05) : Colors.white,
+          color: isChecked
+              ? primaryColor.withValues(alpha: 0.05)
+              : Colors.white,
           border: Border.all(
-            color: widget.isChecked ? primaryColor : Colors.grey.shade300,
-            width: widget.isChecked ? 2 : 1,
+            color: isChecked ? primaryColor : Colors.grey.shade300,
+            width: isChecked ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(16),
-          boxShadow: widget.isChecked
+          boxShadow: isChecked
               ? [
                   BoxShadow(
-                    color: tertiary.withAlpha(38), 
+                    color: tertiary.withValues(alpha: 0.15),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -84,27 +56,30 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               height: 24,
               width: 24,
               decoration: BoxDecoration(
-                color: widget.isChecked ? primaryColor : Colors.transparent,
+                color: isChecked ? primaryColor : Colors.transparent,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: widget.isChecked ? primaryColor : Colors.grey.shade400,
+                  color: isChecked ? primaryColor : Colors.grey.shade400,
                   width: 2,
                 ),
               ),
-              child: widget.isChecked
+              child: isChecked
                   ? const Icon(Icons.check, size: 16, color: Colors.white)
                   : null,
             ),
+
             const SizedBox(width: 14),
+
             Expanded(
               child: RichText(
                 text: TextSpan(
                   style: TextStyle(
                     fontSize: 12,
-                    color: widget.isChecked ? Colors.black87 : Colors.grey[600],
+                    color: isChecked ? Colors.black87 : Colors.grey[600],
                     height: 1.4,
-                    fontFamily:
-                        Theme.of(context).textTheme.bodyMedium?.fontFamily,
+                    fontFamily: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.fontFamily,
                   ),
                   children: [
                     TextSpan(text: l10n.termsText),
@@ -115,7 +90,10 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline,
                       ),
-                      recognizer: _termsRecognizer,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // TODO: Open Terms and Conditions link
+                        },
                     ),
                     TextSpan(text: l10n.andText),
                     TextSpan(
@@ -125,7 +103,10 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline,
                       ),
-                      recognizer: _privacyRecognizer,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // TODO: Open Privacy Policy link
+                        },
                     ),
                   ],
                 ),

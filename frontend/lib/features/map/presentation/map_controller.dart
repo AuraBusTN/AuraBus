@@ -72,7 +72,7 @@ class MapController {
         CameraUpdate.newLatLng(LatLng(position.latitude, position.longitude)),
       );
     } catch (e) {
-      showLocation.value = false;
+      // Handle potential errors, e.g., timeout or location services disabled
     }
   }
 

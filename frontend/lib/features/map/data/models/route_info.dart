@@ -1,12 +1,7 @@
-import 'dart:ui';
-
-import 'package:aurabus/core/utils/color_utils.dart';
-
-
 class RouteInfo {
   final int areaId;
   final Object? news;
-  final Color routeColor;
+  final String? routeColor;
   final int routeId;
   final String routeLongName;
   final String routeShortName;
@@ -26,23 +21,22 @@ class RouteInfo {
 
   factory RouteInfo.fromJson(Map<String, dynamic> json) {
     return RouteInfo(
-      areaId: json['areaId'] is int ? json['areaId'] as int : 0,
+      areaId: json['areaId'],
       news: json['news'],
-      routeColor: ColorUtils.parseHexColor(
-        (json['routeColor'] as String?)?.replaceAll('#', '') ?? '000000',
-      ),
-      routeId: json['routeId'] is int ? json['routeId'] as int : -1,
-      routeLongName: json['routeLongName'] as String? ?? '',
-      routeShortName: json['routeShortName'] as String? ?? '',
-      routeType: json['routeType'] is int ? json['routeType'] as int : 0,
-      type: json['type'] as String? ?? '',
+      routeColor: json['routeColor'],
+      routeId: json['routeId'],
+      routeLongName: json['routeLongName'],
+      routeShortName: json['routeShortName'],
+      routeType: json['routeType'],
+      type: json['type'],
     );
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RouteInfo && other.routeId == routeId;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is RouteInfo && other.routeId == routeId;
+  }
 
   @override
   int get hashCode => routeId.hashCode;

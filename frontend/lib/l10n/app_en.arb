@@ -92,12 +92,5 @@
     "reward10Rides": "10 Free Rides",
     "reward2Rides": "2 Free Rides",
     "youLabel": "You",
-    "favoritesTitle": "Favorites",
-    "favoritesSection": "Favorites",
-    "privacyLoadError": "Error loading Privacy Policy",
-    "termsLoadError": "Error loading Terms & Conditions",
-    "userPlaceholder": "User",
-    "searchPlaceholder": "Search stop...",
-    "termsdirectory": "assets/termsandprivacy/termsEN.txt",
-    "privacydirectory": "assets/termsandprivacy/privacyEN.txt"
+    "searchPlaceholder": "Search stop..."
 }

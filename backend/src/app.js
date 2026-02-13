@@ -46,7 +46,6 @@ app.use("/stops", apiLimiter, stopsRouter);
 app.use("/routes", apiLimiter, routesRouter);
 app.use("/users", apiLimiter, usersRouter);
 
-
 app.use((req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
   error.statusCode = 404;

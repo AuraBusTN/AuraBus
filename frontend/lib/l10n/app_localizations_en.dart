@@ -249,26 +249,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youLabel => 'You';
 
   @override
-  String get favoritesTitle => 'Favorites';
-
-  @override
-  String get favoritesSection => 'Favorites';
-
-  @override
-  String get privacyLoadError => 'Error loading Privacy Policy';
-
-  @override
-  String get termsLoadError => 'Error loading Terms & Conditions';
-
-  @override
-  String get userPlaceholder => 'User';
-
-  @override
   String get searchPlaceholder => 'Search stop...';
-
-  @override
-  String get termsdirectory => 'assets/termsandprivacy/termsEN.txt';
-
-  @override
-  String get privacydirectory => 'assets/termsandprivacy/privacyEN.txt';
 }

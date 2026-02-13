@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:aurabus/core/utils/color_utils.dart';
 import 'package:aurabus/features/map/presentation/utils/route_utils.dart';
 import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
@@ -243,7 +244,9 @@ class _MapSearchBarState extends ConsumerState<MapSearchBar> {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: route.routeColor,
+                                color: ColorUtils.parseHexColor(
+                                  route.routeColor,
+                                ),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(

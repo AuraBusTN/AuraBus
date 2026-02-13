@@ -249,26 +249,5 @@ class AppLocalizationsIt extends AppLocalizations {
   String get youLabel => 'Tu';
 
   @override
-  String get favoritesTitle => 'Preferiti';
-
-  @override
-  String get favoritesSection => 'Preferiti';
-
-  @override
-  String get privacyLoadError => 'Errore nel caricamento della Privacy Policy';
-
-  @override
-  String get termsLoadError => 'Errore nel caricamento di Terms and Conditions';
-
-  @override
-  String get userPlaceholder => 'Utente';
-
-  @override
   String get searchPlaceholder => 'Cerca fermata...';
-
-  @override
-  String get termsdirectory => 'assets/termsandprivacy/termsIT.txt';
-
-  @override
-  String get privacydirectory => 'assets/termsandprivacy/privacyIT.txt';
 }

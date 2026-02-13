@@ -1,11 +1,9 @@
-import 'package:aurabus/features/favorites/presentation/favorites_page.dart';
 import 'package:aurabus/features/ranking/presentation/ranking_page.dart';
 import 'package:aurabus/features/signup/presentation/signup_page.dart';
-import 'package:aurabus/features/signup/widgets/privacy_page.dart';
-import 'package:aurabus/features/signup/widgets/terms_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:aurabus/features/home/presentation/home_page.dart';
 import 'package:aurabus/features/tickets/presentation/ticket_page.dart';
 import 'package:aurabus/features/map/presentation/map_screen.dart';
@@ -22,9 +20,6 @@ class AppRoute {
   static const String login = '/login';
   static const String signup = '/signup';
   static const String ranking = '/ranking';
-  static const String favorites = '/favorites';
-  static const String privacy = '/privacy';
-  static const String terms = '/terms';
 }
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -64,22 +59,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const RankingPage(),
       ),
-      GoRoute(
-        path: AppRoute.favorites,
-        parentNavigatorKey: _rootKey,
-        builder: (context, state) => const FavoritesPage(),
-      ),
-      GoRoute(
-        path: AppRoute.terms,
-        parentNavigatorKey: _rootKey,
-        builder: (context, state) => const TermsPage(),
-      ),
-      GoRoute(
-        path: AppRoute.privacy,
-        parentNavigatorKey: _rootKey,
-        builder: (context, state) => const PrivacyPage(),
-      ),
-
 
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -106,6 +85,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
 
+          // Account
           StatefulShellBranch(
             routes: [
               GoRoute(

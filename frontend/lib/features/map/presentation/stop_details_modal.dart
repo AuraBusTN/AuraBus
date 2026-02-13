@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
@@ -17,7 +18,6 @@ class StopDetailsModal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(stopDetailsProvider(stopInfo.stopId));
     final l10n = AppLocalizations.of(context)!;
-
 
     return DraggableScrollableSheet(
       expand: false,
