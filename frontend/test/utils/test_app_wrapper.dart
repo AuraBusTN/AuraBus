@@ -51,6 +51,21 @@ Widget createTestApp({
                 builder: (context, state) =>
                     const Scaffold(body: Text('Account Screen Reached')),
               ),
+              GoRoute(
+                path: '/ranking',
+                builder: (context, state) =>
+                    const Scaffold(body: Text('Ranking Screen Reached')),
+              ),
+              GoRoute(
+                path: '/terms-of-service',
+                builder: (context, state) =>
+                    const Scaffold(body: Text('Terms Screen Reached')),
+              ),
+              GoRoute(
+                path: '/privacy-policy',
+                builder: (context, state) =>
+                    const Scaffold(body: Text('Privacy Screen Reached')),
+              ),
             ],
           ),
     ),

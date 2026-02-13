@@ -8,6 +8,7 @@ import 'package:aurabus/features/account/widgets/favorite_management_body.dart';
 import 'package:aurabus/features/account/widgets/subscription_body.dart';
 import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 import 'package:aurabus/routing/router.dart';
+import 'package:aurabus/theme.dart';
 
 enum AccountSectionType { info, subscription, favorites, ranking }
 
@@ -89,6 +90,51 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   AccountSectionType.ranking,
                 ),
                 onTap: () => context.push(AppRoute.ranking),
+              ),
+              const SizedBox(height: 12),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardTheme.color,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(
+                        Icons.description_outlined,
+                        color: AppColors.textSecondary,
+                        size: 20,
+                      ),
+                      title: Text(
+                        l10n.termsOfServiceTitle,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => context.push(AppRoute.termsOfService),
+                    ),
+                    Divider(
+                      height: 1,
+                      indent: 16,
+                      endIndent: 16,
+                      color: Colors.grey.shade200,
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.shield_outlined,
+                        color: AppColors.textSecondary,
+                        size: 20,
+                      ),
+                      title: Text(
+                        l10n.privacyPolicyTitle,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => context.push(AppRoute.privacyPolicy),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
 
