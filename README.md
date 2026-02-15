@@ -323,8 +323,6 @@ flutter test
 # Run with coverage
 flutter test --coverage
 
-# Generate HTML coverage report
-python coverage_report.py
 ```
 
 Test suites cover theming, widgets, routing, localization, core utilities, and feature-level tests.
