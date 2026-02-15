@@ -1,0 +1,61 @@
+paths:
+  /stops/{id}:
+    get:
+      summary: Get Stop Details by ID
+      description: Retrieves detailed information about a specific stop using its numeric ID.
+      tags: [Stops]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The numeric ID of the stop to retrieve.
+      responses:
+        '200':
+          description: Successful response with stop details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopTrip'
+        
+        '400':
+          description: ID not a valid number
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        
+        '404':
+          description: Fermata not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        '429':
+          description: Too Many Requests
+          headers:
+            RateLimit-Limit:
+              schema:
+                type: integer
+              description: Maximum number of requests allowed
+            RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Remaining requests
+            RateLimit-Reset:
+              schema:
+                type: integer
+              description: Seconds until reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+
+        '500':
+          description: Internal Server Error (e.g., external APIs down)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

@@ -1,49 +1,158 @@
+import 'package:aurabus/features/signup/presentation/signup_page.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:aurabus/features/ranking/presentation/ranking_page.dart';
 import 'package:aurabus/features/home/presentation/home_page.dart';
-import 'package:aurabus/features/map/presentation/map_screen.dart';
 import 'package:aurabus/features/tickets/presentation/ticket_page.dart';
+import 'package:aurabus/features/map/presentation/map_screen.dart';
 import 'package:aurabus/features/account/presentation/account_page.dart';
+import 'package:aurabus/features/login/presentation/login_page.dart';
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
+import 'package:aurabus/features/legal/presentation/terms_of_service_page.dart';
+import 'package:aurabus/features/legal/presentation/privacy_policy_page.dart';
+
+final _rootKey = GlobalKey<NavigatorState>();
 
 class AppRoute {
   static const String tickets = '/tickets';
   static const String map = '/map';
   static const String account = '/account';
+  static const String login = '/login';
+  static const String signup = '/signup';
+  static const String ranking = '/ranking';
+  static const String termsOfService = '/terms-of-service';
+  static const String privacyPolicy = '/privacy-policy';
 }
 
-final _shellNavigatorKey = GlobalKey<NavigatorState>();
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
-
 final goRouterProvider = Provider<GoRouter>((ref) {
-  return GoRouter(
-    navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoute.map,
+  final authListenable = AuthListenable(ref);
 
+  ref.onDispose(authListenable.dispose);
+
+  return GoRouter(
+    refreshListenable: authListenable,
+    navigatorKey: _rootKey,
+    initialLocation: AppRoute.map,
     routes: [
-      ShellRoute(
-        navigatorKey: _shellNavigatorKey,
-        builder: (context, state, child) {
-          return HomePage(child: child);
+      GoRoute(
+        path: AppRoute.login,
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const LoginPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.signup,
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const SignupPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.ranking,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const RankingPage(),
+      ),
+      GoRoute(
+        path: AppRoute.termsOfService,
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const TermsOfServicePage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.privacyPolicy,
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const PrivacyPolicyPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      ),
+
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return HomePage(navigationShell: navigationShell);
         },
-        routes: [
-          GoRoute(
-            path: AppRoute.tickets,
-            pageBuilder: (context, state) =>
-                const NoTransitionPage(child: TicketPage()),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoute.tickets,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: TicketPage()),
+                redirect: (context, state) {
+                  final authState = ref.read(authProvider);
+                  if (!authState.isAuthenticated) {
+                    return AppRoute.login;
+                  }
+                  return null;
+                },
+              ),
+            ],
           ),
-          GoRoute(
-            path: AppRoute.map,
-            pageBuilder: (context, state) =>
-                const NoTransitionPage(child: MapScreen()),
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoute.map,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: MapScreen()),
+              ),
+            ],
           ),
-          GoRoute(
-            path: AppRoute.account,
-            pageBuilder: (context, state) =>
-                const NoTransitionPage(child: AccountPage()),
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoute.account,
+                redirect: (context, state) {
+                  final authState = ref.read(authProvider);
+                  if (!authState.isAuthenticated) {
+                    return AppRoute.login;
+                  }
+                  return null;
+                },
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: AccountPage()),
+              ),
+            ],
           ),
         ],
       ),
     ],
   );
 });
+
+class AuthListenable extends ChangeNotifier {
+  final Ref ref;
+  ProviderSubscription? _subscription;
+
+  AuthListenable(this.ref) {
+    _subscription = ref.listen<AuthState>(authProvider, (previous, next) {
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.close();
+    super.dispose();
+  }
+}

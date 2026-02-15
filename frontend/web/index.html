@@ -19,6 +19,7 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -28,12 +29,63 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-<script src="https://maps.googleapis.com/maps/api/js?key=FLUTTER_WEB_MAPS_API_KEY_PLACEHOLDER&v=weekly&libraries=marker"></script>
 
   <title>frontend</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
-</body>
+  <script src="env.js"></script>
+
+  <!-- Unregister any lingering service workers from previous builds
+       to prevent Safari/Firefox reload loops -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var i = 0; i < registrations.length; i++) {
+          registrations[i].unregister();
+        }
+      });
+    }
+  </script>
+
+  <script>
+    function loadFlutter() {
+      // Safari has a strict limit on concurrent WebGL contexts.
+      // CanvasKit overlay surfaces + Google Maps both use WebGL.
+      // Limit to 1 overlay surface on non-Chromium browsers to stay
+      // within Safari/Firefox WebGL budget. Modals use full-page
+      // navigation instead of overlays to avoid needing extra surfaces.
+      var isChromium = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      var config = isChromium ? {} : { canvasKitMaximumSurfaces: 1 };
+
+      {{flutter_js}}
+      {{flutter_build_config}}
+      _flutter.loader.load({ config: config });
+    }
+
+    if (window.env && window.env.GOOGLE_MAPS_API_KEY) {
+      var script = document.createElement('script');
+      script.src = "https://maps.googleapis.com/maps/api/js?key=" + window.env.GOOGLE_MAPS_API_KEY + "&v=weekly";
+      script.async = true;
+      script.onload = loadFlutter;
+      script.onerror = function() {
+        console.warn('Google Maps JS SDK failed to load. Loading app without it.');
+        loadFlutter();
+      };
+      document.head.appendChild(script);
+    } else {
+      loadFlutter();
+    }
+  </script>
+  
+  </body>
 </html>

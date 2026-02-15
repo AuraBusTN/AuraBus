@@ -1,33 +1,63 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const config = require('./config');
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import hpp from "hpp";
+import mongoSanitize from "express-mongo-sanitize";
+import { setupSwagger } from "./swagger.js";
+import stopsRouter from "./routes/stops.routes.js";
+import authRouter from "./routes/auth.routes.js";
+import routesRouter from "./routes/routes.routes.js";
+import usersRouter from "./routes/users.routes.js";
+import { apiLimiter, authLimiter } from "./middlewares/rateLimiter.js";
 
-const app = express();
+export const app = express();
 
-async function connectDb() {
-  const { user, pass, host, name } = config.db;
-  if (!user || !pass || !host) {
-    console.error('Error: Missing MongoDB environment variables (USER, PASS, or HOST)');
-    process.exit(1);
+app.set("trust proxy", 1);
+
+setupSwagger(app);
+app.use(helmet());
+app.use(cors());
+
+app.use(morgan("dev"));
+app.use(express.json());
+app.use((req, res, next) => {
+  if (req.query) {
+    Object.defineProperty(req, "query", {
+      value: req.query,
+      writable: true,
+      configurable: true,
+      enumerable: true,
+    });
   }
-  
-  const mongoURI = `mongodb://${user}:${pass}@${host}:27017/${name}?authSource=admin`;
-
-  try {
-    await mongoose.connect(mongoURI);
-    console.log('Connected to MongoDB successfully!');
-  } catch (err) {
-    console.error('Error connecting to MongoDB:', err.message);
-    process.exit(1);
-  }
-}
-
-if (process.env.NODE_ENV !== 'test') {
-  connectDb();
-}
-
-app.get('/', (req, res) => {
-  res.send('Hello World! My AuraBus API is alive!');
+  next();
 });
 
-module.exports = app;
+app.use(hpp());
+
+app.use(mongoSanitize());
+
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "OK", message: "AuraBus API is alive!" });
+});
+
+app.use("/auth", authLimiter, authRouter);
+app.use("/stops", apiLimiter, stopsRouter);
+app.use("/routes", apiLimiter, routesRouter);
+app.use("/users", apiLimiter, usersRouter);
+
+app.use((req, res, next) => {
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+  error.statusCode = 404;
+  next(error);
+});
+
+app.use((err, req, res, next) => {
+  console.error("❌ Global Error Handler:", err);
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === "development" ? err.stack : null,
+  });
+});

@@ -1,56 +1,51 @@
+import 'package:aurabus/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:aurabus/routing/router.dart';
+import 'package:aurabus/l10n/app_localizations.dart';
 
-class HomePage extends StatelessWidget {
-  final Widget child;
+class HomePage extends ConsumerWidget {
+  final StatefulNavigationShell navigationShell;
 
-  const HomePage({super.key, required this.child});
+  const HomePage({super.key, required this.navigationShell});
 
-  int _calculateSelectedIndex(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
-    if (location.startsWith(AppRoute.tickets)) return 0;
-    if (location.startsWith(AppRoute.map)) return 1;
-    if (location.startsWith(AppRoute.account)) return 2;
-    return 0;
-  }
+  void _onItemTapped(int index, BuildContext context, WidgetRef ref) {
+    if (index == 2) {
+      final isLoggedIn = ref.read(authProvider).isAuthenticated;
 
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        context.go(AppRoute.tickets);
-        break;
-      case 1:
-        context.go(AppRoute.map);
-        break;
-      case 2:
-        context.go(AppRoute.account);
-        break;
+      if (!isLoggedIn) {
+        context.push(AppRoute.login);
+        return;
+      }
     }
+
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    final selectedIndex = _calculateSelectedIndex(context);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: child,
+      body: navigationShell,
 
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: (index) => _onItemTapped(index, context),
-        items: const [
+        currentIndex: navigationShell.currentIndex,
+        onTap: (index) => _onItemTapped(index, context, ref),
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.airplane_ticket, size: 28),
-            label: 'Tickets',
+            icon: const Icon(Icons.confirmation_number_outlined),
+            label: AppLocalizations.of(context)!.tickets,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 28),
-            label: 'Home',
+            icon: const Icon(Icons.map_outlined),
+            label: AppLocalizations.of(context)!.map,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle, size: 28),
-            label: 'Account',
+            icon: const Icon(Icons.person_outline),
+            label: AppLocalizations.of(context)!.account,
           ),
         ],
       ),

@@ -30,18 +30,37 @@ jobs:
       - name: Build the Docker image
         env:
           MONGO_USER: ${{ secrets.MONGO_USER }}
-          MONGO_PASS: ${{ secrets.MONGO_PASS }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
         run: docker compose build api
 
       - name: Create .env file
         run: |
           echo "NODE_ENV=test" > .env
           echo "MONGO_USER=${{ secrets.MONGO_USER }}" >> .env
-          echo "MONGO_PASS=${{ secrets.MONGO_PASS }}" >> .env
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+          echo "MONGO_HOST=db" >> .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "API_USER=${{ secrets.API_USER }}" >> .env
+          echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> .env
+          echo "PREDICTION_URL=${{ secrets.PREDICTION_URL }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
 
       - name: Run tests with Jest (inside Docker)
         env:
           MONGO_USER: ${{ secrets.MONGO_USER }}
-          MONGO_PASS: ${{ secrets.MONGO_PASS }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
         run: |
-          docker compose run --rm api npm test
+          docker compose run --rm \
+          -e MONGO_USER="${{ secrets.MONGO_USER }}" \
+          -e MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}" \
+          -e MONGO_HOST="db" \
+          -e API_URL="${{ secrets.API_URL }}" \
+          -e API_USER="${{ secrets.API_USER }}" \
+          -e API_PASSWORD="${{ secrets.API_PASSWORD }}" \
+          -e PREDICTION_URL="${{ secrets.PREDICTION_URL }}" \
+          -e REDIS_HOST="${{ secrets.REDIS_HOST }}" \
+          -e REDIS_PORT="${{ secrets.REDIS_PORT }}" \
+          -e REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}" \
+          api npm test

@@ -1,0 +1,292 @@
+[
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "C52720",
+        "routeId": 396,
+        "routeLongName": "Cortesano Gardolo P.Dante Villazzano 3",
+        "routeShortName": "3",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "F5C500",
+        "routeId": 400,
+        "routeLongName": "Piazza Dante P.Fiera Povo Oltrecastello",
+        "routeShortName": "5",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "0A9B86",
+        "routeId": 402,
+        "routeLongName": "Canova Melta Piazza Dante Gocciadoro",
+        "routeShortName": "7",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "52332A",
+        "routeId": 404,
+        "routeLongName": "Centochiavi Piazza Dante Mattarello",
+        "routeShortName": "8",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "8B4E2B",
+        "routeId": 406,
+        "routeLongName": "P.Dante S.Donà Cognola Villamontagna",
+        "routeShortName": "9",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "0A5543",
+        "routeId": 408,
+        "routeLongName": "P.Dante Martignano Cognola / Montevaccino",
+        "routeShortName": "10",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "582E79",
+        "routeId": 425,
+        "routeLongName": "Dogana Ftm Via Brennero Gardolo Spini",
+        "routeShortName": "11",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "BF6092",
+        "routeId": 466,
+        "routeLongName": "P.Dante Rosmini S.Rocco Povo Polo Soc.",
+        "routeShortName": "13",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "72E006",
+        "routeId": 478,
+        "routeLongName": "Dogana Ftm Interporto Spini Di Gardolo",
+        "routeShortName": "15",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "3564B1",
+        "routeId": 484,
+        "routeLongName": "Centochiavi Martignano Cognola Povo",
+        "routeShortName": "16",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "000000",
+        "routeId": 533,
+        "routeLongName": "Rsa \"S.Bart.\" \"Angeli Custodi\" Laste",
+        "routeShortName": "C",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 535,
+        "routeLongName": "P.Dante P.Fiera Università Mesiano Povo",
+        "routeShortName": "5/",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "1D3F72",
+        "routeId": 536,
+        "routeLongName": "Ospedale P.Dante Sopramonte",
+        "routeShortName": "1",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "DB5826",
+        "routeId": 538,
+        "routeLongName": "Piedic. Stazione Osp.S.Chiara Regione Piedic.",
+        "routeShortName": "2",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "007BC3",
+        "routeId": 539,
+        "routeLongName": "Gardolo Roncafort Stazione V.Deg. Mad.Bianca",
+        "routeShortName": "4",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "70B442",
+        "routeId": 541,
+        "routeLongName": "Vela P.Dante Villazzano Grotta",
+        "routeShortName": "6",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 568,
+        "routeLongName": "Gardolo Gardolo Di Mezzo E Spini",
+        "routeShortName": "G",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 570,
+        "routeLongName": "Povo Borino Celva Passo Cimirlo",
+        "routeShortName": "CM",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 607,
+        "routeLongName": "01 Lavis Pressano Nave S.Felice Sorni",
+        "routeShortName": "L1",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 610,
+        "routeLongName": "03 Lavis Stazione Fs",
+        "routeShortName": "L3",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 612,
+        "routeLongName": "04 Lavis Zona Industriale Lavis",
+        "routeShortName": "L4",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 613,
+        "routeLongName": "02 Lavis Pressano Masi Sp.131 Sorni",
+        "routeShortName": "L2",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "BABAB7",
+        "routeId": 614,
+        "routeLongName": "P.Dante Ospedale Fersina Clarina P.Dante",
+        "routeShortName": "A",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 615,
+        "routeLongName": "Martignano Montevaccino",
+        "routeShortName": "M",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 621,
+        "routeLongName": "Zuffo Via Rosmini Italcementi",
+        "routeShortName": "N",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": null,
+        "routeId": 623,
+        "routeLongName": "Stazione Buc M.Baldo Muse Regione",
+        "routeShortName": "19",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "95293B",
+        "routeId": 624,
+        "routeLongName": "P.Dante V.Ghiaie Ravina Romagnano",
+        "routeShortName": "12",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "E490B0",
+        "routeId": 626,
+        "routeLongName": "P.Dante Via Sanseverino Belvedere",
+        "routeShortName": "14",
+        "routeType": 3,
+        "type": "U"
+    },
+    {
+        "areaId": 23,
+        "news": [],
+        "routeColor": "1F9ACF",
+        "routeId": 629,
+        "routeLongName": "Dogana Ftm V.Bolzano Lavis Lavs Ftm",
+        "routeShortName": "17",
+        "routeType": 3,
+        "type": "U"
+    }
+]

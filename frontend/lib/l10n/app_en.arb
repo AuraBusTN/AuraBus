@@ -1,0 +1,194 @@
+{
+    "welcomeBack": "Welcome Back!",
+    "signInSubtitle": "Sign in to continue your journey",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account? ",
+    "signUpLink": "Sign Up",
+    "yourTicketsTitle": "My Tickets",
+    "continueWith": "Or continue with",
+    "forgotPassword": "Forgot Password?",
+    "tickets": "Tickets",
+    "map": "Map",
+    "account": "Account",
+    "accountSettings": "Account Settings",
+    "accountInfoSection": "Account Info",
+    "subscriptionSection": "Subscription",
+    "contactUsSection": "Contact Us",
+    "rankingSection": "Ranking",
+    "logoutButton": "Logout",
+    "editProfilePicture": "Edit your profile picture",
+    "settingsTitle": "Settings",
+    "busNotificationLabel": "Bus Coming Notification",
+    "errorMessage": "Error: {error}",
+    "@errorMessage": {
+        "placeholders": {
+            "error": { "type": "String" }
+        }
+    },
+    "lineTitle": "Line {route}",
+    "@lineTitle": {
+        "placeholders": {
+            "route": { "type": "String" }
+        }
+    },
+    "arrivingIn": "Here in {minutes}m",
+    "@arrivingIn": {
+        "placeholders": {
+            "minutes": { "type": "int" }
+        }
+    },
+    "createAccountTitle": "Create Account",
+    "createAccountSubtitle": "Join us and start your journey",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "confirmPasswordLabel": "Confirm Password",
+    "signupButton": "Sign Up",
+    "orSignUpWith": "Or sign up with",
+    "alreadyHaveAccount": "Do you already have an account? ",
+    "termsError": "Please accept terms and conditions",
+    "requiredField": "Required",
+    "invalidEmail": "Invalid Email",
+    "passwordMinChars": "Min 6 chars",
+    "passwordMismatch": "Mismatch",
+    "termsText": "I agree with the ",
+    "termsLink": "Terms & Conditions",
+    "andText": " and ",
+    "privacyLink": "Privacy Policy",
+    "ticketUrbanService": "Urban Service",
+    "ticketCity": "TRENTO",
+    "ticketVat": "VAT 01807370224",
+    "ticketDuration70": "70 minutes",
+    "ticketPrice120": "€ 1.20",
+    "ticketValidateAction": "Validate",
+    "ticketStatusUnused": "UNUSED",
+    "signInWithGoogle": "Sign in with Google",
+    "subscriptionCardTitle": "LIBERA CIRCOLAZIONE UNITN",
+    "subscriptionCodeLabel": "Code:",
+    "subscriptionStatusLabel": "Status:",
+    "subscriptionTypeLabel": "Type:",
+    "subscriptionStartDateLabel": "Start date:",
+    "subscriptionExpirationDateLabel": "Expiration Date:",
+    "statusValid": "Valid",
+    "clear": "Clear",
+    "rankingTitle": "AuraRanking",
+    "tiersAndRewards": "Tiers & Rewards",
+    "globalLeaderboard": "Global Leaderboard",
+    "noUsersInLeaderboard": "No users in the leaderboard yet.",
+    "errorLoadingLeaderboard": "Error loading leaderboard",
+    "yourTier": "YOUR TIER",
+    "points": "POINTS",
+    "pointsAbbr": "pts",
+    "maxLevelReached": "Max level reached!",
+    "nextTier": "Next:",
+    "missingPoints": "missing",
+    "tierElite": "Elite",
+    "tierGold": "Gold",
+    "tierSilver": "Silver",
+    "tierBronze": "Bronze",
+    "rewardAnnual": "Annual Subscription",
+    "rewardMonthly": "Monthly Subscription",
+    "reward10Rides": "10 Free Rides",
+    "reward2Rides": "2 Free Rides",
+    "youLabel": "You",
+    "searchPlaceholder": "Search stop...",
+    "favoritesManagementSection": "Manage Favorites",
+    "favoriteLinesSubtitle": "Favorite Lines",
+    "noLinesAvailable": "No lines available.",
+    "errorLoadingLines": "Error loading lines: {error}",
+    "@errorLoadingLines": {
+        "placeholders": {
+            "error": { "type": "String" }
+        }
+    },
+    "saveButton": "Save Changes",
+    "favoritesSaved": "Favorites saved successfully!",
+
+    "legalSection": "Legal",
+    "termsOfServiceTitle": "Terms of Service",
+    "privacyPolicyTitle": "Privacy Policy",
+    "lastUpdated": "Last updated: {date}",
+    "@lastUpdated": {
+        "placeholders": {
+            "date": { "type": "String" }
+        }
+    },
+
+    "tosIntroTitle": "1. Introduction",
+    "tosIntroBody": "Welcome to AuraBus (\"the App\"). These Terms of Service (\"Terms\") govern your access to and use of the AuraBus mobile application, operated by AuraBus (\"we\", \"us\", or \"our\"). By downloading, installing, or using the App, you agree to be bound by these Terms. If you do not agree, please do not use the App.",
+
+    "tosEligibilityTitle": "2. Eligibility",
+    "tosEligibilityBody": "You must be at least 16 years of age to use the App. By using AuraBus, you represent and warrant that you meet this age requirement and have the legal capacity to enter into these Terms.",
+
+    "tosAccountTitle": "3. User Account",
+    "tosAccountBody": "To access certain features, you must create an account by providing accurate and complete information. You are responsible for maintaining the confidentiality of your credentials and for all activities that occur under your account. Notify us immediately of any unauthorized use.",
+
+    "tosServiceTitle": "4. Service Description",
+    "tosServiceBody": "AuraBus provides real-time public transportation information for the city of Trento, including bus routes, stop locations, arrival times, ticketing, and gamification features. The information is provided for convenience and may not always reflect real-time conditions.",
+
+    "tosUseTitle": "5. Acceptable Use",
+    "tosUseBody": "You agree not to: (a) use the App for any unlawful purpose; (b) attempt to gain unauthorized access to our systems; (c) interfere with the proper functioning of the App; (d) reverse engineer, decompile, or disassemble any part of the App; (e) use automated means to access the App without our permission.",
+
+    "tosIpTitle": "6. Intellectual Property",
+    "tosIpBody": "All content, features, and functionality of the App — including but not limited to text, graphics, logos, icons, and software — are the exclusive property of AuraBus and are protected by applicable intellectual property laws. You are granted a limited, non-exclusive, non-transferable license to use the App for personal, non-commercial purposes.",
+
+    "tosTicketsTitle": "7. Tickets & Payments",
+    "tosTicketsBody": "Digital tickets purchased through the App are subject to the terms and conditions of the local transport operator. AuraBus acts as a digital interface and is not responsible for service disruptions, route changes, or ticket validity disputes with the transport provider.",
+
+    "tosDisclaimerTitle": "8. Disclaimer of Warranties",
+    "tosDisclaimerBody": "The App is provided \"as is\" and \"as available\" without warranties of any kind, either express or implied. We do not guarantee that the App will be uninterrupted, error-free, or that real-time data will be accurate. Use of the App is at your own risk.",
+
+    "tosLiabilityTitle": "9. Limitation of Liability",
+    "tosLiabilityBody": "To the fullest extent permitted by law, AuraBus shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the App, including but not limited to missed buses, incorrect schedule information, or data loss.",
+
+    "tosTerminationTitle": "10. Termination",
+    "tosTerminationBody": "We reserve the right to suspend or terminate your account at any time, without prior notice, if you violate these Terms or engage in conduct that we determine to be harmful to other users or the App.",
+
+    "tosChangesTitle": "11. Changes to Terms",
+    "tosChangesBody": "We may update these Terms from time to time. We will notify you of material changes through the App or via email. Your continued use of the App after such changes constitutes acceptance of the updated Terms.",
+
+    "tosGoverningTitle": "12. Governing Law",
+    "tosGoverningBody": "These Terms shall be governed by and construed in accordance with the laws of Italy. Any disputes arising under these Terms shall be subject to the exclusive jurisdiction of the courts of Trento, Italy.",
+
+    "tosContactTitle": "13. Contact Us",
+    "tosContactBody": "If you have questions about these Terms, please contact us at: support@aurabus.it",
+
+    "ppIntroTitle": "1. Introduction",
+    "ppIntroBody": "AuraBus (\"we\", \"us\", or \"our\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use the AuraBus mobile application (\"the App\"). Please read this policy carefully. By using the App, you consent to the practices described herein.",
+
+    "ppDataCollectedTitle": "2. Information We Collect",
+    "ppDataCollectedBody": "We collect the following categories of information:\n\n• Personal Information: name, email address, and profile picture when you create an account or sign in with Google.\n• Location Data: your device's geographic location to provide nearby stops and real-time transit information (only when you grant permission).\n• Usage Data: information about how you interact with the App, including pages viewed, features used, and session duration.\n• Device Information: device type, operating system, unique device identifiers, and network information.",
+
+    "ppHowWeUseTitle": "3. How We Use Your Information",
+    "ppHowWeUseBody": "We use the collected information to:\n\n• Provide, maintain, and improve the App's functionality.\n• Display real-time bus information and nearby stops.\n• Manage your account, subscriptions, and ticket purchases.\n• Operate the gamification and ranking system.\n• Send service-related notifications (e.g., bus approaching alerts).\n• Analyze usage patterns to improve user experience.\n• Ensure security and prevent fraud.",
+
+    "ppDataSharingTitle": "4. Data Sharing & Disclosure",
+    "ppDataSharingBody": "We do not sell your personal information. We may share your data with:\n\n• Service Providers: third-party vendors who assist in operating the App (e.g., cloud hosting, analytics).\n• Legal Obligations: when required by law, regulation, or legal process.\n• Safety: to protect the rights, property, or safety of AuraBus, our users, or the public.\n• Business Transfers: in connection with a merger, acquisition, or sale of assets.",
+
+    "ppDataStorageTitle": "5. Data Storage & Security",
+    "ppDataStorageBody": "Your data is stored on secure servers within the European Union. We implement industry-standard security measures including encryption, access controls, and regular security audits. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.",
+
+    "ppRetentionTitle": "6. Data Retention",
+    "ppRetentionBody": "We retain your personal data for as long as your account is active or as needed to provide our services. Upon account deletion, we will remove your personal data within 30 days, except where retention is required by law.",
+
+    "ppRightsTitle": "7. Your Rights (GDPR)",
+    "ppRightsBody": "Under the General Data Protection Regulation (GDPR), you have the right to:\n\n• Access: request a copy of the personal data we hold about you.\n• Rectification: request correction of inaccurate data.\n• Erasure: request deletion of your personal data (\"right to be forgotten\").\n• Restriction: request restriction of processing of your data.\n• Portability: receive your data in a structured, machine-readable format.\n• Objection: object to the processing of your personal data.\n• Withdraw Consent: withdraw consent at any time without affecting prior processing.\n\nTo exercise these rights, contact us at: privacy@aurabus.it",
+
+    "ppChildrenTitle": "8. Children's Privacy",
+    "ppChildrenBody": "The App is not intended for children under 16 years of age. We do not knowingly collect personal information from children under 16. If we discover such data has been collected, we will promptly delete it.",
+
+    "ppCookiesTitle": "9. Cookies & Tracking",
+    "ppCookiesBody": "The App may use local storage and analytics tools to improve performance and user experience. These do not track you across other applications or websites. You can manage your preferences through your device settings.",
+
+    "ppChangesTitle": "10. Changes to This Policy",
+    "ppChangesBody": "We may update this Privacy Policy periodically. We will notify you of significant changes through the App or via email. The \"Last Updated\" date at the top of this page indicates when the policy was last revised.",
+
+    "ppContactTitle": "11. Contact Us",
+    "ppContactBody": "If you have questions or concerns about this Privacy Policy, or wish to exercise your data rights, please contact our Data Protection Officer at:\n\nEmail: privacy@aurabus.it\nAddress: AuraBus, Trento, Italy",
+
+    "ppDpoTitle": "12. Data Protection Officer",
+    "ppDpoBody": "We have appointed a Data Protection Officer (DPO) to oversee compliance with data protection regulations. You may contact the DPO at privacy@aurabus.it for any data protection inquiries.",
+    "expandAllLabel": "Expand",
+    "collapseAllLabel": "Collapse"
+}

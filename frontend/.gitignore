@@ -12,6 +12,7 @@
 .swiftpm/
 migrate_working_dir/
 .metadata
+.env
 
 # IntelliJ related
 *.iml
@@ -46,3 +47,7 @@ app.*.map.json
 /android/app/release
 secrets.dart
 build_web.sh
+
+/web/env.js
+/ios/Flutter/Keys.xcconfig
+upload-keystore.jks

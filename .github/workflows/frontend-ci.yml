@@ -34,6 +34,13 @@ jobs:
         run: flutter pub get
         working-directory: ./frontend
 
+      - name: Create .env file
+        run: |
+          mkdir -p assets/env
+          touch assets/env/.env
+        working-directory: ./frontend
+
+
       - name: Analyze Dart code
         run: flutter analyze .
         working-directory: ./frontend
