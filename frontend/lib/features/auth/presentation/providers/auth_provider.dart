@@ -130,9 +130,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
     try {
       if (kIsWeb) {
-        state = state.copyWith(
-          isLoading: false,
-        );
+        state = state.copyWith(isLoading: false);
         return false;
       }
 

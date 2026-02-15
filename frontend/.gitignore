@@ -50,3 +50,4 @@ build_web.sh
 
 /web/env.js
 /ios/Flutter/Keys.xcconfig
+upload-keystore.jks

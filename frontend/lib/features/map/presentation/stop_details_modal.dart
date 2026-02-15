@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:aurabus/core/utils/browser_detect.dart';
 import 'package:aurabus/theme.dart';
 import 'package:aurabus/l10n/app_localizations.dart';
 import 'package:aurabus/features/map/data/map_providers.dart';
@@ -18,6 +21,25 @@ class StopDetailsModal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(stopDetailsProvider(stopInfo.stopId));
     final l10n = AppLocalizations.of(context)!;
+
+    // On Safari/Firefox, this widget is placed inside a Scaffold body (full page route).
+    // DraggableScrollableSheet with expand:false only works inside a modal.
+    // Use a simple scrollable container for those browsers.
+    if (kIsWeb && !isChromiumBrowser) {
+      return Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        child: async.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(child: Text(l10n.errorMessage(e.toString()))),
+          data: (arrivals) => _StopDetailsContent(
+            controller: ScrollController(),
+            stopInfo: stopInfo,
+            arrivals: arrivals,
+          ),
+        ),
+      );
+    }
 
     return DraggableScrollableSheet(
       expand: false,
